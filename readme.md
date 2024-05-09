@@ -202,7 +202,7 @@ Clouds have a scope.
 const scope = cloud.scope
 ```
 
-Register functions to dispose for later when you're finished with a scope.
+Register functions to dispose of later when you're finished with a scope.
 
 ```javascript
 let off
