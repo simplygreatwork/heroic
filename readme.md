@@ -222,6 +222,6 @@ This scope is unplugged and disposed when the router path part exits.
 
 ```javascript
 router.register(`realm`, {
-	exit: () => cloud.scope.unplug()
+	exit: () => scope.unplug()
 })
 ```
