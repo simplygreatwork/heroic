@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+		<title>Tests</title>
+	</head>
+	<body>
+		<script type="importmap">{"imports": {
+			"html-console": "../../html-console/module.js",
+			"test-suite": "../../test-suite/module.js"
+		}}</script>
+		<script type="module">
+			
+			import { console_init } from 'html-console'
+			import { test_suite_new, test_suite_run } from 'test-suite'
+			import { Router } from '../source/router.js'
+			import { complete } from '../source/router.js'
+			import { find_match } from '../source/router.js'
+			
+			function run() {
+				
+				console_init('body')
+				let suite = test_suite_new()
+				let { it } = suite
+				
+				it('runs the first match test', function() {
+					return find_match_('one/two/three', 'one/two/three')
+				})
+				
+				it('runs the second match test', function() {
+					return find_match_('one/two/three', 'one/two/three')
+				})
+				
+				// it('runs the third test', function() {
+				// 	return match('one/two/three', 'one/two')
+				// })
+				
+				// it('registers an enter pattern', function() {
+				// 	return register('one/two').enter(() =>  console.log('enter one/two'))
+				// })
+					
+				// it('registers an enter and/or exit patterns', function() {
+				// 	route('one/two/three')
+				// 	.enter(() => {})
+				// 	.exit(() => {})
+				// 	return true
+				// })
+				
+				it('travels among multiple paths', function() {
+										
+					const router = Router()
+					watch(router, '1')
+					watch(router, '1/2')
+					watch(router, '1/2/3')
+					watch(router, '1/2/3/4')
+					watch(router, '1/2/3b')
+					watch(router, '1/2/3b/4b')
+					watch(router, 'a')
+					watch(router, 'a/b')
+					watch(router, 'a/b/c')
+					watch(router, 'a/c')
+					watch(router, 'a/c/d')
+					watch(router, 'a/c/e')
+					watch_products(router)
+					
+					router.go('1/2/3/4')
+					router.go('1/2/3b/4b')
+					router.go('a/b/c')
+					router.go('a/c/d')
+					router.go('a/c/e')
+					router.go('products/product-1/features/feature-1')
+					return true
+				})
+				
+				function watch(router, path) {
+					
+					router.register(path, {
+						enter: complete((data) => print(data)),
+						exit: complete((data) => print(data)),
+					})
+				}
+				
+				function complete(fn) {
+					
+					return function(options) {
+						fn(options)
+						options.then()
+					}
+				}
+				
+				test_suite_run(suite, function(passed) {
+					
+					if (passed) console.log(`All tests passed.`)
+					else console.log(`Some tests failed.`)
+				})
+			}
+			
+			run()
+			
+			function watch_products(router) {
+				
+				const chain = [watch_products, watch_product, watch_features, watch_feature]
+				
+				router.register('products', {
+					enter: complete((data) => {
+						print(data)
+						watch_product(router)
+					}),
+					exit: complete((data) => print(data))
+				})
+			}
+			
+			function watch_product(router) {
+				
+				router.register('products/:product', {
+					enter: complete((data) => {
+						print(data)
+						watch_features(router)
+					}),
+					exit: complete((data) => print(data))
+				})
+			}
+			
+			function watch_features(router) {
+				
+				router.register('products/:product/features', {
+					enter: complete((data) => {
+						print(data)
+						watch_feature(router)
+					}),
+					exit: complete((data) => print(data))
+				})
+			}
+			
+			function watch_feature(router) {
+				
+				router.register('products/:product/features/:feature', {
+					enter: complete((data) => print(data)),
+					exit: complete((data) => print(data))
+				})
+			}
+			
+			function print({ kind, path, values }) {
+				
+				if (Object.keys(values).length > 0)
+					console.log(`${kind}: ${path} with values ${JSON.stringify(values)}`)
+				else
+					console.log(`${kind}: ${path}`)
+			}
+			
+			function find_match_(pattern, subject) {
+				
+				let result = false
+				find_match(pattern, subject, (result_) => {
+					if (result_) result = true
+				})
+				return result
+			}
+			
+		</script>
+	</body>
+</html>

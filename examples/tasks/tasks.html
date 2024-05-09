@@ -1,0 +1,109 @@
+
+<div>
+	<div class="container">
+		<section class="content">
+			<header data-title class="title">Tasks</header>
+			<section class="scroll">
+				<section name="task-template" data-component="./task.html"></section>
+				<button name="task-new" class="task-new">New Task</button>
+			</section>
+		</section>
+		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
+	</div>
+	
+	<style>
+		header.title {
+			margin-top:30px;
+		}
+		a.row.done {
+			text-decoration: line-through;
+		}
+		.task-title {
+			margin-top:20px;
+			margin-bottom:20px;
+			width:180px;
+			border:0px dotted lightgrey;
+			outline:0;
+			font-size:24px;
+			-webkit-appearance: none;
+		}
+		button.task-new, button.task-done, button.task-close, button.undo, button.redo, button.transactions {
+			display:block;
+			width:100%;
+			margin-top:8px;
+			padding:6px;
+			background-color:white;
+			border:1px solid #8888DD;
+			border-radius:4px
+		}
+	</style>
+	
+	<script type="module">
+		
+		import { Component } from 'component'
+		import { Bus } from 'bus'
+		import { install_selection, select_row } from '../shared/library/selection.js'
+		
+		let counter = 0
+		
+		Component.ready(({ component, $ }) => {
+			
+			const bus = component.data.bus || new Bus()
+			const template = component.child('task-template')
+			const cache = {}
+			default_items().forEach(function(item) {
+				install_row(item, template, bus, cache)
+			})
+			
+			const child = component.child('void')
+			router.register('tasks/:id', {
+				enter: ({ path, values, then }) => {
+					console.log(`enter tasks/:id`)
+					const { item, row } = cache[values.id]
+					select_row(row, bus)
+					child.redirect('./detail.html', { path, item, bus }, then)
+				},
+				exit: ({ then }) => {
+					child.redirect('../shared/views/empty.html', {}, then)
+				}
+			})
+			
+			install_selection(component, bus)
+			listen(component, $, bus, cache)
+		})
+		
+		function default_items() {
+			
+			return [
+				{ id: ++counter, title: 'Empty Trash!', done: false },
+				{ id: ++counter, title: 'Feed Dog!', done: false },
+				{ id: ++counter, title: 'Water Plant!', done: false }
+			]
+		}
+		
+		function install_row(item, template, bus, cache) {
+			
+			let link = `#/tasks/${item.id}`
+			let row = template.clone({ item, link, bus })
+			cache[item.id] = { item, row }
+			row.element.style.display = 'block'
+			template.element.style.display = 'none'
+			return row
+		}
+		
+		function listen(component, $, bus, cache) {
+			
+			$('.task-new').onclick = () => {
+				let id = ++counter
+				let item = { id, title: `Untitled Task ${id}`, done: false }
+				let template = component.child('task-template')
+				let row = install_row(item, template, bus, cache)
+				window.location.hash = row.data.link
+			}
+			bus.on(`item-changed`, ({ item }) => {
+				if (item.closed) delete cache[item.id]
+			})
+		}
+		
+	</script>
+</div>

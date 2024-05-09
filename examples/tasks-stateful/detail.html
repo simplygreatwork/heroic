@@ -1,0 +1,34 @@
+
+<div>
+	<div class="container">
+		<section class="content">
+			<header data-title style="display:none;"></header>
+			<section class="scroll">
+				<input name="title" class="task-title">
+				<button class="task-done">Complete Task</button>
+				<button class="task-close">Discard Task</button>
+			</section>
+		</section>
+		<section name="void" data-component="../shared/views/empty.html" class="void"></section>
+	</div>
+	
+	<script type="module">
+		
+		import { Component } from 'component'
+		
+		Component.ready(({ component, data, $ }) => {
+			
+			const { id, item, bus, cloud } = data
+			$('[data-title]').innerText = item.title
+			$('input.task-title').value = item.title
+			$('input.task-title').oninput = () => {
+				cloud.set(`tasks/${id}/title`, $('input.task-title').value)
+				$('[data-title]').innerText = $('input.task-title').value
+				bus.emit('title-changed')
+			}
+			$('.task-done').onclick = () => cloud.set(`tasks/${id}/done`, true)
+			$('.task-close').onclick = () => cloud.remove(`tasks/${id}`)
+		})
+		
+	</script>
+</div>

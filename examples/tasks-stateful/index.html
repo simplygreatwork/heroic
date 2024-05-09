@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html data-theme="light">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0">
+		<title>Tasks</title>
+		<link rel="stylesheet" type="text/css" href="../shared/style/main.css"/>
+		<link rel="stylesheet" type="text/css" href="../shared/style/list.css"/>
+		<script type="importmap">{"imports": {
+			"bind": "../../modules/bind/module.js",
+			"bus": "../../modules/bus/module.js",
+			"cloud": "../../modules/cloud/module.js",
+			"component": "../../modules/component/module.js",
+			"html-console": "../../modules/html-console/module.js",
+			"router": "../../modules/router/module.js",
+			"state": "../../modules/state/module.js",
+			"test-suite": "../../modules/test-suite/module.js"
+		}}</script>
+	</head>
+	<body>
+		<div class="modal container">
+			<div name="void" data-component="../shared/views/empty.html"></div>
+		</div>
+		<script type="module">
+			
+			import { Component } from 'component'
+			import { Router } from 'router'
+			import { Bus } from 'bus'
+			
+			Component.start(function(component) {
+				
+				window.location.hash = '#'
+				const router = window.router = new Router()
+				const bus = window.bus = new Bus()
+				const realm = `tasks-stateful`
+				
+				const child = component.child('void')
+				router.register(realm, {
+					enter: ({ path, part, then }) => child.redirect('./tasks.html', { path, part, realm, bus }, then),
+					exit: ({ then }) => child.redirect('../shared/views/empty.html', {}, then)
+				})
+				window.location.hash = `#/${realm}`
+			})
+			
+		</script>		
+	</body>
+</html>

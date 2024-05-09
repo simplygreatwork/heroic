@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+		<title>Tests</title>
+	</head>
+	<body>
+		<form>
+			<input type="text" value="" name="a/a">
+			<input type="text" value="" name="b/a">
+			<input type="button" value="undo">
+			<input type="button" value="redo">
+			<input type="button" value="release">
+		</form>
+		<script type="importmap">{"imports": {
+			"html-console": "../../html-console/module.js",
+			"test-suite": "/../../test-suite/module.js",
+			"bind": "../../bind/source/bind.js",
+			"state": "../../state/module.js"
+		}}</script>
+		<script type="module">
+			
+			import { console_init } from 'html-console'
+			import { test_suite_new, test_suite_run } from 'test-suite'
+			import { Bus } from '../../bus/source/bus.js'
+			import { Cloud } from '../source/cloud.js'
+			import { bind_text_field } from 'bind'
+			import { state } from 'state'
+			
+			function run() {
+				
+				console_init('body')
+				let suite = test_suite_new()
+				let { it } = suite
+				let bus = new Bus()
+				let clouds = {
+					main : Cloud(bus),
+					interface_a : Cloud(bus),
+					interface_b : Cloud(bus)
+				}
+				
+				document.querySelector('input[value="undo"]').addEventListener('click', () => undo())
+				document.querySelector('input[value="redo"]').addEventListener('click', () => redo())
+				document.querySelector('input[value="release"]').addEventListener('click', () => {
+					clouds.interface_a.scope.unplug()
+					clouds.interface_b.scope.unplug()
+				})
+				
+				it('initializes storage provider', function() {
+					const store = configure_store(clouds.main)
+					return store != null
+				})
+				
+				it('initializes provider data', function() {
+					let { set, get, on_change, undo, redo } = clouds.main 
+					set('a', 1)
+					// on_change('a', (key, value) => console.log(`a changed to ${value}`))
+					// on_change('b', (key, value) => console.log(`b changed to ${value}`))
+					// on_change((key, value) => console.log(`key ${key} changed to ${value}`))
+					set('b', 8)
+					return get('a') === 1 && get('b') === 8
+				})
+				
+				const { set, get, update, on_change } = clouds.main
+				const { undo, redo, travel } = clouds.main
+				
+				it('initializes interface a', function() {
+					const $ = document.querySelector.bind(document)
+					const parse = (value) => parseInt(value.substring(1))
+					const format = (value) => `$${value}`
+					bind_text_field($('input[name="a/a"]'), clouds.interface_a, 'a', parse, format)
+					bind_text_field($('input[name="b/a"]'), clouds.interface_b, 'a', parse, format)
+					return true
+				})
+				
+				it('sets a to 11', function() {
+					set('a', 11)
+					return get('a') === 11
+				})
+				
+				it('will undo', function() {
+					undo()
+					return get('a') === 1
+				})
+				
+				it('will redo', function() {
+					redo()
+					return get('a') === 11
+				})
+				
+				it('will update and travel', function() {
+					set('tasks', [])
+					const transaction = update('tasks', (tasks) => [...tasks, 1] )
+					update('tasks', (tasks) => [...tasks, 2] )
+					update('tasks', (tasks) => [...tasks, 3] )
+					undo()
+					undo()
+					undo()
+					redo()
+					redo()
+					redo()
+					// travel(transaction)				// fixme: prior commits interfere with travel
+					return get('tasks').length === 3
+				})
+				
+				it('will set a to 1111 after 5 seconds', function() {
+					window.setTimeout(() => set('a', 1111), 5000)
+					return true
+				})
+				
+				it('will get and print root value', function() {
+					let done = false
+					clouds.main.with(function({ get }) {
+						print('all', get())
+						done = true
+					})
+					return done
+				})
+				
+				test_suite_run(suite, function(passed) {
+					if (passed) console.log(`All tests passed.`)
+					else console.log(`Some tests failed.`)
+				})
+			}
+			
+			function configure_store(cloud) {
+				
+				const { on_get, on_set, on_update } = cloud
+				const { change, on_change } = cloud
+				const { on_undo, on_redo, on_travel } = cloud
+				const store = state({})
+				store.on_change((key, value) => change(key, value))
+				on_get((key, result) => result.value = store.get(key))
+				on_set((key, value, result) => result.value = store.commit(({ set }) => set(key, value)))
+				on_update((key, fn, result) => result.value = store.commit(({ update }) => update(key, fn)))
+				on_undo(() => store.undo())
+				on_redo(() => store.redo())
+				on_travel((transaction) => store.travel(transaction))
+				return store
+			}
+			
+			function print(label, value) {
+				console.log(`${label}: ${JSON.stringify(value)}`)
+			}
+			
+			run()
+			
+		</script>
+	</body>
+</html>

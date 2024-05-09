@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+		<title>Tests</title>
+	</head>
+	<body>
+		<script type="importmap">{"imports": {
+			"html-console": "../../html-console/module.js",
+			"test-suite": "../../test-suite/module.js"
+		}}</script>
+		<script type="module">
+			
+			import { console_init } from 'html-console'
+			import { test_suite_new, test_suite_run } from 'test-suite'
+			import { State } from '../source/state.js'
+			
+			function run() {
+				
+				console_init('body')
+				let suite = test_suite_new()
+				let { it } = suite
+				
+				it('sets 5 values then travels', function() {
+					let store = State({})
+					store.commit(({ set }) => set('a', 1))
+					let transaction = store.commit(({ set }) => set('b', 2))
+					store.commit(({ set }) => set('c', 3))
+					store.commit(({ set }) => set('d', 4))
+					let transaction_b = store.commit(({ set }) => set('e', 5))
+					store.travel(transaction)
+					const length_a = Object.keys(store.get()).length
+					store.travel(transaction_b)
+					const length_b = Object.keys(store.get()).length
+					return length_a === 2 && length_b === 5
+				})
+				
+				test_suite_run(suite, function(passed) {
+					if (passed) console.log(`All tests passed.`)
+					else console.log(`Some tests failed.`)
+				})
+			}
+			
+			run()
+			
+			function print(label, value) {
+				console.log(`${label}: ${JSON.stringify(value)}`)
+			}
+			
+		</script>
+	</body>
+</html>

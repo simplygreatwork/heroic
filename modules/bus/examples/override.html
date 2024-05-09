@@ -1,0 +1,28 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0">
+		<title>Bus : Override</title>
+	</head>
+	<body>
+		<script type="module">
+			
+			import { Bus } from '../source/bus.js'
+			
+			const bus = new Bus()
+			const off = bus.on('hello', function(name) {
+				console.log(`Hello ${name}!`)
+				off()
+			})
+			const off_ = bus.unshift('hello', function(name, interrupt) {
+				console.log(`Hello ${name}! override`)
+				interrupt()
+				off_()
+			})
+			bus.emit('hello', 'world')
+			
+		</script>
+	</body>
+</html>

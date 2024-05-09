@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+		<title>Tests</title>
+	</head>
+	<body>
+		<script type="importmap">{"imports": {
+			"html-console": "../../html-console/module.js",
+			"test-suite": "../../test-suite/module.js"
+		}}</script>
+		<script type="module">
+			
+			import { console_init } from 'html-console'
+			import { test_suite_new, test_suite_run } from 'test-suite'
+			import { State } from '../source/state.js'
+			
+			function run() {
+				
+				console_init('body')
+				let suite = test_suite_new()
+				let { it } = suite
+				
+				it('commits', function() {
+					
+					let store = State({ one: { two: { three: { four: { five: 5 }}}} })
+					store.commit(({ get }) => {
+						print(`one/two`, get('one/two'))
+					})
+					store.select('one/two').commit(({ get }) => {
+						print(`three/four`, get('three/four'))
+					})
+					store.commit(({ set }) => {
+						set('one/two/three/four/five', 'five')
+					})
+					store.select('one/two').commit(({ set }) => {
+						set('three/four/five', 'five-five')
+					})
+					return true
+				})
+				
+				it('is frozen?', function() {
+					
+					let result = false
+					let store = State({ a: 1, b: 2, one: { two: { three: {} }}})
+					store.commit(({ set, get, update }) => {
+						try {
+							get().a = 4
+						} catch (e) {
+							result = true
+						}
+					})
+					return result
+				})
+				
+				it('gets at depth', function() {
+					
+					let store = State({ a: 1, b: 2, one: { two: { three: {} }}})
+					store.commit(({ set, get, update }) => {
+						print(`get()`, get())
+						print(`get('one')`, get('one'))
+						print(`get('one/two')`, get('one/two'))
+						print(`get('one/two/three')`, get('one/two/three'))
+					})
+					return true
+				})
+				
+				it('sets at depth', function() {
+					
+					let store = State({ a: 1, b: 2, one: { two: { three: {} }}})
+					store.commit(({ set, get, update }) => {
+						print(`get()`, get())
+						print(`get('one')`, get('one'))
+						print(`get('one/two')`, get('one/two'))
+						print(`get('one/two/three')`, get('one/two/three'))
+						set('one/two/three', {four:{}})
+						print(`get('one/two/three')`, get('one/two/three'))
+					})
+					return true
+				})
+				
+				it('uses select to get and set', function() {
+					
+					let store = State({ a: 1, b: 2, one: { two: { three: {} }}})					
+					let substore = store.select('one/two')
+					substore.commit(({ set, get, update }) => {
+						print(`get()`, get())
+						print(`get('three')`, get('three'))
+						set('three', 4)
+						print(`get('three')`, get('three'))
+					})
+					return true
+				})
+				
+				it('updates an array', function() {
+					
+					let store = State({ one: { two: { three: [1, 2, 3] }}})
+					store.commit(({ set, get, update }) => {
+						print(`get()`, get())
+						update('one/two/three', function(array) {
+							print(`array`, array)
+							array.push(4)
+							return array
+						})
+						print(`get()`, get())
+					})
+					return true
+				})
+				
+				it('removes a key and value', function() {
+					let store = State({ one: { a: 1, b: 2 }})		
+					store.commit(({ set, get, remove }) => {
+						print(`get()`, get())
+						remove('one/a')
+						print(`get()`, get())
+					})
+					return true
+				})
+				
+				it('uses apply', function() {
+					let store = State({ one: { two: { three: {}} }})		
+					store.commit(({ get, apply }) => {
+						apply('one/two', ({ get, set }) => {
+							print(`get()`, get())							
+							set('three', 4)
+						})
+						print(`get()`, get())							
+					})
+					return true
+				})
+				
+				it('sets 5 values plus 3 undo, plus 3 redo', function() {
+					let store = State({})
+					store.on_change('a', () => console.log(`a changed`))
+					store.on_change('b', () => console.log(`b changed`))
+					store.on_change((path) => console.log(`any changed: ${path}`))
+					store.commit(({ set }) => set('a', 1))
+					let transaction = store.commit(({ set }) => set('b', 2))
+					store.commit(({ set }) => set('c', 3))
+					store.commit(({ set }) => set('d', 4))
+					let transaction_b = store.commit(({ set }) => set('e', 5))
+					print(`get()`, store.get())
+					store.undo()
+					print(`get()`, store.get())
+					store.undo()
+					print(`get()`, store.get())
+					store.undo()
+					print(`get()`, store.get())
+					store.redo()
+					print(`get()`, store.get())
+					store.redo()
+					print(`get()`, store.get())
+					store.redo()
+					print(`get()`, store.get())
+					store.travel(transaction)
+					print(`get()`, store.get())
+					store.travel(transaction_b)
+					print(`get()`, store.get())
+					return Object.keys(store.get()).length === 5
+				})
+				
+				test_suite_run(suite, function(passed) {
+					if (passed) console.log(`All tests passed.`)
+					else console.log(`Some tests failed.`)
+				})
+			}
+			
+			run()
+			
+			function print(label, value) {
+				console.log(`${label}: ${JSON.stringify(value)}`)
+			}
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,35 @@
+
+<div>
+	<div class="container">
+		<section class="content">
+			<header data-title class="title">Infinite</header>
+			<section class="scroll">
+				<section name="lorem" data-component="../shared/views/lorem.html"></section>
+			</section>
+		</section>
+		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
+	</div>
+	
+	<script type="module">
+		
+		import { Component } from 'component'
+		
+		Component.ready(({ component, data, $ }) => {
+			
+			$('.title').innerText = `Column "${data.part}"`
+			const child = component.child('void')
+			router.register(next_path(data.path), {
+				enter: ({ path, part, then }) => child.redirect('./infinite.html', { path, part }, then),
+				exit : ({ then }) => child.redirect('../shared/views/empty.html', {}, then)
+			})
+		})
+		
+		function next_path(path) {
+			
+			let split = path.split('/')
+			split.push(parseInt(split[split.length - 1]) + 1)
+			return split.join('/')
+		}
+		
+	</script>
+</div>

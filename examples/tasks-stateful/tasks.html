@@ -1,0 +1,119 @@
+
+<div>
+	<div class="container">
+		<section class="content">
+			<button name="task-new" class="task-new">New Task</button>
+			<button name="undo" class="undo">Undo</button>
+			<button name="redo" class="redo">Redo</button>
+			<button name="transactions" class="transactions">Transactions</button>
+			<header data-title class="title">Tasks</header>
+			<section class="scroll">
+				<section name="task-template" data-component="./task.html"></section>
+			</section>
+		</section>
+		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
+	</div>
+	<link rel="stylesheet" type="text/css" href="../tasks-stateful/tasks.css"/>
+	
+	<script type="module">
+		
+		import { Bus } from 'bus'
+		import { Component } from 'component'
+		import { Cloud } from 'cloud'
+		import { State } from 'state'
+		import { bind_click } from 'bind'
+		import { install_selection, select_row } from '../shared/library/selection.js'
+		import { cloud_install_store, find_row_placement, trace } from '../tasks-stateful/tasks.js'
+		import { on_task_added, on_task_removed } from '../tasks-stateful/tasks.js'
+		
+		let counter = 0
+		
+		Component.ready(({ component, data, $ }) => {
+			
+			const bus = data.bus || new Bus()
+			const cloud = Cloud(bus)
+			const store = data.store || State({})
+			const realm = data.realm
+			const template = component.child('task-template')
+			const cache = {}
+			
+			configure_store(store)
+			render()
+			bind()
+			watch()
+			install_selection(component, bus)
+			trace(false, cloud, store)
+			
+			function render() {
+				
+				const tasks = cloud.get('tasks')
+				Object.entries(tasks).forEach(([id, item]) => install_row(id, item))
+				counter = Object.keys(tasks).length > 0 ? Math.max(...Object.keys(tasks)) : 0
+			}
+			
+			function install_row(id, item) {
+				
+				const row = template.clone({ id, item, realm, bus, cloud, link:`#/${realm}/${id}` })
+				cache[id] = { item, row }
+				row.element.style.display = 'block'
+				template.element.style.display = 'none'
+				return row
+			}
+			
+			function bind() {
+				
+				const { set, undo, redo, scope } = cloud
+				bind_click($('.task-new'), () => {
+					set(`tasks/${++counter}`, new_task({ id: counter, title: `Untitled Task ${counter}` }))
+				}, scope)
+				bind_click($('.undo'), () => undo(), scope)
+				bind_click($('.redo'), () => redo(), scope)
+			}
+			
+			function watch() {
+				
+				const child = component.child('void')
+				router.register(`${realm}/:id`, {
+					enter: ({ path, values, then }) => {
+						const { id } = values
+						const item = cloud.get(`tasks/${id}`)
+						select_row(cache[id].row, bus)
+						child.redirect('./detail.html', { path, id, item, bus, cloud }, then)
+					},
+					exit: ({ then }) => child.redirect('../shared/views/empty.html', {}, then)
+				})
+				
+				router.register(`${realm}`, {
+					exit: () => cloud.scope.unplug()
+				})
+				
+				on_task_added(cloud, (id, item) => {
+					const row = install_row(id, item)
+					find_row_placement(component, id, (component) => component.element.before(row.element))
+					window.location.hash = row.data.link
+				})
+				
+				on_task_removed(cloud, (id, item) => {
+					delete cache[id]
+				})
+			}
+			
+			function configure_store(store) {
+				
+				cloud_install_store(cloud, store)
+				if (cloud.get('tasks')) return
+				store.commit(({ set }) => {
+					set('tasks', {})
+					set(`tasks/${++counter}`, new_task({ id: counter, title: `Empty Trash!` }))
+					set(`tasks/${++counter}`, new_task({ id: counter, title: `Feed Dog!` }))
+					set(`tasks/${++counter}`, new_task({ id: counter, title: `Water Plant!` }))
+				})
+			}
+			
+			function new_task(task) {
+				return Object.assign(task, { done: false, created: new Date().getTime() })
+			}
+		})
+			
+	</script>
+</div>

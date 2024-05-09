@@ -1,0 +1,65 @@
+
+<div>
+	<div class="container">
+		<section class="content">
+			<header data-title class="title">Stress Items</header>
+			<section class="scroll">
+				<section name="template" data-component="./item.html"></section>
+			</section>
+		</section>
+		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
+	</div>
+	
+	<script type="module">
+		
+		import { Component } from 'component'
+		import { Bus } from 'bus'
+		import { install_selection, select_row } from '../shared/library/selection.js'
+		
+		let counter = 0
+		
+		Component.ready(function({ component, $ }) {
+			
+			const bus = new Bus()
+			const template = component.child('template')
+			const index = {}
+			default_items().forEach(function(item) {
+				install_row(item, template, index, bus)
+			})
+			
+			const child = component.child('void')
+			router.register('stress/:id', {
+				enter: ({ path, values, then }) => {
+					const item = index[values.id].item
+					const row = index[values.id].row
+					select_row(row, bus)
+					child.redirect('./detail.html', { path, item, bus }, then)
+				},
+				exit: ({ then }) => {
+					child.redirect('../shared/views/empty.html', {}, then)
+				}
+			})
+			
+			install_selection(component, bus)
+		})
+		
+		function default_items() {
+			
+			return new Array(10000).fill(0).map(function(each, index) {
+				const id = index + 1
+				return { id: id, title: `Item ${id}` }
+			})
+		}
+		
+		function install_row(item, template, index, bus) {
+			
+			const link = `#/stress/${item.id}`
+			const row = template.clone({ item, link, bus })
+			index[item.id] = { item, row }
+			row.element.style.display = 'block'
+			template.element.style.display = 'none'
+			return row
+		}
+		
+	</script>
+</div>

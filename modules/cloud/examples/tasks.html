@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+		<title>Tests</title>
+	</head>
+	<body>
+		<form>
+			<input type="text" value="" name="a/a">
+			<input type="text" value="" name="b/a">
+			<input type="button" value="undo">
+			<input type="button" value="redo">
+			<input type="button" value="release">
+		</form>
+		<script type="importmap">{"imports": {
+			"html-console": "../../html-console/module.js",
+			"test-suite": "/../../test-suite/module.js",
+			"bind": "../../bind/module.js",
+			"state": "../../state/module.js"
+		}}</script>
+		<script type="module">
+			
+			import { console_init } from 'html-console'
+			import { test_suite_new, test_suite_run } from 'test-suite'
+			import { Bus } from '../../bus/source/bus.js'
+			import { Cloud } from '../source/cloud.js'
+			import { bind_text_field } from 'bind'
+			import { state } from 'state'
+			
+			function run() {
+				
+				console_init('body')
+				let suite = test_suite_new()
+				let { it } = suite
+				let bus = new Bus()
+				let clouds = {
+					main : new Cloud(bus),
+					interface_a : new Cloud(bus),
+					interface_b : new Cloud(bus)
+				}
+				
+				document.querySelector('input[value="undo"]').addEventListener('click', () => undo())
+				document.querySelector('input[value="redo"]').addEventListener('click', () => redo())
+				document.querySelector('input[value="release"]').addEventListener('click', () => {
+					clouds.interface_a.scope.unplug()
+					clouds.interface_b.scope.unplug()
+				})
+				
+				it('initializes storage provider', function() {
+					const store = configure_store(clouds.main)
+					store.commit(({ set, update }) => {
+						set('tasks', [])
+						update('tasks', (tasks) => [...tasks, { id: 1, title: 'Empty Trash!', done: false }])
+						update('tasks', (tasks) => [...tasks, { id: 2, title: 'Feed Dog!', done: false }])
+						update('tasks', (tasks) => [...tasks, { id: 3, title: 'Water Plant!', done: false }])
+					})
+					return store != null
+				})
+				
+				it('initializes provider data', function() {
+					clouds.main.with(({ update, get }) => {
+						update('tasks', (tasks) => [...tasks, { id: 4, title: 'Feed Cat!', done: false }])
+						print('all', get())
+					})
+					return clouds.main.get('tasks').length == 4	
+				})
+				
+				const { set, get, on_change } = clouds.main
+				const { undo, redo } = clouds.main
+				
+				test_suite_run(suite, function(passed) {
+					if (passed) console.log(`All tests passed.`)
+					else console.log(`Some tests failed.`)
+				})
+			}
+			
+			function configure_store(cloud) {
+				
+				const { on_get, on_set, on_update } = cloud
+				const { change, on_change } = cloud
+				const { on_undo, on_redo, on_travel } = cloud
+				const store = state({})
+				store.on_change((key, value) => change(key, value))
+				on_get((key, result) => result.value = store.get(key))
+				on_set((key, value, result) => result.value = store.commit(({ set }) => set(key, value)))
+				on_update((key, fn, result) => result.value = store.commit(({ update }) => update(key, fn)))
+				on_undo(() => store.undo())
+				on_redo(() => store.redo())
+				on_travel((transaction) => store.travel(transaction))
+				return store
+			}
+			
+			function print(label, value) {
+				console.log(`${label}: ${JSON.stringify(value)}`)
+			}
+			
+			run()
+			
+		</script>
+	</body>
+</html>

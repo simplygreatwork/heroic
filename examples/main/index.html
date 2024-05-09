@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0">
+		<title>Main</title>
+		<link rel="stylesheet" type="text/css" href="../shared/style/main.css"/>
+		<link rel="stylesheet" type="text/css" href="./main.css"/>
+		<link rel="stylesheet" type="text/css" href="../shared/style/list.css"/>
+		<script type="importmap">{"imports": {
+			"bind": "../../modules/bind/module.js",
+			"bus": "../../modules/bus/module.js",
+			"cloud": "../../modules/cloud/module.js",
+			"component": "../../modules/component/module.js",
+			"html-console": "../../modules/html-console/module.js",
+			"router": "../../modules/router/module.js",
+			"state": "../../modules/state/module.js",
+			"test-suite": "../../modules/test-suite/module.js"
+		}}</script>
+	</head>
+	<body>
+		<div class="modal">
+			<div class="header">
+				<div name="navbar" data-component="./navbar.html"></div>
+			</div>
+			<div class="container">
+				<div data-component="./main.html"></div>
+			</div>
+		</div>
+		
+		<script type="module">
+			
+			import { Component } from 'component'
+			import { Router } from 'router'
+			import { Bus } from 'bus'
+			import { State } from 'state'
+			
+			Component.start((component, $) => {
+				
+				window.location.hash = '#'
+				const router = window.router = new Router()
+				const bus = window.bus = new Bus()
+				const store = window.store = State({})
+				component.child('navbar').data.bus = bus
+				const child = component.child(0).child('void')
+				
+				router.register('products', {
+					enter: ({ path, then }) => {
+						child.rebase('../products').redirect('./products.html', { path }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('1', {
+					enter: ({ path, part, then }) => {
+						child.rebase('../columns').redirect('./infinite.html', { path, part }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('include', {
+					enter: ({ path, then }) => {
+						child.rebase('../include').redirect('./include.html', { path }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('tasks', {
+					enter: ({ path, then }) => {
+						child.rebase('../tasks').redirect('./tasks.html', { path, bus }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('tasks-stateful', {
+					enter: ({ path, part, then }) => {
+						child.rebase('../tasks-stateful').redirect('./tasks.html', { path, realm: part, bus, store }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('list', {
+					enter: ({ path, then }) => {
+						child.rebase('../list').redirect('./items.html', { path, bus }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('stress', {
+					enter: ({ path, then }) => {
+						child.rebase('../stress').redirect('./items.html', { path, bus }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('test', {
+					enter: ({ path, then }) => {
+						child.rebase('../test').redirect('./test.html', { path }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+			})
+			
+		</script>
+		
+	</body>
+</html>
