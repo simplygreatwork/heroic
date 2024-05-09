@@ -202,14 +202,15 @@ Clouds have a scope.
 const scope = cloud.scope
 ```
 
-Register functions to cleanup for when you're finished with a scope.
+Register functions to dispose for later when you're finished with a scope.
 
 ```javascript
-const off = register_some_event_listener()
-scope.plug(off)
+let off
+scope.plug(off = register_an_event_listener())
+scope.plug(off = register_another_event_listener())
 ```
 
-When you're finished with a scope, unplug to dispose.
+When you're finished with a scope, unplug. The handlers will be disconnected and disposed.
 
 ```javascript
 scope.unplug()
