@@ -1,5 +1,5 @@
 
-# Intro
+# Story
 
 Create an html page "index.html"
 
