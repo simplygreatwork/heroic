@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+		<title>Test</title>
+	</head>
+	<body>
+		<script type="importmap">{"imports": {
+			"bus": "../../bus/module.js",
+			"html-console": "../../html-console/module.js",
+			"test": "../../test/module.js"
+		}}</script>
+		<script type="module">
+			
+			import { console_init } from 'html-console'
+			import { Test } from 'test'
+			console_init('body')
+			
+			Test().suite((it, wait) => {
+				
+				wait('first', (then) => {
+					
+					Test({ name: 'first' }).suite((it, wait) => {
+						wait('one', (then) => setTimeout(() => then(true)))
+						it('two', () => true)
+						it('three', () => true)
+					}).run((bus) => {
+						bus.on('begin', (name) => console.log(`\nRunning test "${name}"!`))
+						bus.on('item', (pass, label) => console.log(`${ pass ? 'Passed' : 'Failed'}: "${label}"!`))
+						bus.on('end', (pass) => {
+							if (pass) console.log(`All tests passed!`)
+							else console.log(`Some tests failed!`)
+							then()
+						})
+					})
+				})
+				
+				wait('second', (then) => {
+					
+					Test({ name: 'second' }).suite((it, wait) => {
+						
+						wait('one', (then) => {
+							then(false)
+						})
+						
+						it('two', () => {
+							return true	
+						})
+						
+						it('three', () => {
+							return true	
+						})
+						
+					}).run()
+				})
+				
+			}).run((bus) => {})
+			
+		</script>
+	</body>
+</html>
