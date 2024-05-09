@@ -186,7 +186,7 @@ Watch for a value to change.
 
 ```javascript
 const { on_change } = cloud
-on_change('key', () => { ... })
+on_change('key', (key, value, old) => { ... })
 ```
 
 Interact with data in the cloud. Announce changes and requests. Providers listen to changes and provide responses.
@@ -206,7 +206,7 @@ Register functions to cleanup for when you're finished with a scope.
 
 ```javascript
 const off = register_some_event_listener()
-scope.plug(off_fn)
+scope.plug(off)
 ```
 
 When you're finished with a scope, unplug to dispose.
