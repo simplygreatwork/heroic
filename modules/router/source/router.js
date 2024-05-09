@@ -11,7 +11,7 @@ export function Router() {
 	return install({
 		register,
 		go,
-		on: (key, fn) => bus.on(key, fn)
+		on: bus.on.bind(bus)
 	})
 	
 	function install(router) {
@@ -62,7 +62,7 @@ export function Router() {
 		})
 	}
 	
-	function find_change_point() {				// consider returning a value using map/filter instead
+	function find_change_point() {
 		
 		let point = null
 		then.some((item, index) => {
@@ -96,7 +96,7 @@ export function Router() {
 		const path = now.slice(0, point)
 		return now.slice(point).map((part, index) => {
 			path.push(part)
-			return { kind: 'enter', path: path.join('/'), part, index }
+			return { kind: 'enter', path: path.join('/'), part, index: point + index }
 		})
 	}
 	

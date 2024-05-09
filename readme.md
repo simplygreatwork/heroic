@@ -96,7 +96,7 @@ router.register('products', {
 })
 ```
 
-Imagine, the url changes from "1/2/3" to "1/b/c". "3" exits. "2" exits. "b" enters. "c" enters.
+Imagine, a url which changes from "1/2/3" to "1/b/c". "3" exits. "2" exits. "b" enters. "c" enters.
 
 Handlers are called only when a change to each url path part is detected.
 
@@ -118,13 +118,13 @@ router.register('products/:product_id', {
 
 # Components
 
-Components are always created inside the html.
+Components are always created inside html markup.
 
 ```html
-<div name="child" data-component="./child.html"></div>
+<div name="name" data-component="./child.html"></div>
 ```
 
-Find a component's child by it's name.
+Find a component's child by its name.
 
 ```javascript
 Component.ready(({ component }) => {
@@ -132,7 +132,7 @@ Component.ready(({ component }) => {
 })
 ```
 
-Or find a component's child by it's index.
+Or find a component's child by its index.
 
 ```javascript
 Component.ready(({ component }) => {
