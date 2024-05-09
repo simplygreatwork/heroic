@@ -210,7 +210,7 @@ scope.plug(off = register_an_event_listener())
 scope.plug(off = register_another_event_listener())
 ```
 
-When you're finished with a scope, unplug. The handlers will be disconnected and disposed.
+When you're finished with a scope, unplug. These handlers will be disconnected and disposed.
 
 ```javascript
 scope.unplug()
