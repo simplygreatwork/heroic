@@ -13,7 +13,7 @@ Add a component.
 <div name="child" data-component="./child.html"></div>
 ```
 
-When "index.html" loads, "./child.html" loads, and Component.start runs.
+When "index.html" loads, "./child.html" inserts, and Component.start runs.
 
 ```javascript
 Component.start(({ component }) => { ... })
