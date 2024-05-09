@@ -153,7 +153,9 @@ Clone a component.
 
 ```javascript
 Component.ready(({ component }) => {
-	const clone = component.child('template').clone()
+	const data = {}
+	const template = component.child('template')
+	const clone = template.clone(data)
 })
 ```
 
