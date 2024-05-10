@@ -7,47 +7,46 @@
 	<body>
 		<script type="importmap">{"imports": {
 			"html-console": "../../html-console/module.js",
-			"test-suite": "../../test-suite/module.js"
+			"test": "../../test/module.js",
+			"bus": "../../bus/module.js"
 		}}</script>
 		<script type="module">
 			
 			import { console_init } from 'html-console'
-			import { test_suite_new, test_suite_run } from 'test-suite'
+			import { Test } from 'test'
 			import { Router } from '../source/router.js'
 			import { complete } from '../source/router.js'
 			import { find_match } from '../source/router.js'
 			
-			function run() {
+			console_init('body')
+			
+			Test().suite((it) => {
 				
-				console_init('body')
-				let suite = test_suite_new()
-				let { it } = suite
-				
-				it('runs the first match test', function() {
+				it('runs the first match test', () => {
 					return find_match_('one/two/three', 'one/two/three')
 				})
 				
-				it('runs the second match test', function() {
+				it('runs the second match test', () => {
 					return find_match_('one/two/three', 'one/two/three')
 				})
 				
-				// it('runs the third test', function() {
+				// it('runs the third test', () => {
 				// 	return match('one/two/three', 'one/two')
 				// })
 				
-				// it('registers an enter pattern', function() {
+				// it('registers an enter pattern', () => {
 				// 	return register('one/two').enter(() =>  console.log('enter one/two'))
 				// })
 					
-				// it('registers an enter and/or exit patterns', function() {
+				// it('registers an enter and/or exit patterns', () => {
 				// 	route('one/two/three')
 				// 	.enter(() => {})
 				// 	.exit(() => {})
 				// 	return true
 				// })
 				
-				it('travels among multiple paths', function() {
-										
+				it('travels among multiple paths', () => {
+					
 					const router = Router()
 					watch(router, '1')
 					watch(router, '1/2')
@@ -72,31 +71,16 @@
 					return true
 				})
 				
-				function watch(router, path) {
-					
-					router.register(path, {
-						enter: complete((data) => print(data)),
-						exit: complete((data) => print(data)),
-					})
-				}
+			}).run()
+			
+			function watch(router, path) {
 				
-				function complete(fn) {
-					
-					return function(options) {
-						fn(options)
-						options.then()
-					}
-				}
-				
-				test_suite_run(suite, function(passed) {
-					
-					if (passed) console.log(`All tests passed.`)
-					else console.log(`Some tests failed.`)
+				router.register(path, {
+					enter: complete((data) => print(data)),
+					exit: complete((data) => print(data)),
 				})
 			}
-			
-			run()
-			
+						
 			function watch_products(router) {
 				
 				const chain = [watch_products, watch_product, watch_features, watch_feature]

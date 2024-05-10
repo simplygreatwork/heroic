@@ -7,21 +7,20 @@
 	<body>
 		<script type="importmap">{"imports": {
 			"html-console": "../../html-console/module.js",
-			"test-suite": "../../test-suite/module.js"
+			"test": "../../test/module.js",
+			"bus": "../../bus/module.js"
 		}}</script>
 		<script type="module">
 			
 			import { console_init } from 'html-console'
-			import { test_suite_new, test_suite_run } from 'test-suite'
+			import { Test } from 'test'
 			import { State } from '../source/state.js'
 			
-			function run() {
+			console_init('body')
+			
+			Test().suite((it) => {
 				
-				console_init('body')
-				let suite = test_suite_new()
-				let { it } = suite
-				
-				it('sets 5 values then travels', function() {
+				it('sets 5 values then travels', () => {
 					let store = State({})
 					store.commit(({ set }) => set('a', 1))
 					let transaction = store.commit(({ set }) => set('b', 2))
@@ -35,14 +34,8 @@
 					return length_a === 2 && length_b === 5
 				})
 				
-				test_suite_run(suite, function(passed) {
-					if (passed) console.log(`All tests passed.`)
-					else console.log(`Some tests failed.`)
-				})
-			}
-			
-			run()
-			
+			}).run()
+						
 			function print(label, value) {
 				console.log(`${label}: ${JSON.stringify(value)}`)
 			}

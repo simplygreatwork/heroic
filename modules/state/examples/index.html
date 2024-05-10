@@ -7,21 +7,20 @@
 	<body>
 		<script type="importmap">{"imports": {
 			"html-console": "../../html-console/module.js",
-			"test-suite": "../../test-suite/module.js"
+			"test": "../../test/module.js",
+			"bus": "../../bus/module.js"
 		}}</script>
 		<script type="module">
 			
 			import { console_init } from 'html-console'
-			import { test_suite_new, test_suite_run } from 'test-suite'
+			import { Test } from 'test'
 			import { State } from '../source/state.js'
 			
-			function run() {
+			console_init('body')
+			
+			Test().suite((it) => {
 				
-				console_init('body')
-				let suite = test_suite_new()
-				let { it } = suite
-				
-				it('commits', function() {
+				it('commits', () => {
 					
 					let store = State({ one: { two: { three: { four: { five: 5 }}}} })
 					store.commit(({ get }) => {
@@ -39,7 +38,7 @@
 					return true
 				})
 				
-				it('is frozen?', function() {
+				it('is frozen?', () => {
 					
 					let result = false
 					let store = State({ a: 1, b: 2, one: { two: { three: {} }}})
@@ -53,7 +52,7 @@
 					return result
 				})
 				
-				it('gets at depth', function() {
+				it('gets at depth', () => {
 					
 					let store = State({ a: 1, b: 2, one: { two: { three: {} }}})
 					store.commit(({ set, get, update }) => {
@@ -65,7 +64,7 @@
 					return true
 				})
 				
-				it('sets at depth', function() {
+				it('sets at depth', () => {
 					
 					let store = State({ a: 1, b: 2, one: { two: { three: {} }}})
 					store.commit(({ set, get, update }) => {
@@ -79,7 +78,7 @@
 					return true
 				})
 				
-				it('uses select to get and set', function() {
+				it('uses select to get and set', () => {
 					
 					let store = State({ a: 1, b: 2, one: { two: { three: {} }}})					
 					let substore = store.select('one/two')
@@ -92,7 +91,7 @@
 					return true
 				})
 				
-				it('updates an array', function() {
+				it('updates an array', () => {
 					
 					let store = State({ one: { two: { three: [1, 2, 3] }}})
 					store.commit(({ set, get, update }) => {
@@ -107,7 +106,7 @@
 					return true
 				})
 				
-				it('removes a key and value', function() {
+				it('removes a key and value', () => {
 					let store = State({ one: { a: 1, b: 2 }})		
 					store.commit(({ set, get, remove }) => {
 						print(`get()`, get())
@@ -117,7 +116,7 @@
 					return true
 				})
 				
-				it('uses apply', function() {
+				it('uses apply', () => {
 					let store = State({ one: { two: { three: {}} }})		
 					store.commit(({ get, apply }) => {
 						apply('one/two', ({ get, set }) => {
@@ -129,7 +128,7 @@
 					return true
 				})
 				
-				it('sets 5 values plus 3 undo, plus 3 redo', function() {
+				it('sets 5 values plus 3 undo, plus 3 redo', () => {
 					let store = State({})
 					store.on_change('a', () => console.log(`a changed`))
 					store.on_change('b', () => console.log(`b changed`))
@@ -159,14 +158,8 @@
 					return Object.keys(store.get()).length === 5
 				})
 				
-				test_suite_run(suite, function(passed) {
-					if (passed) console.log(`All tests passed.`)
-					else console.log(`Some tests failed.`)
-				})
-			}
-			
-			run()
-			
+			}).run()
+						
 			function print(label, value) {
 				console.log(`${label}: ${JSON.stringify(value)}`)
 			}
