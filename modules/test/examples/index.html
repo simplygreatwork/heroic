@@ -14,6 +14,7 @@
 			
 			import { console_init } from 'html-console'
 			import { Test } from 'test'
+			import { install } from 'test'
 			console_init('body')
 			
 			Test().suite((it, wait) => {
@@ -30,7 +31,7 @@
 						bus.on('end', (pass) => {
 							if (pass) console.log(`All tests passed!`)
 							else console.log(`Some tests failed!`)
-							then()
+							then(true)
 						})
 					})
 				})

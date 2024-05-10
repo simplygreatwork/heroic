@@ -46,7 +46,7 @@ function run_each_result(test, fn, bus, pass, item, result) {
 	run_each(test, fn, bus, pass)
 }
 
-function install(bus) {
+export function install(bus) {
 	
 	bus.on('begin', (name) => console.log(`\nRunning test "${name}".`))
 	bus.on('item', (pass, label) => console.log(`${ pass ? 'Passed' : 'Failed'}: "${label}".`))
