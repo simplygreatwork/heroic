@@ -79,7 +79,7 @@ router.register('products/:product_id', {
 })
 ```
 
-You pass these values, which contain "product_id", along to the next component, "product.html"
+You can pass these values, which contain "product_id", along to the next component, "product.html"
 
 ```javascript
 router.register('products/:product_id', {
@@ -159,7 +159,7 @@ Component.ready(({ component }) => {
 })
 ```
 
-When you clone a component, it's inserted in the DOM directly above the subject. This is mostly used for creating lists of items.
+When you clone a component, it's inserted in the DOM directly above the subject. Cloning is mostly used for creating lists of items.
 
 # Cloud
 

@@ -23,7 +23,7 @@ function suite(test, fn) {
 
 function run(test, fn) {
 	
-	let pass = true
+	const pass = true
 	const bus = new Bus()
 	fn ? fn(bus) : install(bus)
 	bus.emit('begin', test.name || "")
