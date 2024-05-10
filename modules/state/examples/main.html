@@ -8,13 +8,14 @@
 		<script type="importmap">{"imports": {
 			"html-console": "../../html-console/module.js",
 			"test": "../../test/module.js",
-			"bus": "../../bus/module.js"
+			"bus": "../../bus/module.js",
+			"state": "../../state/module.js"
 		}}</script>
 		<script type="module">
 			
 			import { console_init } from 'html-console'
 			import { Test } from 'test'
-			import { State } from '../source/state.js'
+			import { State } from 'state'
 			
 			console_init('body')
 			
