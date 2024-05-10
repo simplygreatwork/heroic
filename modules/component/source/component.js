@@ -59,7 +59,7 @@ export class Component {
 			parent: this,
 			base: this.base
 		})
-		this.children.push(child)
+		this.children.unshift(child)
 		child.on('ready', () => this.scan_child(elements))
 		child.load()
 	}
