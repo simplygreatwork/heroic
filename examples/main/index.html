@@ -25,7 +25,7 @@
 				<div name="navbar" data-component="./navbar.html"></div>
 			</div>
 			<div class="container">
-				<div data-component="./main.html"></div>
+				<div name="main" data-component="./main.html"></div>
 			</div>
 		</div>
 		
@@ -43,7 +43,7 @@
 				const bus = window.bus = new Bus()
 				const store = window.store = State({})
 				component.child('navbar').data.bus = bus
-				const child = component.child(0).child('void')
+				const child = component.child('main').child('void')
 				
 				router.register('products', {
 					enter: ({ path, then }) => {
