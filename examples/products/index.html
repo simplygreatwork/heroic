@@ -32,13 +32,10 @@
 				location.hash = '#'
 				window.router = new Router()
 				
+				const child = component.child('void')
 				router.register('products', {
-					enter: function({ part, then }) {
-						component.child('void').redirect('./products.html', { part }, then)
-					},
-					exit : function({ then }) {
-						component.child('void').redirect('../shared/views/empty.html', {}, then)
-					}
+					enter: ({ part, then }) => child.redirect('./products.html', { part }, then),
+					exit: ({ then }) => child.redirect('../shared/views/empty.html', {}, then)
 				})
 				
 				setTimeout(() => location.hash = '#/products/1/features/2')
