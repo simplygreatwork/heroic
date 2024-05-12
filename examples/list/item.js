@@ -6,11 +6,10 @@ export function _() {
 	Component.ready(({ component, data, $, elements }) => {
 		
 		const { item, link, bus } = data
-		const a = $('a.row')
-		const div = $('div.row')
+		const div_ = $('div.row'), a_ = $('a.row')
 		
-		Object.assign(a, { href: link, innerText: item.title })
-		div_row.onmousedown = () => window.location.hash = link
-		bus.on(`item-changed:${item.id}`, ({ item }) => a_row.innerText = item.title)
+		Object.assign(a_, { href: link, innerText: item.title })
+		div_.onmousedown = () => window.location.hash = link
+		bus.on(`item-changed:${item.id}`, ({ item }) => a_.innerText = item.title)
 	})
 }
