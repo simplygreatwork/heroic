@@ -138,7 +138,9 @@ export class Component {
 			options: this.options,
 			path: this.path,
 			parent: this.parent,
-			fn: this.fn
+			fn: this.fn,
+			elements: this.elements,
+			template: false
 		})
 		this.parent.children.push(component)
 		this.element.before(component.element)
