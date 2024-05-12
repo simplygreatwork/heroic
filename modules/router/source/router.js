@@ -102,19 +102,16 @@ export function Router() {
 	
 	function proceed() {
 		
-		if (queue.length > 0) {
-			const change = queue.shift()
-			trace(`process: ${JSON.stringify(change)}`)
-			later(() => {
-				if (change.kind == 'complete') {
-					bus.emit('change', change.path)
-					proceed()	
-				}
-				else fire_change(change)
-			})
-		} else {
-			if (false) print_registry(enters)
-		}
+		if (queue.length === 0) return 
+		const change = queue.shift()
+		trace(`process: ${JSON.stringify(change)}`)
+		later(() => {
+			if (change.kind == 'complete') {
+				bus.emit('change', change.path)
+				proceed()	
+			}
+			else fire_change(change)
+		})
 	}
 	
 	function fire_change(change) {
