@@ -8,13 +8,15 @@ export function _() {
 		if (! data.item ) return												// because the template has no data
 		const { id, item, link, realm, bus, cloud } = data
 		const a = $('a.row'), div = $('div.row')
-		a.href = link
-		a.innerText = item.title
+		
+		Object.assign(a, { href: link, innerText: item.title })
 		item.done ? a.classList.add('done') : a.classList.remove('done')
-		div.onmousedown = () => window.location.hash = link
-		cloud.on_change((key, title) => a.innerText = title, `tasks/${id}/title`)
-		cloud.on_change((key, done) => done ? a.classList.add('done') : a.classList.remove('done'), `tasks/${id}/done`)
-		cloud.on_change((key, value) => {
+		div.onmousedown = () => location.hash = link
+		
+		const { on_change } = cloud
+		on_change((key, title) => a.innerText = title, `tasks/${id}/title`)
+		on_change((key, done) => done ? a.classList.add('done') : a.classList.remove('done'), `tasks/${id}/done`)
+		on_change((key, value) => {
 			if (value != undefined) return
 			component.remove()
 			window.location.hash = `#/${realm}`

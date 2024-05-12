@@ -38,11 +38,25 @@ export class Component {
 	invoke() {
 		
 		const $ = this.element.querySelector.bind(this.element)
-		this.fn.apply(this, [{ component: this, data: this.data, $ }])
+		this.fn.apply(this, [{ component: this, data: this.data, $, elements: this.elements }])
 		this.emit('initialized', this)
 	}
 	
 	scan() {
+		
+		this.scan_elements()
+		this.scan_children()
+	}
+	
+	scan_elements() {
+		
+		this.elements = {}
+		Array.from(this.content.querySelectorAll(`[id]`)).forEach((element) => {
+			this.elements[element.id] = element
+		})
+	}
+	
+	scan_children() {
 		
 		this.children = []
 		this.scan_child(Array.from(this.content.querySelectorAll(`[data-component]`)))

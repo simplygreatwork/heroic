@@ -16,7 +16,7 @@
 		
 		Component.ready(({ component, data, $ }) => {
 			
-			$('.title').innerText = `Column "${data.part}"`
+			$('[data-title]').innerText = `Column "${data.part}"`
 			const child = component.child('void')
 			router.register(next_path(data.path), {
 				enter: ({ path, part, then }) => child.redirect('./infinite.html', { path, part }, then),

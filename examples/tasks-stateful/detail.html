@@ -2,11 +2,11 @@
 <div>
 	<div class="container">
 		<section class="content">
-			<header data-title style="display:none;"></header>
+			<header id="data_title" data-title style="display:none;"></header>
 			<section class="scroll">
-				<input name="title" class="task-title">
-				<button class="task-done">Complete Task</button>
-				<button class="task-close">Discard Task</button>
+				<input id="title" name="title" class="task-title">
+				<button id="done" class="task-done">Complete Task</button>
+				<button id="close" class="task-close">Discard Task</button>
 			</section>
 		</section>
 		<section name="void" data-component="../shared/views/empty.html" class="void"></section>
@@ -16,18 +16,19 @@
 		
 		import { Component } from 'component'
 		
-		Component.ready(({ component, data, $ }) => {
+		Component.ready(({ component, data, $, elements }) => {
 			
 			const { id, item, bus, cloud } = data
-			$('[data-title]').innerText = item.title
-			$('input.task-title').value = item.title
-			$('input.task-title').oninput = () => {
-				cloud.set(`tasks/${id}/title`, $('input.task-title').value)
-				$('[data-title]').innerText = $('input.task-title').value
+			const { title, data_title, done, close } = elements
+			
+			title.value = data_title.innerText = item.title
+			title.oninput = () => {
+				cloud.set(`tasks/${id}/title`, title.value)
+				data_title.innerText = title.value
 				bus.emit('title-changed')
 			}
-			$('.task-done').onclick = () => cloud.set(`tasks/${id}/done`, true)
-			$('.task-close').onclick = () => cloud.remove(`tasks/${id}`)
+			done.onclick = () => cloud.set(`tasks/${id}/done`, true)
+			close.onclick = () => cloud.remove(`tasks/${id}`)
 		})
 		
 	</script>

@@ -4,7 +4,7 @@ import { clone } from './utility.js'
 import { deep_freeze } from './freeze.js'
 
 export function State(data) {
-	return store_new(clone(data))
+	return store_new(clone(data || {}))
 }
 
 function store_new(data) {
