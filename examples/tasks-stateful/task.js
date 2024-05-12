@@ -5,7 +5,6 @@ export function _() {
 	
 	Component.ready(({ component, data, $ }) => {
 		
-		if (! data.item ) return												// because the template has no data
 		const { id, item, link, realm, bus, cloud } = data
 		const a = $('a.row'), div = $('div.row')
 		

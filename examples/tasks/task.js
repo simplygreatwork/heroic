@@ -5,7 +5,6 @@ export function _() {
 	
 	Component.ready(function({ component, data, $ }) {
 		
-		if (! data.item ) return						// because could be the template
 		let { item, link, bus } = data
 		let a = $('a.row')
 		let div = $('div.row')

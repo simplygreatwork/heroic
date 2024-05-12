@@ -5,7 +5,6 @@ export function _() {
 	
 	Component.ready(({ component, data, $ }) => {
 		
-		if (! data.item ) return
 		const { item, link, bus } = data
 		const a = $('a.row')
 		const div = $('div.row')

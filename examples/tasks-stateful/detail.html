@@ -2,7 +2,7 @@
 <div>
 	<div class="container">
 		<section class="content">
-			<header id="data_title" data-title style="display:none;"></header>
+			<header id="page_title" data-title style="display:none;"></header>
 			<section class="scroll">
 				<input id="title" name="title" class="task-title">
 				<button id="done" class="task-done">Complete Task</button>
@@ -19,12 +19,12 @@
 		Component.ready(({ component, data, $, elements }) => {
 			
 			const { id, item, bus, cloud } = data
-			const { title, data_title, done, close } = elements
+			const { page_title, title, done, close } = elements
 			
-			title.value = data_title.innerText = item.title
+			title.value = page_title.innerText = item.title
 			title.oninput = () => {
 				cloud.set(`tasks/${id}/title`, title.value)
-				data_title.innerText = title.value
+				page_title.innerText = title.value
 				bus.emit('title-changed')
 			}
 			done.onclick = () => cloud.set(`tasks/${id}/done`, true)

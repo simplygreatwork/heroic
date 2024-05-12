@@ -18,18 +18,14 @@
 		Component.ready(({ component, data, $ }) => {
 			
 			const { bus } = data
-			router.on('change', (hash) => {
-				update(hash)
-			})
-			bus.on(`title-changed`, () => {
-				update(window.location.hash)
-			})
+			router.on('change', (hash) => update(hash))
+			bus.on(`title-changed`, () => update(window.location.hash))
 			
 			function update(hash) {
 				
-				let array = hash.split('/')
+				const array = hash.split('/')
 				array.shift()
-				let list = []							// use array.reduce instead?
+				const list = []								// use array.reduce instead?
 				while (array.length > 0) {
 					list.unshift([...array])
 					array.pop()
@@ -44,7 +40,7 @@
 		
 		function find_title(path, component) {
 			
-			let top = find_top_level_component(component)
+			const top = find_top_level_component(component)
 			let component_ = null
 			walk_components(top, (component) => {
 				if (component.data.path == path) {

@@ -37,6 +37,7 @@ export class Component {
 	
 	invoke() {
 		
+		if (this.template) return
 		const $ = this.element.querySelector.bind(this.element)
 		this.fn.apply(this, [{ component: this, data: this.data, $, elements: this.elements }])
 		this.emit('initialized', this)
@@ -71,8 +72,10 @@ export class Component {
 			path: element.dataset.component,
 			name: element.getAttribute('name'),
 			parent: this,
-			base: this.base
+			base: this.base,
+			template: element.dataset.template ? true : false
 		})
+		if (child.template) element.style.display = 'none'
 		this.children.unshift(child)
 		child.on('ready', () => this.scan_child(elements))
 		child.load()
@@ -139,6 +142,7 @@ export class Component {
 		})
 		this.parent.children.push(component)
 		this.element.before(component.element)
+		component.element.style.display = 'block'
 		component.invoke()
 		return component
 	}
