@@ -53,8 +53,6 @@
 			const link = `#/list/${item.id}`
 			const row = template.clone({ item, link, bus })
 			cache[item.id] = { item, row }
-			row.element.style.display = 'block'
-			template.element.style.display = 'none'
 			return row
 		}
 		

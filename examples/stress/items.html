@@ -56,8 +56,6 @@
 			const link = `#/stress/${item.id}`
 			const row = template.clone({ item, link, bus })
 			index[item.id] = { item, row }
-			row.element.style.display = 'block'
-			template.element.style.display = 'none'
 			return row
 		}
 		

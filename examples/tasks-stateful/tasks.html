@@ -54,8 +54,6 @@
 				
 				const row = template.clone({ id, item, realm, bus, cloud, link:`#/${realm}/${id}` })
 				cache[id] = { item, row }
-				row.element.style.display = 'block'
-				template.element.style.display = 'none'
 				return row
 			}
 			
