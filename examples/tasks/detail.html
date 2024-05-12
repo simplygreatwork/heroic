@@ -2,11 +2,11 @@
 <div>
 	<div class="container">
 		<section class="content">
-			<header data-title class="title" style="display:none;"></header>
+			<header id="page_title" data-title class="title" style="display:none;"></header>
 			<section class="scroll">
-				<input name="title" class="task-title">
-				<button class="task-done">Complete Task</button>
-				<button class="task-close">Close Task</button>
+				<input id="title" name="title" class="task-title">
+				<button id="done" class="task-done">Complete Task</button>
+				<button id="close" class="task-close">Close Task</button>
 			</section>
 		</section>
 		<section name="void" data-component="../shared/views/empty.html" class="void"></section>
@@ -16,22 +16,24 @@
 		
 		import { Component } from 'component'
 		
-		Component.ready(({ component, data, $ }) => {
+		Component.ready(({ component, data, $, elements }) => {
 			
 			const { item, bus } = data
-			$('[data-title]').innerText = item.title
-			$('input.task-title').value = item.title
-			$('input.task-title').oninput = function() {
-				item.title = $('input.task-title').value
+			const { page_title, title, done, close } = elements
+			
+			page_title.innerText = item.title
+			title.value = item.title
+			title.oninput = () => {
+				item.title = title.value
 				bus.emit(`item-changed:${item.id}`, { item })
-				$('[data-title]').innerText = item.title + '!'
+				page_title.innerText = item.title + '!'
 				bus.emit('title-changed')
 			}
-			$('.task-done').onclick = function() {
+			done.onclick = () => {
 				item.done = true
 				bus.emit(`item-changed:${item.id}`, { item })
 			}
-			$('.task-close').onclick = function() {
+			close.onclick = () => {
 				item.closed = true
 				bus.emit(`item-changed:${item.id}`, { item })
 				bus.emit(`item-changed`, { item })

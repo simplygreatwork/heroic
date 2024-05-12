@@ -6,17 +6,13 @@ export function _() {
 	Component.ready(function({ component, data, $ }) {
 		
 		let { item, link, bus } = data
-		let a = $('a.row')
-		let div = $('div.row')
-		a.href = link
-		a.innerText = item.title
-		div.onmousedown = function() {
-			window.location.hash = link
-		}
-		bus.on(`item-changed:${item.id}`, function({ item }) {
+		const div = $('div.row'), a = $('a.row')
+		
+		Object.assign(a, { href: link, innerText: item.title })
+		div.onmousedown = () => window.location.hash = link
+		bus.on(`item-changed:${item.id}`, ({ item }) => {
 			a.innerText = item.title
-			if (item.done) a.classList.add('done')
-			if (! item.done) a.classList.remove('done')
+			item.done ? a.classList.add('done') : a.classList.remove('done')
 			if (item.closed) {
 				component.remove()
 				window.location.hash = `#/tasks`	
