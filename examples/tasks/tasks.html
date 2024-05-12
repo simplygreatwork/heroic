@@ -86,8 +86,6 @@
 			let link = `#/tasks/${item.id}`
 			let row = template.clone({ item, link, bus })
 			cache[item.id] = { item, row }
-			row.element.style.display = 'block'
-			template.element.style.display = 'none'
 			return row
 		}
 		
