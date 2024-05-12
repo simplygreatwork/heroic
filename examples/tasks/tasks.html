@@ -2,10 +2,10 @@
 <div>
 	<div class="container">
 		<section class="content">
+			<button name="task-new" class="task-new">New Task</button>
 			<header data-title class="title">Tasks</header>
 			<section class="scroll">
 				<section name="task-template" data-component="./task.html" data-template></section>
-				<button name="task-new" class="task-new">New Task</button>
 			</section>
 		</section>
 		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
@@ -86,6 +86,8 @@
 			let link = `#/tasks/${item.id}`
 			let row = template.clone({ item, link, bus })
 			cache[item.id] = { item, row }
+			row.element.style.display = 'block'
+			template.element.style.display = 'none'
 			return row
 		}
 		

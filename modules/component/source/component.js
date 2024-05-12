@@ -73,7 +73,7 @@ export class Component {
 			name: element.getAttribute('name'),
 			parent: this,
 			base: this.base,
-			template: element.dataset.template ? true : false
+			template: element.hasAttribute('data-template') ? true : false
 		})
 		if (child.template) element.style.display = 'none'
 		this.children.unshift(child)
