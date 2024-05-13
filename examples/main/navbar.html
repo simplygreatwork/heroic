@@ -1,6 +1,6 @@
 
 <div>
-	<div class="navbar"></div>
+	<div id="navbar" class="navbar"></div>
 	<style>
 		.navbar {
 			margin-top:20px;
@@ -18,7 +18,6 @@
 		Component.ready(({ component, data, $ }) => {
 			
 			const { bus } = data
-			const { div } = $()
 			
 			router.on('change', (hash) => update(hash))
 			bus.on(`title-changed`, () => update(window.location.hash))
@@ -32,7 +31,7 @@
 					list.unshift([...array])
 					array.pop()
 				}
-				div[1].innerHTML = list.map((item) => {
+				$('#navbar').innerHTML = list.map((item) => {
 					const path = item.join('/')
 					const title = find_title(path, component) || item.pop()
 					return `<a href="#/${path}">${title}</a>`
