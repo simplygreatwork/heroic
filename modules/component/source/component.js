@@ -37,7 +37,7 @@ export class Component {
 	
 	invoke() {
 		
-		if (this.template) return
+		if (this.is_template) return
 		const $ = this.$.bind(this)
 		this.elements = Array.from(this.element.querySelectorAll(`*`))
 		this.fn.apply(this, [{ component: this, data: this.data, $ }])
@@ -76,9 +76,9 @@ export class Component {
 			name: element.getAttribute('name'),
 			parent: this,
 			base: this.base,
-			template: element.hasAttribute('data-template') ? true : false
+			is_template: element.hasAttribute('data-template') ? true : false
 		})
-		if (child.template) element.style.display = 'none'
+		if (child.is_template) element.style.display = 'none'
 		this.children.unshift(child)
 		child.on('ready', () => this.scan_child(elements))
 		child.load()
@@ -145,7 +145,7 @@ export class Component {
 			parent: this.parent,
 			fn: this.fn,
 			elements: Array.from(element.querySelectorAll(`*`)),
-			template: false
+			is_template: false
 		})
 		this.parent.children.push(component)
 		this.element.before(component.element)
