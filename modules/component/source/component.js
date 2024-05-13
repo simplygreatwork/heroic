@@ -38,10 +38,27 @@ export class Component {
 	invoke() {
 		
 		if (this.template) return
-		const $ = this.element.querySelector.bind(this.element)
+		const $ = this.$.bind(this)
 		this.elements_ = Array.from(this.element.querySelectorAll(`*`))
 		this.fn.apply(this, [{ component: this, data: this.data, $, elements: this.get_elements.bind(this) }])
 		this.emit('initialized', this)
+	}
+	
+	$(selector) {
+		
+		if (selector) return this.element.querySelector(selector)
+		if (! this.elements_) return {}
+		let result = {}
+		this.elements_.forEach((element) => {
+			const tag = element.tagName.toLowerCase()
+			if (! result[tag]) result[tag] = []
+			result[tag].push(element)
+		})
+		Object.keys(result).forEach((each) => {
+			if (result[each].length === 1) result[each] = result[each][0]
+		})
+		return result
+		
 	}
 	
 	get_elements() {

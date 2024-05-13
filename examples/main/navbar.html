@@ -18,6 +18,8 @@
 		Component.ready(({ component, data, $ }) => {
 			
 			const { bus } = data
+			const { div } = $()
+			
 			router.on('change', (hash) => update(hash))
 			bus.on(`title-changed`, () => update(window.location.hash))
 			
@@ -30,7 +32,7 @@
 					list.unshift([...array])
 					array.pop()
 				}
-				$('.navbar').innerHTML = list.map((item) => {
+				div[1].innerHTML = list.map((item) => {
 					const path = item.join('/')
 					const title = find_title(path, component) || item.pop()
 					return `<a href="#/${path}">${title}</a>`

@@ -46,12 +46,12 @@
 		
 		let counter = 0
 		
-		Component.ready(({ component, $, elements }) => {
+		Component.ready(({ component, $ }) => {
 			
 			const bus = component.data.bus || new Bus()
 			const template = component.child('task-template')
 			const cache = {}
-			const { button } = elements()
+			const { button } = $()
 			
 			default_items().forEach((item) => {
 				install_row(item)

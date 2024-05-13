@@ -2,7 +2,7 @@
 <div>
 	<div class="container">
 		<section class="content">
-			<header data-title class="title" style="display:none;"></header>
+			<header data-title class="title" style="display:block;color:black;">page-title</header>
 			<section class="scroll">
 				<input class="task-title">
 				<button class="task-done">Complete Task</button>
@@ -16,10 +16,11 @@
 		
 		import { Component } from 'component'
 		
-		Component.ready(({ component, data, $, elements }) => {
+		Component.ready(({ component, data, $ }) => {
 			
 			const { item, bus } = data
-			const { header, input, button } = elements()
+			let { header, input, button } = $()
+			header = header[0]
 			
 			header.innerText = item.title
 			input.value = item.title
@@ -27,6 +28,7 @@
 				item.title = input.value
 				bus.emit(`item-changed:${item.id}`, { item })
 				header.innerText = item.title + '!'
+				console.log(`header.innerText: ${header.innerText}`)
 				bus.emit('title-changed')
 			}
 			button[0].onclick = () => {

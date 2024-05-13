@@ -27,7 +27,7 @@
 		
 		let counter = 0
 		
-		Component.ready(({ component, data, $, elements }) => {
+		Component.ready(({ component, data, $ }) => {
 			
 			const bus = data.bus || new Bus()
 			const cloud = Cloud(bus)
@@ -35,7 +35,7 @@
 			const realm = data.realm
 			const template = component.child('task-template')
 			const cache = {}
-			const { button } = elements()
+			const { button } = $()
 			
 			configure_store(store)
 			render()

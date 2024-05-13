@@ -3,10 +3,10 @@ import { Component } from 'component'
 
 export function _() {
 	
-	Component.ready(({ component, data, $, elements }) => {
+	Component.ready(({ component, data, $ }) => {
 		
 		const { item, link, bus } = data
-		const { div, a } = elements()
+		const { div, a } = $()
 		
 		Object.assign(a, { href: link, innerText: item.title })
 		div[0].onmousedown = () => window.location.hash = link

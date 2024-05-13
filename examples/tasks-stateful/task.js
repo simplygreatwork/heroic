@@ -3,10 +3,10 @@ import { Component } from 'component'
 
 export function _() {
 	
-	Component.ready(({ component, data, $, elements }) => {
+	Component.ready(({ component, data, $ }) => {
 		
 		const { id, item, link, realm, bus, cloud } = data
-		const { div, a } = elements()
+		const { div, a } = $()
 		
 		Object.assign(a, { href: link, innerText: item.title })
 		item.done ? a.classList.add('done') : a.classList.remove('done')
