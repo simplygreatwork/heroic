@@ -2,9 +2,9 @@
 <div>
 	<div class="container">
 		<section class="content">
-			<button name="task-new" class="task-new">New Task</button>
-			<button name="undo" class="undo">Undo</button>
-			<button name="redo" class="redo">Redo</button>
+			<button class="task-new">New Task</button>
+			<button class="undo">Undo</button>
+			<button class="redo">Redo</button>
 			<header data-title class="title">Tasks</header>
 			<section class="scroll">
 				<div name="task-template" data-component="./task.html" data-template></div>
@@ -27,7 +27,7 @@
 		
 		let counter = 0
 		
-		Component.ready(({ component, data, $ }) => {
+		Component.ready(({ component, data, $, elements }) => {
 			
 			const bus = data.bus || new Bus()
 			const cloud = Cloud(bus)
@@ -35,6 +35,7 @@
 			const realm = data.realm
 			const template = component.child('task-template')
 			const cache = {}
+			const { button } = elements()
 			
 			configure_store(store)
 			render()
@@ -60,11 +61,11 @@
 			function bind() {
 				
 				const { set, undo, redo, scope } = cloud
-				bind_click($('.task-new'), () => {
+				bind_click(button[0], () => {
 					set(`tasks/${++counter}`, new_task({ id: counter, title: `Untitled Task ${counter}` }))
 				}, scope)
-				bind_click($('.undo'), () => undo(), scope)
-				bind_click($('.redo'), () => redo(), scope)
+				bind_click(button[1], () => undo(), scope)
+				bind_click(button[2], () => redo(), scope)
 			}
 			
 			function watch() {

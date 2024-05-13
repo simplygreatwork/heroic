@@ -51,14 +51,13 @@
 			const bus = component.data.bus || new Bus()
 			const template = component.child('task-template')
 			const cache = {}
-			default_items().forEach(function(item) {
+			default_items().forEach((item) => {
 				install_row(item, template, bus, cache)
 			})
 			
 			const child = component.child('void')
 			router.register('tasks/:id', {
 				enter: ({ path, values, then }) => {
-					console.log(`enter tasks/:id`)
 					const { item, row } = cache[values.id]
 					select_row(row, bus)
 					child.redirect('./detail.html', { path, item, bus }, then)

@@ -39,20 +39,26 @@ export class Component {
 		
 		if (this.template) return
 		const $ = this.element.querySelector.bind(this.element)
-		const elements = this.scan_elements()
-		this.fn.apply(this, [{ component: this, data: this.data, $, elements }])
+		this.elements_ = Array.from(this.element.querySelectorAll(`*`))
+		this.fn.apply(this, [{ component: this, data: this.data, $, elements: this.get_elements.bind(this) }])
 		this.emit('initialized', this)
 	}
 	
-	scan_elements() {
+	get_elements() {
 		
+		if (! this.elements_) return {}
 		let result = {}
-		Array.from(this.element.querySelectorAll(`[id]`)).forEach((element) => {
-			result[element.id] = element
+		this.elements_.forEach((element) => {
+			const tag = element.tagName.toLowerCase()
+			if (! result[tag]) result[tag] = []
+			result[tag].push(element)
+		})
+		Object.keys(result).forEach((each) => {
+			if (result[each].length === 1) result[each] = result[each][0]
 		})
 		return result
 	}
-	
+			
 	scan() {
 		
 		this.scan_children()
@@ -90,6 +96,7 @@ export class Component {
 			this.content = div.children[0]
 			Component.recent = this
 			this.element.innerHTML = ''
+			this.content_ = this.content.cloneNode(deep)
 			document.body.appendChild(this.content)
 			this.emit('attached')
 		})

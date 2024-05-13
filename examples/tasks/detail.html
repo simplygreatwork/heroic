@@ -2,11 +2,11 @@
 <div>
 	<div class="container">
 		<section class="content">
-			<header id="page_title" data-title class="title" style="display:none;"></header>
+			<header data-title class="title" style="display:none;"></header>
 			<section class="scroll">
-				<input id="title" name="title" class="task-title">
-				<button id="done" class="task-done">Complete Task</button>
-				<button id="close" class="task-close">Close Task</button>
+				<input class="task-title">
+				<button class="task-done">Complete Task</button>
+				<button class="task-close">Close Task</button>
 			</section>
 		</section>
 		<section name="void" data-component="../shared/views/empty.html" class="void"></section>
@@ -19,21 +19,21 @@
 		Component.ready(({ component, data, $, elements }) => {
 			
 			const { item, bus } = data
-			const { page_title, title, done, close } = elements
+			const { header, input, button } = elements()
 			
-			page_title.innerText = item.title
-			title.value = item.title
-			title.oninput = () => {
-				item.title = title.value
+			header.innerText = item.title
+			input.value = item.title
+			input.oninput = () => {
+				item.title = input.value
 				bus.emit(`item-changed:${item.id}`, { item })
-				page_title.innerText = item.title + '!'
+				header.innerText = item.title + '!'
 				bus.emit('title-changed')
 			}
-			done.onclick = () => {
+			button[0].onclick = () => {
 				item.done = true
 				bus.emit(`item-changed:${item.id}`, { item })
 			}
-			close.onclick = () => {
+			button[1].onclick = () => {
 				item.closed = true
 				bus.emit(`item-changed:${item.id}`, { item })
 				bus.emit(`item-changed`, { item })

@@ -23,7 +23,7 @@
 			const bus = new Bus()
 			const template = component.child('template')
 			const index = {}
-			default_items().forEach(function(item) {
+			default_items().forEach((item) => {
 				install_row(item, template, index, bus)
 			})
 			
@@ -45,7 +45,7 @@
 		
 		function default_items() {
 			
-			return new Array(10000).fill(0).map(function(each, index) {
+			return new Array(10000).fill(0).map((each, index) => {
 				const id = index + 1
 				return { id: id, title: `Item ${id}` }
 			})

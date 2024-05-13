@@ -14,9 +14,12 @@
 		
 		import { Component } from 'component'
 		
-		Component.ready(({ component, data, $ }) => {
+		Component.ready(({ component, data, $, elements }) => {
+			
 			const { item, bus } = data
-			$('[data-title]').innerText = item.title
+			const { header } = elements()
+			
+			header.innerText = item.title
 			bus.emit('title-changed')
 		})
 		

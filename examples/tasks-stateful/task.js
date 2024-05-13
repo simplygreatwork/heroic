@@ -6,11 +6,11 @@ export function _() {
 	Component.ready(({ component, data, $, elements }) => {
 		
 		const { id, item, link, realm, bus, cloud } = data
-		const { div, a } = elements
+		const { div, a } = elements()
 		
 		Object.assign(a, { href: link, innerText: item.title })
 		item.done ? a.classList.add('done') : a.classList.remove('done')
-		div.onmousedown = () => location.hash = link
+		div[1].onmousedown = () => location.hash = link
 		
 		const { on_change } = cloud
 		on_change((key, title) => a.innerText = title, `tasks/${id}/title`)
