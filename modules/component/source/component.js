@@ -48,7 +48,7 @@ export class Component {
 		
 		if (selector) return this.element.querySelector(selector)
 		if (! this.elements) return {}
-		let result = {}
+		const result = {}
 		this.elements.forEach((element) => {
 			const tag = element.tagName.toLowerCase()
 			if (! result[tag]) result[tag] = []
@@ -65,7 +65,7 @@ export class Component {
 		this.children = []
 		this.scan_child(Array.from(this.content.querySelectorAll(`[data-component]`)))
 	}
-		
+	
 	scan_child(elements) {
 		
 		if (elements.length === 0) return this.emit('ready', this, this.path)
@@ -136,14 +136,15 @@ export class Component {
 	
 	clone(data) {
 		
+		const element = this.element.cloneNode(deep)
 		const component = new Component({
-			element: this.element.cloneNode(deep),
+			element,
 			data,
 			options: this.options,
 			path: this.path,
 			parent: this.parent,
 			fn: this.fn,
-			elements: this.elements,				// todo: refresh to cloned elements
+			elements: Array.from(element.querySelectorAll(`*`)),
 			template: false
 		})
 		this.parent.children.push(component)
