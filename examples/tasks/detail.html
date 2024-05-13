@@ -18,7 +18,7 @@
 		Component.ready(({ component, data, $ }) => {
 			
 			const { item, bus } = data
-			let { header, input, button } = $()
+			const { header, input, button } = $()
 			
 			header.innerText = item.title
 			input.value = item.title
