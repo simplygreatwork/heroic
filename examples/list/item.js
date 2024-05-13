@@ -6,7 +6,7 @@ export function _() {
 	Component.ready(({ component, data, $, elements }) => {
 		
 		const { item, link, bus } = data
-		const div = $('div.row'), a = $('a.row')
+		const { div, a } = elements
 		
 		Object.assign(a, { href: link, innerText: item.title })
 		div.onmousedown = () => window.location.hash = link

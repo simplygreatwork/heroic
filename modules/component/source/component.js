@@ -39,24 +39,25 @@ export class Component {
 		
 		if (this.template) return
 		const $ = this.element.querySelector.bind(this.element)
-		this.fn.apply(this, [{ component: this, data: this.data, $, elements: this.elements }])
+		const elements = this.scan_elements()
+		this.fn.apply(this, [{ component: this, data: this.data, $, elements }])
 		this.emit('initialized', this)
-	}
-	
-	scan() {
-		
-		this.scan_elements()
-		this.scan_children()
 	}
 	
 	scan_elements() {
 		
-		this.elements = {}
-		Array.from(this.content.querySelectorAll(`[id]`)).forEach((element) => {
-			this.elements[element.id] = element
+		let result = {}
+		Array.from(this.element.querySelectorAll(`[id]`)).forEach((element) => {
+			result[element.id] = element
 		})
+		return result
 	}
 	
+	scan() {
+		
+		this.scan_children()
+	}
+		
 	scan_children() {
 		
 		this.children = []
