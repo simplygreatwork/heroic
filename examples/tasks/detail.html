@@ -28,7 +28,6 @@
 				item.title = input.value
 				bus.emit(`item-changed:${item.id}`, { item })
 				header.innerText = item.title + '!'
-				console.log(`header.innerText: ${header.innerText}`)
 				bus.emit('title-changed')
 			}
 			button[0].onclick = () => {
