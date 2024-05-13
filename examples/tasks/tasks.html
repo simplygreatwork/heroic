@@ -83,8 +83,8 @@
 			
 			function install_row(item) {
 				
-				let link = `#/tasks/${item.id}`
-				let row = template.clone({ item, link, bus })
+				const link = `#/tasks/${item.id}`
+				const row = template.clone({ item, link, bus })
 				cache[item.id] = { item, row }
 				return row
 			}
@@ -92,10 +92,9 @@
 			function listen() {
 				
 				button.onclick = () => {
-					let id = ++counter
-					let item = { id, title: `Untitled Task ${id}`, done: false }
-					let template = component.child('task-template')
-					let row = install_row(item)
+					const id = ++counter
+					const item = { id, title: `Untitled Task ${id}`, done: false }
+					const row = install_row(item)
 					window.location.hash = row.data.link
 				}
 				bus.on(`item-changed`, ({ item }) => {

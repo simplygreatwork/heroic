@@ -9,7 +9,6 @@
 				<button class="task-close">Discard Task</button>
 			</section>
 		</section>
-		<section name="void" data-component="../shared/views/empty.html" class="void"></section>
 	</div>
 	
 	<script type="module">
@@ -20,7 +19,6 @@
 			
 			const { id, item, bus, cloud } = data
 			let { header, input, button } = $()
-			header = header[0]
 			
 			input.value = header.innerText = item.title
 			input.oninput = () => {

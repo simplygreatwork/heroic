@@ -7,7 +7,6 @@
 				<section name="lorem" data-component="../shared/views/lorem.html"></section>
 			</section>
 		</section>
-		<section name="void" data-component="../shared/views/empty.html" class="void"></section>
 	</div>
 	
 	<script type="module">
@@ -18,7 +17,6 @@
 			
 			const { item, bus } = data
 			let { header } = $()
-			header = header[0]
 			
 			header.innerText = item.title
 			bus.emit('title-changed')
