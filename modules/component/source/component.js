@@ -39,17 +39,17 @@ export class Component {
 		
 		if (this.template) return
 		const $ = this.$.bind(this)
-		this.elements_ = Array.from(this.element.querySelectorAll(`*`))
-		this.fn.apply(this, [{ component: this, data: this.data, $, elements: this.get_elements.bind(this) }])
+		this.elements = Array.from(this.element.querySelectorAll(`*`))
+		this.fn.apply(this, [{ component: this, data: this.data, $ }])
 		this.emit('initialized', this)
 	}
 	
 	$(selector) {
 		
 		if (selector) return this.element.querySelector(selector)
-		if (! this.elements_) return {}
+		if (! this.elements) return {}
 		let result = {}
-		this.elements_.forEach((element) => {
+		this.elements.forEach((element) => {
 			const tag = element.tagName.toLowerCase()
 			if (! result[tag]) result[tag] = []
 			result[tag].push(element)
@@ -58,35 +58,14 @@ export class Component {
 			if (result[each].length === 1) result[each] = result[each][0]
 		})
 		return result
-		
 	}
 	
-	get_elements() {
-		
-		if (! this.elements_) return {}
-		let result = {}
-		this.elements_.forEach((element) => {
-			const tag = element.tagName.toLowerCase()
-			if (! result[tag]) result[tag] = []
-			result[tag].push(element)
-		})
-		Object.keys(result).forEach((each) => {
-			if (result[each].length === 1) result[each] = result[each][0]
-		})
-		return result
-	}
-			
 	scan() {
-		
-		this.scan_children()
-	}
-		
-	scan_children() {
 		
 		this.children = []
 		this.scan_child(Array.from(this.content.querySelectorAll(`[data-component]`)))
 	}
-	
+		
 	scan_child(elements) {
 		
 		if (elements.length === 0) return this.emit('ready', this, this.path)
@@ -164,7 +143,7 @@ export class Component {
 			path: this.path,
 			parent: this.parent,
 			fn: this.fn,
-			elements: this.elements,
+			elements: this.elements,				// todo: refresh to cloned elements
 			template: false
 		})
 		this.parent.children.push(component)
