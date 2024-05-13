@@ -2,7 +2,7 @@
 <div>
 	<div class="container">
 		<section class="content">
-			<button name="task-new" class="task-new">New Task</button>
+			<button class="task-new">New Task</button>
 			<header data-title class="title">Tasks</header>
 			<section class="scroll">
 				<section name="task-template" data-component="./task.html" data-template></section>
@@ -46,13 +46,15 @@
 		
 		let counter = 0
 		
-		Component.ready(({ component, $ }) => {
+		Component.ready(({ component, $, elements }) => {
 			
 			const bus = component.data.bus || new Bus()
 			const template = component.child('task-template')
 			const cache = {}
+			const { button } = elements()
+			
 			default_items().forEach((item) => {
-				install_row(item, template, bus, cache)
+				install_row(item)
 			})
 			
 			const child = component.child('void')
@@ -69,38 +71,38 @@
 			
 			install_selection(component, bus)
 			listen(component, $, bus, cache)
-		})
-		
-		function default_items() {
 			
-			return [
-				{ id: ++counter, title: 'Empty Trash!', done: false },
-				{ id: ++counter, title: 'Feed Dog!', done: false },
-				{ id: ++counter, title: 'Water Plant!', done: false }
-			]
-		}
-		
-		function install_row(item, template, bus, cache) {
-			
-			let link = `#/tasks/${item.id}`
-			let row = template.clone({ item, link, bus })
-			cache[item.id] = { item, row }
-			return row
-		}
-		
-		function listen(component, $, bus, cache) {
-			
-			$('.task-new').onclick = () => {
-				let id = ++counter
-				let item = { id, title: `Untitled Task ${id}`, done: false }
-				let template = component.child('task-template')
-				let row = install_row(item, template, bus, cache)
-				window.location.hash = row.data.link
+			function default_items() {
+				
+				return [
+					{ id: ++counter, title: 'Empty Trash!', done: false },
+					{ id: ++counter, title: 'Feed Dog!', done: false },
+					{ id: ++counter, title: 'Water Plant!', done: false }
+				]
 			}
-			bus.on(`item-changed`, ({ item }) => {
-				if (item.closed) delete cache[item.id]
-			})
-		}
+			
+			function install_row(item) {
+				
+				let link = `#/tasks/${item.id}`
+				let row = template.clone({ item, link, bus })
+				cache[item.id] = { item, row }
+				return row
+			}
+			
+			function listen() {
+				
+				button.onclick = () => {
+					let id = ++counter
+					let item = { id, title: `Untitled Task ${id}`, done: false }
+					let template = component.child('task-template')
+					let row = install_row(item)
+					window.location.hash = row.data.link
+				}
+				bus.on(`item-changed`, ({ item }) => {
+					if (item.closed) delete cache[item.id]
+				})
+			}
+		})
 		
 	</script>
 </div>
