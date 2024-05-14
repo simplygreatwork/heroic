@@ -14,7 +14,9 @@
 		import { Component } from 'component'
 		
 		Component.ready(({ component, data, $ }) => {
+			
 			$('.title').innerText = `Product "${data.part}"`
+			
 			const child = component.child('void')
 			router.register('products/:pid/features', {
 				enter: ({ path, part, then }) => child.redirect('./features.html', { path, part }, then),

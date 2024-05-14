@@ -41,23 +41,23 @@
 			})
 			
 			install_selection(component, bus)
+			
+			function default_items() {
+				
+				return new Array(10000).fill(0).map((each, index) => {
+					const id = index + 1
+					return { id: id, title: `Item ${id}` }
+				})
+			}
+			
+			function install_row(item) {
+				
+				const link = `#/stress/${item.id}`
+				const row = template.clone({ item, link, bus })
+				index[item.id] = { item, row }
+				return row
+			}
 		})
-		
-		function default_items() {
 			
-			return new Array(10000).fill(0).map((each, index) => {
-				const id = index + 1
-				return { id: id, title: `Item ${id}` }
-			})
-		}
-		
-		function install_row(item, template, index, bus) {
-			
-			const link = `#/stress/${item.id}`
-			const row = template.clone({ item, link, bus })
-			index[item.id] = { item, row }
-			return row
-		}
-		
 	</script>
 </div>

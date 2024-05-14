@@ -23,8 +23,9 @@
 			const bus = data.bus || new Bus()
 			const template = component.child('template')
 			const cache = {}
+			
 			default_items().forEach((item) => {
-				install_row(item, template, bus, cache)
+				install_row(item)
 			})
 			
 			const child = component.child('void')
@@ -38,23 +39,23 @@
 			})
 			
 			install_selection(component, bus)
+			
+			function default_items() {
+				
+				return new Array(20).fill(0).map(function(each, index) {
+					const id = index + 1
+					return { id: id, title: `Item ${id}` }
+				})
+			}
+			
+			function install_row(item) {
+				
+				const link = `#/list/${item.id}`
+				const row = template.clone({ item, link, bus })
+				cache[item.id] = { item, row }
+				return row
+			}
 		})
-		
-		function default_items() {
-			
-			return new Array(20).fill(0).map(function(each, index) {
-				const id = index + 1
-				return { id: id, title: `Item ${id}` }
-			})
-		}
-		
-		function install_row(item, template, bus, cache) {
-			
-			const link = `#/list/${item.id}`
-			const row = template.clone({ item, link, bus })
-			cache[item.id] = { item, row }
-			return row
-		}
 		
 	</script>
 </div>

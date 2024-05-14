@@ -15,6 +15,7 @@
 		import { Component } from 'component'
 		
 		Component.ready(({ component, $ }) => {
+			
 			const child = component.child('void')
 			router.register('products/:pid/features/:fid', {
 				enter: ({ path, part, then }) => child.redirect('./feature.html', { path, part }, then),
