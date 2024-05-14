@@ -22,16 +22,17 @@
 			
 			const bus = new Bus()
 			const template = component.child('template')
-			const index = {}
+			const cache = {}
+			
 			default_items().forEach((item) => {
-				install_row(item, template, index, bus)
+				install_row(item)
 			})
 			
 			const child = component.child('void')
 			router.register('stress/:id', {
 				enter: ({ path, values, then }) => {
-					const item = index[values.id].item
-					const row = index[values.id].row
+					const item = cache[values.id].item
+					const row = cache[values.id].row
 					select_row(row, bus)
 					child.redirect('./detail.html', { path, item, bus }, then)
 				},
@@ -54,7 +55,7 @@
 				
 				const link = `#/stress/${item.id}`
 				const row = template.clone({ item, link, bus })
-				index[item.id] = { item, row }
+				cache[item.id] = { item, row }
 				return row
 			}
 		})
