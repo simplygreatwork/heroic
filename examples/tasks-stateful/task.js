@@ -6,7 +6,7 @@ export function _() {
 	Component.ready(({ component, data, $ }) => {
 		
 		const { id, item, link, realm, bus, cloud } = data
-		const { div, a } = $()
+		const { div, a } = component.get_elements(component.elements)
 		
 		Object.assign(a, { href: link, innerText: item.title })
 		item.done ? a.classList.add('done') : a.classList.remove('done')

@@ -5,11 +5,11 @@ export function _() {
 	
 	Component.ready(function({ component, data, $ }) {
 		
-		let { item, link, bus } = data
-		const { div, a } = $()
+		const { item, link, bus } = data
+		const { div, a } = component.get_elements(component.elements)
 		
 		Object.assign(a, { href: link, innerText: item.title })
-		div.onmousedown = () => window.location.hash = link
+		div[1].onmousedown = () => window.location.hash = link
 		bus.on(`item-changed:${item.id}`, ({ item }) => {
 			a.innerText = item.title
 			item.done ? a.classList.add('done') : a.classList.remove('done')

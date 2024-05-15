@@ -60,6 +60,21 @@ export class Component {
 		return result
 	}
 	
+	get_elements(elements) {
+		
+		if (! elements) return {}
+		const result = {}
+		elements.forEach((element) => {
+			const tag = element.tagName.toLowerCase()
+			if (! result[tag]) result[tag] = []
+			result[tag].push(element)
+		})
+		Object.keys(result).forEach((each) => {
+			if (result[each].length === 1) result[each] = result[each][0]
+		})
+		return result
+	}
+	
 	scan() {
 		
 		this.children = []
@@ -92,7 +107,6 @@ export class Component {
 			this.content = div.children[0]
 			Component.recent = this
 			this.element.innerHTML = ''
-			this.content_ = this.content.cloneNode(deep)
 			document.body.appendChild(this.content)
 			this.emit('attached')
 		})

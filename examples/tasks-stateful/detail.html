@@ -9,6 +9,7 @@
 				<button class="task-close">Discard Task</button>
 			</section>
 		</section>
+		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
 	</div>
 	
 	<script type="module">
@@ -18,7 +19,7 @@
 		Component.ready(({ component, data, $ }) => {
 			
 			const { id, item, bus, cloud } = data
-			const { header, input, button } = $()
+			const { header, input, button } = component.get_elements(component.elements)
 			
 			input.value = header.innerText = item.title
 			input.oninput = () => {

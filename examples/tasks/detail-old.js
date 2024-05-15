@@ -9,7 +9,6 @@
 				<button class="task-close">Close Task</button>
 			</section>
 		</section>
-		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
 	</div>
 	
 	<script type="module">
@@ -19,7 +18,7 @@
 		Component.ready(({ component, data, $ }) => {
 			
 			const { item, bus } = data
-			const { header, input, button } = component.get_elements(component.elements)
+			const { header, input, button } = $()
 			
 			header.innerText = item.title
 			input.value = item.title
