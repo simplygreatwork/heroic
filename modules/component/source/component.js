@@ -22,6 +22,7 @@ export class Component {
 		const component = Component.recent
 		Object.assign(component, { fn, options: options || {} })
 		component.element.appendChild(component.content)
+		component.elements = Array.from(component.element.querySelectorAll(`*`))
 		component.observe()
 		component.once('ready', (component) => component.invoke())
 		component.scan()
@@ -39,7 +40,6 @@ export class Component {
 	invoke() {
 		
 		if (this.is_template) return
-		this.elements = Array.from(this.element.querySelectorAll(`*`))
 		const $ = (selector) => $_(this, selector)
 		this.fn.apply(this, [{ component: this, data: this.data, $ }])
 		this.emit('initialized', this)

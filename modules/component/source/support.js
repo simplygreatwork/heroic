@@ -16,11 +16,12 @@ export function later(fn) {
 export function $(component, selector) {
 	
 	if (selector) return component.element.querySelector(selector)
-	return get_elements(component.elements)
+	return get_elements(component.elements, true)
 }
 
-function get_elements(elements) {
+export function get_elements(elements, condense) {
 	
+	condense = condense || false
 	if (! elements) return {}
 	const result = {}
 	elements.forEach((element) => {
@@ -28,8 +29,15 @@ function get_elements(elements) {
 		if (! result[tag]) result[tag] = []
 		result[tag].push(element)
 	})
-	Object.keys(result).forEach((each) => {
-		if (result[each].length === 1) result[each] = result[each][0]
+	if (condense) Object.keys(result).forEach((each) => {
+		if (result[each] instanceof Array && result[each].length === 1) result[each] = result[each][0]
 	})
 	return result
+}
+
+export function print_elements(elements) {
+	
+	elements.forEach((each) => {
+		console.log(`tag: ${each.tagName}`)
+	})
 }
