@@ -19,7 +19,7 @@ export function $(component, selector) {
 	return get_elements(component.elements)
 }
 
-export function get_elements(elements) {
+export function get_elements(elements) {					// safe
 	
 	if (! elements) return {}
 	const result = {}
