@@ -21,6 +21,7 @@
 			const { id, item, bus, cloud } = data
 			const { header, input, button } = $()
 			
+			header.innerText = item.title
 			input.value = header.innerText = item.title
 			input.oninput = () => {
 				cloud.set(`tasks/${id}/title`, input.value)
