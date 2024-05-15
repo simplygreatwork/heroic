@@ -19,7 +19,7 @@ export function $(component, selector) {
 	return get_elements(component.elements, true)
 }
 
-export function get_elements(elements, condense) {
+export function get_elements(elements, condense) {				// safe
 	
 	condense = condense || false
 	if (! elements) return {}
