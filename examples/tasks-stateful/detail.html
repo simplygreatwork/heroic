@@ -19,7 +19,7 @@
 		Component.ready(({ component, data, $ }) => {
 			
 			const { id, item, bus, cloud } = data
-			const { header, input, button } = component.get_elements(component.elements)
+			const { header, input, button } = $()
 			
 			input.value = header.innerText = item.title
 			input.oninput = () => {

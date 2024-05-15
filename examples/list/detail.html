@@ -17,7 +17,7 @@
 		Component.ready(({ component, data, $ }) => {
 			
 			const { item, bus } = data
-			const { header } = component.get_elements(component.elements)
+			const { header } = $()
 			
 			header.innerText = item.title
 			bus.emit('title-changed')

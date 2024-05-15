@@ -47,17 +47,7 @@ export class Component {
 	$(selector) {
 		
 		if (selector) return this.element.querySelector(selector)
-		if (! this.elements) return {}
-		const result = {}
-		this.elements.forEach((element) => {
-			const tag = element.tagName.toLowerCase()
-			if (! result[tag]) result[tag] = []
-			result[tag].push(element)
-		})
-		Object.keys(result).forEach((each) => {
-			if (result[each].length === 1) result[each] = result[each][0]
-		})
-		return result
+		return this.get_elements(this.elements)
 	}
 	
 	get_elements(elements) {
