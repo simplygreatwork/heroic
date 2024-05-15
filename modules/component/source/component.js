@@ -1,6 +1,7 @@
 
 import { install as install_bus } from '../../bus/source/bus.js'
 import { trace as trace_, deep, later } from './support.js'
+import { $ as $_ } from './support.js'
 
 const trace = trace_(false)
 
@@ -38,31 +39,10 @@ export class Component {
 	invoke() {
 		
 		if (this.is_template) return
-		const $ = this.$.bind(this)
 		this.elements = Array.from(this.element.querySelectorAll(`*`))
+		const $ = (selector) => $_(this, selector)
 		this.fn.apply(this, [{ component: this, data: this.data, $ }])
 		this.emit('initialized', this)
-	}
-	
-	$(selector) {
-		
-		if (selector) return this.element.querySelector(selector)
-		return this.get_elements(this.elements)
-	}
-	
-	get_elements(elements) {
-		
-		if (! elements) return {}
-		const result = {}
-		elements.forEach((element) => {
-			const tag = element.tagName.toLowerCase()
-			if (! result[tag]) result[tag] = []
-			result[tag].push(element)
-		})
-		Object.keys(result).forEach((each) => {
-			if (result[each].length === 1) result[each] = result[each][0]
-		})
-		return result
 	}
 	
 	scan() {

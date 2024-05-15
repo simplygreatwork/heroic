@@ -12,3 +12,24 @@ export function trace(trace_) {
 export function later(fn) {
 	window.setTimeout(fn, 1)
 }
+
+export function $(component, selector) {
+	
+	if (selector) return component.element.querySelector(selector)
+	return get_elements(component.elements)
+}
+
+function get_elements(elements) {
+	
+	if (! elements) return {}
+	const result = {}
+	elements.forEach((element) => {
+		const tag = element.tagName.toLowerCase()
+		if (! result[tag]) result[tag] = []
+		result[tag].push(element)
+	})
+	Object.keys(result).forEach((each) => {
+		if (result[each].length === 1) result[each] = result[each][0]
+	})
+	return result
+}
