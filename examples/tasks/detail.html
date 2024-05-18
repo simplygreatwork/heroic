@@ -20,25 +20,7 @@
 			
 			const { item, bus } = data
 			const { header, input, button } = $()
-
-
-// fixme
-/*
-			input.oninput = () => {
-				changed({ title: input.value })
-				header.innerText = item.title + '!'
-				bus.emit('title-changed')
-			}
-			button[0].onclick = () => changed({ done: true })
-			button[1].onclick = () => changed({ closed: true })
 			
-			function changed(data) {
-				console.log('hello')
-				bus.emit(`item-changed:${item.id}`, Object.assign(item, data))
-			}
-
-*/
-
 			header.innerText = item.title
 			input.value = item.title
 			input.oninput = () => {
