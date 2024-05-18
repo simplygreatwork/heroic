@@ -1,0 +1,149 @@
+
+<div>
+	<div class="container">
+		<section class="content">
+			<header data-title class="title">Examples</header>
+			<section class="scroll">
+				<section name="template" data-component="./item.html" data-template></section>
+			</section>
+		</section>
+		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
+	</div>
+	
+	<script type="module">
+		
+		import { Component } from 'component'
+		import { Bus } from 'bus'
+		import { install_selection, select_row } from '../shared/library/selection.js'
+		
+		let counter = 0
+		
+		Component.ready(({ component, data, $ }) => {
+			
+			const bus = data.bus || new Bus()
+			const template = component.child('template')
+			const cache = {}
+			
+			default_items().forEach((item) => install_row(item))
+			
+			const child = component.child('void')			
+			install_selection(component, bus)
+			register()
+			
+			function default_items() {
+				
+				return default_paths().map((each) => {
+					return { id: counter++, title: each, link: each }
+				})
+			}
+			
+			function default_paths() {
+				
+				return [
+					`#/tasks`,
+					`#/tasks-stateful`,
+					`#/list`,
+					`#/products`,
+					`#/products/0`,
+					`#/products/1`,
+					`#/products/0`,
+					`#/products/1/features`,
+					`#/products/1/features/2`,
+					`#/1`,
+					`#/1/2`,
+					`#/1/2/3`,
+					`#/1/2/3/4`,
+					`#/1/2/3/4/5`,
+					`#/1/2/3/4/5/6`,
+					`#/stress`,
+					`#/include`,
+					`#/test`
+				]
+			}
+			
+			function install_row(item) {
+				
+				const link = item.link
+				const row = template.clone({ item, link, bus })
+				cache[item.id] = { item, row }
+				return row
+			}
+			
+			function register() {
+				
+				router.register('tasks', {
+					enter: ({ path, then }) => {
+						child.rebase('../tasks').redirect('./tasks.html', { path, bus }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('tasks-stateful', {
+					enter: ({ path, part, then }) => {
+						child.rebase('../tasks-stateful').redirect('./tasks.html', { path, realm: part, bus, store }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('list', {
+					enter: ({ path, then }) => {
+						child.rebase('../list').redirect('./items.html', { path, bus }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('products', {
+					enter: ({ path, then }) => {
+						child.rebase('../products').redirect('./products.html', { path }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('1', {
+					enter: ({ path, part, then }) => {
+						child.rebase('../columns').redirect('./infinite.html', { path, part }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('include', {
+					enter: ({ path, then }) => {
+						child.rebase('../include').redirect('./include.html', { path }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('stress', {
+					enter: ({ path, then }) => {
+						child.rebase('../stress').redirect('./items.html', { path, bus }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('test', {
+					enter: ({ path, then }) => {
+						child.rebase('../test').redirect('./test.html', { path }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+			}
+		})
+		
+	</script>
+</div>

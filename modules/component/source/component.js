@@ -94,7 +94,7 @@ export class Component {
 		trace(`redirect: ${path}`)
 		if (then) this.once('initialized', () => then())
 		this.emit('will-redirect')
-		this.data = data
+		this.data = data ? data : this.data
 		this.element.setAttribute('data-component', path)
 	}
 	

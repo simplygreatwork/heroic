@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0">
+		<title>Main</title>
+		<link rel="stylesheet" type="text/css" href="../shared/style/main.css"/>
+		<link rel="stylesheet" type="text/css" href="../shared/style/list.css"/>
+		<script type="importmap">{"imports": {
+			"bind": "../../modules/bind/module.js",
+			"bus": "../../modules/bus/module.js",
+			"cloud": "../../modules/cloud/module.js",
+			"component": "../../modules/component/module.js",
+			"html-console": "../../modules/html-console/module.js",
+			"router": "../../modules/router/module.js",
+			"state": "../../modules/state/module.js",
+			"test": "../../modules/test/module.js"
+		}}</script>
+	</head>
+	<body>
+		<div class="modal">
+			<div class="header">
+				<div name="navbar" data-component="./navbar.html"></div>
+			</div>
+			<div class="container">
+				<div name="void" data-component="../shared/views/empty.html"></div>
+			</div>
+		</div>
+		
+		<script type="module">
+			
+			import { Component } from 'component'
+			import { Router } from 'router'
+			import { Bus } from 'bus'
+			import { State } from 'state'
+			
+			Component.start((component) => {
+				
+				window.location.hash = '#'
+				const router = window.router = new Router()
+				const bus = window.bus = new Bus()
+				const store = window.store = State({})
+				component.child('navbar').data.bus = bus
+				component.child('void').redirect('./items.html', {})			
+			})
+			
+		</script>
+		
+	</body>
+</html>

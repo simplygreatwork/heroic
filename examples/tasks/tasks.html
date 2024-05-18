@@ -53,9 +53,7 @@
 			const cache = {}
 			const { button } = $()
 			
-			default_items().forEach((item) => {
-				install_row(item)
-			})
+			default_items().forEach((item) => install_row(item))
 			
 			const child = component.child('void')
 			router.register('tasks/:id', {
