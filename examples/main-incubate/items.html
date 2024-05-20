@@ -15,6 +15,7 @@
 		import { Component } from 'component'
 		import { Bus } from 'bus'
 		import { install_selection, select_row } from '../shared/library/selection.js'
+		import { Selection } from '../shared/library/selection-new.js'
 		
 		let counter = 0
 		
@@ -23,6 +24,8 @@
 			const { bus, store } = data
 			const template = component.child('template')
 			const cache = {}
+			
+			const selection = Selection(component, 'div.row')
 			
 			const selection_bus = new Bus()
 			install_selection(component, selection_bus)
@@ -63,7 +66,7 @@
 			function install_row(item, bus) {
 				
 				const link = item.link
-				const row = template.clone({ item, link, bus })
+				const row = template.clone({ item, link, bus, selection })
 				cache[item.id] = { item, row }
 				return row
 			}

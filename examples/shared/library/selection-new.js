@@ -1,17 +1,14 @@
 
-import { Bus } from 'bus'
-
-function Selection(component, selector) {
+export function Selection(component, selector) {
 	
 	selector = selector || 'div.row'
-	const bus = new Bus()
-	const selection = null
+	let selection = null
 	
 	install_keyboard()
 	
 	return {
-		add: () => add(child),
-		remove: () => remove(child),
+		add: (child) => add(child),
+		remove: (child) => remove(child),
 		clear: () => clear()
 	}
 	
@@ -19,17 +16,21 @@ function Selection(component, selector) {
 		
 		clear()
 		component.element.querySelector(selector).classList.add('selected')
+		selection = component
 	}
 	
 	function remove(component) {
-		component.element.querySelector(selector).classList.remove('selected')
+		
+		if (component.is_template) return 
+		const element = component.element.querySelector(selector)
+		if (element) element.classList.remove('selected')
 	}
 	
 	function clear() {
-		component.children.forEach((each) => deselect(each))
+		component.children.forEach((each) => remove(each))
 	}
 	
-	install_keyboard() {
+	function install_keyboard() {
 		
 		document.onkeydown = (event) => {
 			if (event.key == 'ArrowDown') adjacent(1)
@@ -52,5 +53,3 @@ function Selection(component, selector) {
 		})
 	}
 }
-
-

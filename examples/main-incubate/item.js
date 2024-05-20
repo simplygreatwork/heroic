@@ -8,14 +8,13 @@ export function _() {
 	
 	Component.ready(({ component, data, $ }) => {
 		
-		const { item, link, bus } = data
+		const { item, link, selection } = data
 		const { div, a } = $()
 		
 		Object.assign(a, { href: link, innerText: item.title })
 		div[1].onmousedown = () => {
-			select_row(component, bus)
+			selection.add(component)
 			window.location.hash = link
 		}
-		bus.on(`item-changed:${item.id}`, ({ item }) => a.innerText = item.title)
 	})
 }
