@@ -3,7 +3,6 @@ import { Bus } from 'bus'
 
 export function install_selection(component, bus) {
 	
-	console.log(`install_selection`)
 	let state = { selections: [] }
 	bus.on('row-will-select', (child) => {
 		deselect_rows(component, state)
@@ -26,7 +25,6 @@ export function select_row(child, bus) {
 
 function deselect_rows(component, state) {
 	
-	console.log(`deselect_rows`)
 	state.selections.forEach((each) => {
 		each.element.querySelector('div.row').classList.remove('selected')
 	})
