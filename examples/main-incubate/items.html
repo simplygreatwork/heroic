@@ -10,11 +10,18 @@
 		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
 	</div>
 	
+	<style>
+		div.row {
+			border-bottom: 1px solid #dfdfdf;
+			padding-top:3px;
+			padding-bottom:3px;
+		}
+	</style>
+	
 	<script type="module">
 		
 		import { Component } from 'component'
 		import { Bus } from 'bus'
-		import { install_selection, select_row } from '../shared/library/selection.js'
 		import { Selection } from '../shared/library/selection-new.js'
 		
 		let counter = 0
