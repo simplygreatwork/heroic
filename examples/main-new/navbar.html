@@ -3,8 +3,9 @@
 	<div id="navbar" class="navbar"></div>
 	<style>
 		.navbar {
-			margin-top:20px;
-			margin-left:20px;
+			padding-top:20px;
+			padding-bottom:20px;
+			padding-left:20px;
 			font-size:110%;
 		}
 	</style>
@@ -35,7 +36,7 @@
 					const path = item.join('/')
 					const title = find_title(path, component) || item.pop()
 					return `<a href="#/${path}">${title}</a>`
-				}).join(' &gt ')
+				}).join(' &raquo; ')
 			}
 		})
 		
