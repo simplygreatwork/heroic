@@ -23,13 +23,10 @@
 			
 			const { bus, store } = data
 			const template = component.child('template')
+			const selection = Selection(component)
 			const cache = {}
 			
-			const selection = Selection(component, 'div.row')
-			
-			const selection_bus = new Bus()
-			install_selection(component, selection_bus)
-			default_items().forEach((item) => install_row(item, selection_bus))
+			default_items().forEach((item) => install_row(item))
 			register()
 			
 			function default_items() {
@@ -63,10 +60,10 @@
 				]
 			}
 			
-			function install_row(item, bus) {
+			function install_row(item) {
 				
 				const link = item.link
-				const row = template.clone({ item, link, bus, selection })
+				const row = template.clone({ item, link, selection })
 				cache[item.id] = { item, row }
 				return row
 			}
