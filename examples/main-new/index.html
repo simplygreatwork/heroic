@@ -42,7 +42,7 @@
 				const bus = window.bus = new Bus()
 				const store = window.store = State({})
 				component.child('navbar').data.bus = bus
-				component.child('void').redirect('./items.html', {})			
+				component.child('void').redirect('./items.html', { bus, store })	
 			})
 			
 		</script>

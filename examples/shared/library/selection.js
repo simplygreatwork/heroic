@@ -3,21 +3,18 @@ import { Bus } from 'bus'
 
 export function install_selection(component, bus) {
 	
+	console.log(`install_selection`)
 	let state = { selections: [] }
-	bus.on('row-will-select', function(child) {
+	bus.on('row-will-select', (child) => {
 		deselect_rows(component, state)
 		state.selections = [child]
 	})
-	document.onkeydown = function(event) {
+	document.onkeydown = (event) => {
 		if (event.key == 'ArrowDown') bus.emit('keydown:arrow-down')
 		if (event.key == 'ArrowUp') bus.emit('keydown:arrow-up')
 	}
-	bus.on('keydown:arrow-down', function() {
-		return select_adjacent_row(component, state, 1)
-	})
-	bus.on('keydown:arrow-up', function() {
-		return select_adjacent_row(component, state, -1)
-	})
+	bus.on('keydown:arrow-down', () => select_adjacent_row(component, state, 1))
+	bus.on('keydown:arrow-up', () => select_adjacent_row(component, state, -1))
 }
 
 export function select_row(child, bus) {
@@ -29,7 +26,8 @@ export function select_row(child, bus) {
 
 function deselect_rows(component, state) {
 	
-	state.selections.forEach(function(each) {
+	console.log(`deselect_rows`)
+	state.selections.forEach((each) => {
 		each.element.querySelector('div.row').classList.remove('selected')
 	})
 }
