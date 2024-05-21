@@ -1,9 +1,6 @@
 
 import { Component } from 'component'
 
-import { Bus } from 'bus'
-import { install_selection, select_row } from '../shared/library/selection.js'
-
 export function _() {
 	
 	Component.ready(({ component, data, $ }) => {

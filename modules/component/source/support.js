@@ -1,18 +1,6 @@
 
 export const deep = true
 
-export function trace(trace_) {
-	
-	trace_ = trace_ || false
-	return function(string) {
-		if (trace_) console.log(string)
-	}
-}
-
-export function later(fn) {
-	window.setTimeout(fn, 1)
-}
-
 export function $(component, selector) {
 	
 	if (selector) return component.element.querySelector(selector)
@@ -34,4 +22,16 @@ export function get_elements(elements) {
 		}
 	})
 	return result
+}
+
+export function trace(trace_) {
+	
+	trace_ = trace_ || false
+	return function(string) {
+		if (trace_) console.log(string)
+	}
+}
+
+export function later(fn) {
+	window.setTimeout(fn, 1)
 }

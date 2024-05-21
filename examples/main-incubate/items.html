@@ -11,10 +11,13 @@
 	</div>
 	
 	<style>
-		div.row {
-			border-bottom: 1px solid #dfdfdf;
-			padding-top:3px;
-			padding-bottom:3px;
+		div.row_main {
+			border-bottom: 0px solid #dfdfdf;
+			padding-top:1px;
+			padding-bottom:1px;
+		}
+		div.row_main.selected {
+			background-color:#DDDDFF;
 		}
 	</style>
 	
@@ -22,7 +25,7 @@
 		
 		import { Component } from 'component'
 		import { Bus } from 'bus'
-		import { Selection } from '../shared/library/selection-new.js'
+		import { Selection } from '../shared/library/selection-incubate.js'
 		
 		let counter = 0
 		
@@ -30,7 +33,7 @@
 			
 			const { bus, store } = data
 			const template = component.child('template')
-			const selection = Selection(component)
+			const selection = Selection(component, 'div.row_main')
 			const cache = {}
 			
 			default_items().forEach((item) => install_row(item))
