@@ -1,6 +1,6 @@
 
 <div>
-	<div id="navbar" class="navbar"><a href="#">Examples</a> &raquo; </div>
+	<div class="navbar"><a href="#">Examples</a> &raquo; </div>
 	<style>
 		.navbar {
 			padding-top:20px;
@@ -19,8 +19,7 @@
 		Component.ready(({ component, data, $ }) => {
 			
 			const { bus } = data
-			const { div } = $()
-			const navbar = div[1]
+			const navbar = $().div[1]
 			
 			router.on('change', (hash) => update(hash))
 			bus.on(`title-changed`, () => update(window.location.hash))
