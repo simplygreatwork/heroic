@@ -21,7 +21,7 @@ export class Component {
 		
 		const component = Component.recent
 		Object.assign(component, { fn, options: options || {} })
-		component.content.style.visibility = 'visible'								//  no flicker
+		component.content.style.removeProperty('visibility')						//  no flicker
 		component.element.appendChild(component.content)
 		component.elements = Array.from(component.element.querySelectorAll(`*`))
 		component.observe()
