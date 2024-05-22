@@ -78,7 +78,7 @@ export class Component {
 			this.content = div.children[0]
 			Component.recent = this
 			this.element.innerHTML = ''
-			this.content.style.visibility = 'hidden'						//  no flicker
+			this.content.style.visibility = 'hidden'								//  no flicker
 			document.body.appendChild(this.content)
 			this.emit('attached')
 		})
