@@ -38,6 +38,7 @@
 			
 			default_items().forEach((item) => install_row(item))
 			register()
+			if (false) window.location.href = `#/intro`
 			
 			function default_items() {
 				
@@ -49,6 +50,7 @@
 			function default_paths() {
 				
 				return [
+					`#/intro`,
 					`#/tasks`,
 					`#/tasks-stateful`,
 					`#/list`,
@@ -81,6 +83,15 @@
 			function register() {
 				
 				const child = component.child('void')
+				
+				router.register('intro', {
+					enter: ({ path, then }) => {
+						child.rebase('../intro').redirect('./intro.html', { path, bus }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
 				
 				router.register('tasks', {
 					enter: ({ path, then }) => {
