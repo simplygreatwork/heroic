@@ -21,7 +21,7 @@ export class Component {
 		
 		const component = Component.recent
 		Object.assign(component, { fn, options: options || {} })
-		component.content.style.removeProperty('visibility')						//  no flicker
+		component.content.style.removeProperty('visibility')						//  prevent flicker
 		component.element.appendChild(component.content)
 		component.elements = Array.from(component.element.querySelectorAll(`*`))
 		component.observe()
@@ -78,9 +78,8 @@ export class Component {
 			this.content = div.children[0]
 			Component.recent = this
 			this.element.innerHTML = ''
-			this.content.style.visibility = 'hidden'								//  no flicker
+			this.content.style.visibility = 'hidden'								//  prevent flicker
 			document.body.appendChild(this.content)
-			this.emit('attached')
 		})
 	}
 	
@@ -95,7 +94,6 @@ export class Component {
 		
 		trace(`redirect: ${path}`)
 		if (then) this.once('initialized', () => then())
-		this.emit('will-redirect')
 		this.data = data ? data : this.data
 		this.element.setAttribute('data-component', path)
 	}

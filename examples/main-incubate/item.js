@@ -13,5 +13,9 @@ export function _() {
 			selection.add(component)
 			window.location.hash = link
 		}
+		// router.on('change', (hash) => {							// should be in item.html instead
+		// 	if (hash == link) selection.add(component)
+		// 	else if (hash == '#/') selection.clear()
+		// })
 	})
 }

@@ -38,7 +38,9 @@
 			
 			default_items().forEach((item) => install_row(item))
 			register()
-			if (false) window.location.href = `#/intro`
+			listen()
+			
+			location.href = `#/intro`
 			
 			function default_items() {
 				
@@ -78,6 +80,15 @@
 				const row = template.clone({ item, link, selection })
 				cache[item.id] = { item, row }
 				return row
+			}
+			
+			function listen() {
+				
+				router.on('change', (hash) => {
+					let child = find_child((child) => child.data.link == hash)
+					if (child) selection.add(child)
+					else selection.clear()
+				})
 			}
 			
 			function register() {
@@ -164,6 +175,15 @@
 						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
 					}
 				})
+			}
+			
+			function find_child(fn) {
+				
+				let result = null
+				component.children.forEach((child) => {
+					if (! result && fn(child)) result = child
+				})
+				return result
 			}
 		})
 		
