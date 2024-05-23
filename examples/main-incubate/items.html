@@ -86,8 +86,8 @@
 				
 				router.on('change', (hash) => {
 					if (hash == '#/') return selection.clear()
-					const child = find_child((child) => child.data.link == hash)
-					if (child) selection.add(child)
+					const children = find_children((child) => child.data.link == hash)
+					if (children) selection.add(children[0])
 				})
 			}
 			
@@ -177,13 +177,11 @@
 				})
 			}
 			
-			function find_child(fn) {
+			function find_children(fn) {
 				
-				let result = null
-				component.children.forEach((child) => {
-					if (! result && fn(child)) result = child
+				return component.children.filter((child) => {
+					return fn(child)
 				})
-				return result
 			}
 		})
 		
