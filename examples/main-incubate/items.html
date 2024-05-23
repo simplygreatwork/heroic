@@ -87,7 +87,7 @@
 				router.on('change', (hash) => {
 					if (hash == '#/') return selection.clear()
 					const children = find_children((child) => child.data.link == hash)
-					if (children) selection.add(children[0])
+					if (children && children.length > 0) selection.add(children[0])
 				})
 			}
 			

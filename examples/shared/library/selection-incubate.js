@@ -9,7 +9,8 @@ export function Selection(component, selector) {
 	return {
 		add: (child) => add(child),
 		remove: (child) => remove(child),
-		clear: () => clear()
+		clear: () => clear(),
+		nearest: () => nearest()
 	}
 	
 	function add(component) {
@@ -28,6 +29,20 @@ export function Selection(component, selector) {
 	
 	function clear() {
 		component.children.forEach((each) => remove(each))
+	}
+	
+	function nearest() {
+		
+		if (! selection) return
+		const children = component.children
+		const index = children.indexOf(selection)
+		if (index < 0) return
+		let child = children[index + 1]
+		if (! child) child = children[index - 1]
+		if (! child) return
+		if (! child.data.link) return
+		add(child)
+		location.href = child.data.link
 	}
 	
 	function install_keyboard() {

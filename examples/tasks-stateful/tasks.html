@@ -20,6 +20,7 @@
 		import { Component } from 'component'
 		import { Cloud } from 'cloud'
 		import { State } from 'state'
+		import { Selection } from '../shared/library/selection-incubate.js'
 		import { bind_click } from 'bind'
 		import { install_selection, select_row } from '../shared/library/selection.js'
 		import { cloud_install_store, find_row_placement, trace } from '../tasks-stateful/tasks.js'
@@ -32,6 +33,7 @@
 			const bus = data.bus || new Bus()
 			const cloud = Cloud(bus)
 			const store = data.store || State({})
+			const selection = Selection(component)
 			const realm = data.realm
 			const template = component.child('task-template')
 			const cache = {}
@@ -53,7 +55,7 @@
 			
 			function install_row(id, item) {
 				
-				const row = template.clone({ id, item, realm, bus, cloud, link:`#/${realm}/${id}` })
+				const row = template.clone({ id, item, realm, bus, cloud, selection, link:`#/${realm}/${id}` })
 				cache[id] = { item, row }
 				return row
 			}
@@ -88,6 +90,7 @@
 				on_task_added(cloud, (id, item) => {
 					const row = install_row(id, item)
 					find_row_placement(component, id, (component) => component.element.before(row.element))
+					selection.add(row)
 					window.location.hash = row.data.link
 				})
 				
