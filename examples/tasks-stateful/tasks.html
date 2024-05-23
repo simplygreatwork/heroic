@@ -22,7 +22,6 @@
 		import { State } from 'state'
 		import { Selection } from '../shared/library/selection-incubate.js'
 		import { bind_click } from 'bind'
-		import { install_selection, select_row } from '../shared/library/selection.js'
 		import { cloud_install_store, find_row_placement, trace } from '../tasks-stateful/tasks.js'
 		import { on_task_added, on_task_removed } from '../tasks-stateful/tasks.js'
 		
@@ -43,7 +42,6 @@
 			render()
 			bind()
 			watch()
-			install_selection(component, bus)
 			trace(false, cloud, store)
 			
 			function render() {
@@ -77,7 +75,7 @@
 					enter: ({ path, values, then }) => {
 						const { id } = values
 						const item = cloud.get(`tasks/${id}`)
-						select_row(cache[id].row, bus)
+						selection.add(cache[id].row)
 						child.redirect('./detail.html', { path, id, item, bus, cloud }, then)
 					},
 					exit: ({ then }) => child.redirect('../shared/views/empty.html', {}, then)
