@@ -33,7 +33,7 @@
 			
 			const { bus, store } = data
 			const template = component.child('template')
-			const selection = Selection(component, 'div.row_main')
+			const selection = Selection({ component, kind: './item.html', selector: 'div.row_main' })
 			const cache = {}
 			
 			default_items().forEach((item) => install_row(item))

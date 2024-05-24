@@ -32,7 +32,7 @@
 			const bus = data.bus || new Bus()
 			const cloud = Cloud(bus)
 			const store = data.store || State({})
-			const selection = Selection(component)
+			const selection = Selection({ component, kind: './task.html' })
 			const realm = data.realm
 			const template = component.child('task-template')
 			const cache = {}

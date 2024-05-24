@@ -1,6 +1,7 @@
 
-export function Selection(component, selector) {
+export function Selection({ component, kind, selector }) {
 	
+	kind = kind || './item.html'
 	selector = selector || 'div.row'
 	let selection = null
 	
@@ -22,7 +23,7 @@ export function Selection(component, selector) {
 	
 	function remove(component) {
 		
-		if (component.is_template) return 
+		if (component.is_template) return
 		const element = component.element.querySelector(selector)
 		if (element) element.classList.remove('selected')
 	}
@@ -33,16 +34,20 @@ export function Selection(component, selector) {
 	
 	function nearest() {
 		
-		if (! selection) return
-		const children = component.children
-		const index = children.indexOf(selection)
-		if (index < 0) return
-		let child = children[index + 1]
-		if (! child) child = children[index - 1]
-		if (! child) return
-		if (! child.data.link) return
-		add(child)
-		location.href = child.data.link
+		if (select_child(1)) return
+		if (select_child(-1)) return
+		clear()
+	}
+	
+	function select_child(bias) {
+		
+		const child = find_adjacent(selection, bias)
+		if (child) {
+			add(child)
+			location.hash = child.data.link
+			return true
+		}
+		return false
 	}
 	
 	function install_keyboard() {
@@ -53,18 +58,27 @@ export function Selection(component, selector) {
 		}
 	}
 	
-	function adjacent(direction) {
+	function adjacent(bias) {
 		
-		const child = find_adjacent(selection, direction)
+		const child = find_adjacent(selection, bias)
 		if (! child) return
 		window.location.hash = child.data.link
 		return true
 	}
 	
-	function find_adjacent(child, direction) {
+	function find_adjacent(child, bias) {
 		
+		let result =  null
 		component.children.forEach((each, index) => {
-			if (each == child) return component.child(index + direction)
+			if (result) return
+			if (each != child) return
+			if (each.path != kind) return
+			const adjacent = component.child(index + bias)
+			if (! adjacent) return
+			if (adjacent.path != kind) return
+			if (adjacent.is_template) return
+			result = adjacent
 		})
+		return result
 	}
 }
