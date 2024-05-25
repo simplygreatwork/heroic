@@ -1,47 +1,82 @@
 
-import { Bus } from 'bus'
-
-export function install_selection(component, bus) {
+export function Selection({ component, kind, selector }) {
 	
-	let state = { selections: [] }
-	bus.on('row-will-select', (child) => {
-		deselect_rows(component, state)
-		state.selections = [child]
-	})
-	document.onkeydown = (event) => {
-		if (event.key == 'ArrowDown') bus.emit('keydown:arrow-down')
-		if (event.key == 'ArrowUp') bus.emit('keydown:arrow-up')
+	kind = kind || './item.html'
+	selector = selector || 'div.row'
+	let selection = null
+	
+	install_keyboard()
+	
+	return {
+		add: (child) => add(child),
+		remove: (child) => remove(child),
+		clear: () => clear(),
+		nearest: () => nearest()
 	}
-	bus.on('keydown:arrow-down', () => select_adjacent_row(component, state, 1))
-	bus.on('keydown:arrow-up', () => select_adjacent_row(component, state, -1))
-}
-
-export function select_row(child, bus) {
 	
-	bus.emit('row-will-select', child)
-	child.element.querySelector('div.row').classList.add('selected')
-	return true
-}
-
-function deselect_rows(component, state) {
+	function add(component) {
+		
+		clear()
+		component.element.querySelector(selector).classList.add('selected')
+		selection = component
+	}
 	
-	state.selections.forEach((each) => {
-		each.element.querySelector('div.row').classList.remove('selected')
-	})
-}
-
-function select_adjacent_row(component, state, direction) {
+	function remove(component) {
+		
+		if (component.is_template) return
+		const element = component.element.querySelector(selector)
+		if (element) element.classList.remove('selected')
+	}
 	
-	let child = find_adjacent_row(component, state.selections[0], direction)
-	if (! child) return
-	window.location.hash = child.data.link
-	return true
-}
-
-function find_adjacent_row(component, child, direction) {
+	function clear() {
+		component.children.forEach((each) => remove(each))
+	}
 	
-	let children = component.children
-	for (let i = 0; i < children.length; i++) {
-		if (children[i] == child) return component.child(i + direction)
+	function nearest() {
+		
+		if (select_child(1)) return
+		if (select_child(-1)) return
+		clear()
+	}
+	
+	function select_child(bias) {
+		
+		const child = find_adjacent(selection, bias)
+		if (! child) return false
+		add(child)
+		location.hash = child.data.link
+		return true
+	}
+	
+	function find_adjacent(child, bias) {
+		
+		let result =  null
+		component.children.forEach((each, index) => {
+			if (result) return
+			if (each != child) return
+			if (each.path != kind) return
+			const adjacent = component.child(index + bias)
+			if (! adjacent) return
+			if (adjacent.path != kind) return
+			if (adjacent.is_template) return
+			result = adjacent
+		})
+		return result
+	}
+	
+	function install_keyboard() {
+		
+		document.onkeydown = (event) => {
+			if (event.key == 'ArrowDown') select_adjacent(1)
+			if (event.key == 'ArrowUp') select_adjacent(-1)
+		}
+	}
+	
+	function select_adjacent(bias) {
+		
+		const child = find_adjacent(selection, bias)
+		if (! child) return
+		window.location.hash = child.data.link
+		return true
 	}
 }

@@ -1,0 +1,25 @@
+
+.margin-top {
+	margin-top:10px;	
+}
+a.row.done {
+	text-decoration: line-through;
+}
+.task-title {
+	margin-top:20px;
+	margin-bottom:20px;
+	width:180px;
+	border:0px dotted lightgrey;
+	outline:0;
+	font-size:24px;
+	-webkit-appearance: none;
+}
+button.task-new, button.task-done, button.task-close, button.undo, button.redo, button.transactions {
+	display:block;
+	width:100%;
+	margin-top:8px;
+	padding:6px;
+	background-color:white;
+	border:1px solid #8888DD;
+	border-radius:4px
+}
