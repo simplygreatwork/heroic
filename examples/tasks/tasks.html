@@ -66,6 +66,7 @@
 					const id = ++counter
 					const item = { id, title: `Untitled Task ${id}`, done: false }
 					const row = install_row(item)
+					selection.add(row)
 					window.location.hash = row.data.link
 				}
 				bus.on(`item-changed`, ({ item }) => {
