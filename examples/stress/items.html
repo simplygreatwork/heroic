@@ -14,7 +14,7 @@
 		
 		import { Component } from 'component'
 		import { Bus } from 'bus'
-		import { Selection } from '../shared/library/selection.js'
+		import { Selection } from 'selection'
 		
 		let counter = 0
 		
@@ -39,7 +39,7 @@
 					child.redirect('../shared/views/empty.html', {}, then)
 				}
 			})
-						
+			
 			function default_items() {
 				
 				return new Array(10000).fill(0).map((each, index) => {
