@@ -1,4 +1,8 @@
 
+# Demo
+
+This is a [demo of examples](https://simplygreatwork.github.io/heroic).
+
 # Story
 
 Create an html page "index.html"
