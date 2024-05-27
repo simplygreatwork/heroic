@@ -1,7 +1,7 @@
 
 # Demo
 
-Here are [the examples](https://simplygreatwork.github.io/heroic) hosted on GitHub.
+The [examples](https://simplygreatwork.github.io/heroic) are hosted on GitHub.
 
 # Story
 
