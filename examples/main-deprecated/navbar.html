@@ -1,0 +1,61 @@
+
+<div>
+	<div id="navbar" class="navbar"></div>
+	<style>
+		.navbar {
+			margin-top:20px;
+			margin-left:20px;
+			font-size:110%;
+		}
+	</style>
+	
+	<script type="module">
+		
+		import { Component } from 'component'
+		import { find_top_level_component } from 'component'
+		import { walk_components } from 'component'
+		
+		Component.ready(({ component, data, $ }) => {
+			
+			const { bus } = data
+			
+			router.on('change', (hash) => update(hash))
+			bus.on(`title-changed`, () => update(window.location.hash))
+			
+			function update(hash) {
+				
+				const array = hash.split('/')
+				array.shift()
+				const list = []								// use array.reduce instead?
+				while (array.length > 0) {
+					list.unshift([...array])
+					array.pop()
+				}
+				$('#navbar').innerHTML = list.map((item) => {
+					const path = item.join('/')
+					const title = find_title(path, component) || item.pop()
+					return `<a href="#/${path}">${title}</a>`
+				}).join(' &raquo; ')
+			}
+		})
+		
+		function find_title(path, component) {
+			
+			const top = find_top_level_component(component)
+			let component_ = null
+			walk_components(top, (component) => {
+				if (component.data.path == path) {
+					if (component_ === null) component_ = component
+				}
+			})
+			if (component_) {
+				let element = component_.element.querySelector('[data-title]')
+				if (element) return element.innerHTML
+				else console.warn(`Navbar found a component matching path "${path}" but no "data-title" attribute.`)
+			}
+			console.warn(`Navbar found no component with path "${path}" in the component hierachy.`)
+			return null
+		}
+		
+	</script>
+</div>
