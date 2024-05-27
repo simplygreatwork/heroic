@@ -1,6 +1,8 @@
 
-# Examples
+# About
 
+A collection of tiny, lightweight, client-side web libraries with a minimal API.
+Single file components without transpiling.
 The [examples](https://simplygreatwork.github.io/heroic) are hosted on GitHub.
 
 # Story
