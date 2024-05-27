@@ -14,13 +14,14 @@
 		
 		import { Component } from 'component'
 		import { Bus } from 'bus'
-		import { install_selection, select_row } from '../shared/library/selection-deprecated.js'
+		import { Selection } from '../shared/library/selection.js'
 		
 		let counter = 0
 		
 		Component.ready(({ component, data, $ }) => {
 			
 			const bus = data.bus || new Bus()
+			const selection = Selection({ component, kind: './item.html' })
 			const template = component.child('template')
 			const cache = {}
 			
@@ -30,13 +31,11 @@
 			router.register('list/:id', {
 				enter: ({ path, values, then }) => {
 					const { item, row } = cache[values.id]
-					select_row(row, bus)
+					selection.add(row)
 					child.redirect('./detail.html', { path, item, bus }, then)
 				},
 				exit: ({ then }) => child.redirect('../shared/views/empty.html', {}, then)
 			})
-			
-			install_selection(component, bus)
 			
 			function default_items() {
 				
