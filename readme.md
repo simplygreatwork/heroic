@@ -1,5 +1,5 @@
 
-# Demo
+# Examples
 
 The [examples](https://simplygreatwork.github.io/heroic) are hosted on GitHub.
 
