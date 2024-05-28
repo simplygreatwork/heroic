@@ -16,8 +16,9 @@ export function _() {
 		bus.on(`item-changed:${item.id}`, ({ item }) => {
 			a.innerText = item.title
 			item.done ? a.classList.add('done') : a.classList.remove('done')
-			if (! item.closed) return 
-			selection.nearest()
+			if (! item.closed) return
+			const nearest = selection.nearest()
+			nearest ? false: location.hash = `#/tasks`
 			component.remove()
 		})
 	})
