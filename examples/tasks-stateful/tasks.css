@@ -19,6 +19,7 @@ button.task-new, button.task-done, button.task-close, button.undo, button.redo {
 	width:100%;
 	margin-top:8px;
 	padding:6px;
+	background-color:white;
 	border:1px solid #8888DD;
 	border-radius:4px
 }

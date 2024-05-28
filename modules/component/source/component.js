@@ -85,7 +85,10 @@ export class Component {
 	
 	fetch_(fn) {
 		
-		fetch(`${this.resolve_path()}?time=${new Date().getTime()}`)
+		const no_cache = true
+		const path = this.resolve_path()
+		const url = no_cache ? `${path}?time=${new Date().getTime()}` : path
+		fetch(url)
 		.then((response) => response.text())
 		.then((html) => fn(this.resolve_links(html)))
 	}
