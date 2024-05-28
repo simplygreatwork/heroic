@@ -18,7 +18,7 @@ export function _() {
 			item.done ? a.classList.add('done') : a.classList.remove('done')
 			if (! item.closed) return
 			const nearest = selection.nearest()
-			nearest ? false: location.hash = `#/tasks`
+			nearest ? false : location.hash = `#/tasks`
 			component.remove()
 		})
 	})

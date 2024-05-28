@@ -21,7 +21,7 @@ export function _() {
 		on_change((key, value) => {
 			if (value !== undefined) return
 			const nearest = selection.nearest()
-			nearest ? false: location.hash = `#/${realm}`
+			nearest ? false : location.hash = `#/${realm}`
 			component.remove()
 		}, `tasks/${id}`)
 	})
