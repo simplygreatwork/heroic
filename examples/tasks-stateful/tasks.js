@@ -14,7 +14,7 @@ export function cloud_install_store(cloud, store) {
 	on_travel((transaction) => store.travel(transaction))
 }
 
-export function find_row_placement(component, id, fn) {
+export function place_row(component, id, fn) {
 	
 	rows(component, './task.html').some((each) => {
 		if (each.data.item.id > id) {
