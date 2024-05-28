@@ -81,17 +81,7 @@
 				cache[item.id] = { item, row }
 				return row
 			}
-			
-			function listen() {
-				
-				router.on('change', (hash) => {
-					if (hash == '#/') return selection.clear()
-					const find = component.children.filter((child) => fn(child))
-					const children = find((child) => child.data.link == hash)
-					if (children && children.length > 0) selection.add(children[0])
-				})
-			}
-			
+						
 			function register() {
 				
 				const child = component.child('void')
@@ -176,6 +166,19 @@
 						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
 					}
 				})
+			}
+			
+			function listen() {
+				
+				router.on('change', (hash) => {
+					if (hash == '#/') return selection.clear()
+					const children = find_children((child) => child.data.link == hash)
+					if (children && children.length > 0) selection.add(children[0])
+				})
+			}
+			
+			function find_children(fn) {
+				return component.children.filter((child) => fn(child))
 			}
 		})
 		
