@@ -34,9 +34,10 @@ export function Selection({ component, kind, selector }) {
 	
 	function nearest() {
 		
-		if (select_child(1)) return
-		if (select_child(-1)) return
+		if (select_child(1)) return true
+		if (select_child(-1)) return true
 		clear()
+		return false
 	}
 	
 	function select_child(bias) {

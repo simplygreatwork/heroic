@@ -20,7 +20,8 @@ export function _() {
 		on_change((key, done) => done ? a.classList.add('done') : a.classList.remove('done'), `tasks/${id}/done`)
 		on_change((key, value) => {
 			if (value !== undefined) return
-			true ? selection.nearest() : location.hash = `#/${realm}`
+			const nearest = selection.nearest()
+			nearest ? false: location.hash = `#/${realm}`
 			component.remove()
 		}, `tasks/${id}`)
 	})
