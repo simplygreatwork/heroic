@@ -131,7 +131,7 @@ Components are typically created inside html markup.
 <div name="name" data-component="./child.html"></div>
 ```
 
-The value 'data' is passed into a child component when it's been redirected.
+Data is passed into a child component when it's been redirected or cloned.
 
 ```javascript
 Component.ready(({ component, data }) => {
