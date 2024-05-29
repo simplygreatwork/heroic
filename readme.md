@@ -139,15 +139,16 @@ Component.ready(({ component, data }) => {
 })
 ```
 
-The function '$' selects an element inside each component.
+The function '$' return a single element matching the selector inside the component.
 
 ```javascript
 Component.ready(({ component, $ }) => {
-	const button = ${`button`}
+	const selector = 'button'
+	const button = ${selector}
 })
 ```
 
-The function '$' returns each element inside a component if no arguments are provided.
+When no arguments are provided, the function '$' returns each element inside the component.
 
 ```javascript
 Component.ready(({ component, $ }) => {
