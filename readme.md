@@ -29,7 +29,8 @@ Redirect the child component to show other content.
 
 ```javascript
 Component.start(({ component }) => {
-	component.child('child').redirect('./another.html')
+	const data = {}
+	component.child('child').redirect('./child.html', data)
 })
 ```
 
@@ -124,10 +125,36 @@ router.register('products/:product_id', {
 
 # Components
 
-Components are always created inside html markup.
+Components are typically created inside html markup.
 
 ```html
 <div name="name" data-component="./child.html"></div>
+```
+
+The value 'data' is passed into a child component when it's been redirected.
+
+```javascript
+Component.ready(({ component, data }) => {
+	const item = data.item
+})
+```
+
+The function '$' selects an element inside each component.
+
+```javascript
+Component.ready(({ component, $ }) => {
+	const button = ${`button`}
+})
+```
+
+The function '$' returns each element inside a component if no arguments are provided.
+
+```javascript
+Component.ready(({ component, $ }) => {
+	const elements = ${}
+	const header = elements.header
+	const button = elements.button[1]
+})
 ```
 
 Find a component's child by its name.
@@ -138,7 +165,7 @@ Component.ready(({ component }) => {
 })
 ```
 
-Or find a component's child by its index.
+Find a component's child by its index.
 
 ```javascript
 Component.ready(({ component }) => {
