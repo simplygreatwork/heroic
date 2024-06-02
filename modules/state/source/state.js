@@ -17,9 +17,9 @@ function store_new(data) {
 function store_undo(store, data) {
 	
 	if (store.index === 0) return
-	let transaction = store.transactions[store.index]
+	const transaction = store.transactions[store.index]
 	transaction.changes.forEach((change) => {
-		let path = change.path.split('/').filter((each) => each.length > 0)
+		const path = change.path.split('/').filter((each) => each.length > 0)
 		ops_set_silently({ data, store }, path, change.old)
 	})
 	store.index--
@@ -31,7 +31,7 @@ function store_redo(store, data) {
 	store.index++
 	const transaction = store.transactions[store.index]
 	transaction.changes.forEach((change) => {
-		let path = change.path.split('/').filter((each) => each.length > 0)
+		const path = change.path.split('/').filter((each) => each.length > 0)
 		ops_set_silently({ data, store }, path, change.value)
 	})
 }
@@ -117,7 +117,8 @@ function ops_preprocess(transaction, fn, args) {
 }
 
 function ops_get(transaction, path) {
-	let result = ops_get_internal(transaction, path)
+	
+	const result = ops_get_internal(transaction, path)
 	return result ? deep_freeze(clone(result)) : null
 }
 
@@ -131,10 +132,10 @@ function ops_set(transaction, path, value) {
 
 function ops_set_silently(transaction, path, value) {
 	
-	let key = path.pop()
-	let item = find(transaction.data, path)
+	const key = path.pop()
+	const item = find(transaction.data, path)
 	path.push(key)
-	let old = ops_get_internal(transaction, path)
+	const old = ops_get_internal(transaction, path)
 	item[key] = value
 	const bus = transaction.store.bus
 	path = path.join('/')
@@ -144,10 +145,10 @@ function ops_set_silently(transaction, path, value) {
 
 function ops_set_internal(transaction, path, value, silent) {
 	
-	let key = path.pop()
-	let item = find(transaction.data, path)
+	const key = path.pop()
+	const item = find(transaction.data, path)
 	path.push(key)
-	let old = ops_get_internal(transaction, path)
+	const old = ops_get_internal(transaction, path)
 	item[key] = value
 	path = path.join('/')
 	if (value) value = clone(value)
@@ -163,9 +164,9 @@ function ops_update(transaction, path, fn) {
 
 function ops_remove(transaction, path) {
 	
-	let old = ops_get_internal(transaction, path)
-	let key = path.pop()
-	let item = find(transaction.data, path)
+	const old = ops_get_internal(transaction, path)
+	const key = path.pop()
+	const item = find(transaction.data, path)
 	path.push(key)
 	delete item[key]
 	const value = undefined

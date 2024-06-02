@@ -6,7 +6,7 @@ export function Selection({ component, kind, selector }) {
 	kind = kind || './item.html'
 	selector = selector || 'div.row'
 	let selected = null
-	let selection = {
+	const selection = {
 		add: (child) => add(child),
 		remove: (child) => remove(child),
 		clear: () => clear(),
