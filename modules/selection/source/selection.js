@@ -40,7 +40,6 @@ export function Selection({ component, kind, selector }) {
 		if (select_child(1)) return true
 		if (select_child(-1)) return true
 		clear()
-		return false
 	}
 	
 	function adjacent(bias) {
@@ -48,7 +47,6 @@ export function Selection({ component, kind, selector }) {
 		const child = find_adjacent(bias)
 		if (! child) return
 		location.hash = child.data.link
-		return true
 	}
 	
 	function select_child(bias) {
