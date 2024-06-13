@@ -152,7 +152,7 @@ When no arguments are provided, the function '$' returns every element inside th
 
 ```javascript
 Component.ready(({ component, $ }) => {
-	const elements = ${}
+	const elements = $()
 	const header = elements.header
 	const button = elements.button[1]
 })
