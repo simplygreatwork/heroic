@@ -13,7 +13,7 @@ export function _() {
 			selection.add(component)	
 			location.hash = link
 		}
-		bus.on(`item-changed:${item.id}`, ({ item }) => {
+		bus.on(`item-changed:${item.id}`, (item) => {
 			a.innerText = item.title
 			item.done ? a.classList.add('done') : a.classList.remove('done')
 			if (! item.closed) return

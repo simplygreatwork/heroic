@@ -24,19 +24,14 @@
 			header.innerText = item.title
 			input.value = item.title
 			input.oninput = () => {
-				item.title = input.value
+				item.title = header.innerText = input.value
 				bus.emit(`item-changed:${item.id}`, { item })
-				header.innerText = item.title + '!'
 				bus.emit('title-changed')
 			}
-			button[0].onclick = () => {
-				item.done = true
-				bus.emit(`item-changed:${item.id}`, { item })
-			}
+			button[0].onclick = () => bus.emit(`item-changed:${item.id}`, Object.assign(item, { done: true }))
 			button[1].onclick = () => {
-				item.closed = true
-				bus.emit(`item-changed:${item.id}`, { item })
-				bus.emit(`item-changed`, { item })
+				bus.emit(`item-changed:${item.id}`, Object.assign(item, { closed: true }))
+				bus.emit(`item-changed`, Object.assign(item, { closed: true }))
 			}
 		})
 		

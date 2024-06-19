@@ -69,7 +69,7 @@
 					selection.add(row)
 					window.location.hash = row.data.link
 				}
-				bus.on(`item-changed`, ({ item }) => {
+				bus.on(`item-changed`, (item) => {
 					if (item.closed) delete cache[item.id]
 				})
 			}

@@ -12,9 +12,6 @@ export class Scope {
 	}
 	
 	unplug() {
-		
-		this.unpluggables.forEach(function(unplug) {
-			unplug()
-		})
+		this.unpluggables.forEach(unplug => unplug())
 	}
 }
