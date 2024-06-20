@@ -25,13 +25,16 @@
 			input.value = item.title
 			input.oninput = () => {
 				item.title = header.innerText = input.value
-				bus.emit(`item-changed:${item.id}`, { item })
+				bus.emit(`item-changed:${item.id}`, item)
 				bus.emit('title-changed')
 			}
-			button[0].onclick = () => bus.emit(`item-changed:${item.id}`, Object.assign(item, { done: true }))
-			button[1].onclick = () => {
-				bus.emit(`item-changed:${item.id}`, Object.assign(item, { closed: true }))
-				bus.emit(`item-changed`, Object.assign(item, { closed: true }))
+			button[0].onclick = () => emit(`item-changed`, item.id, Object.assign(item, { done: true }))
+			button[1].onclick = () => emit(`item-changed`, item.id, Object.assign(item, { closed: true }))
+			
+			function emit(key, id, data) {
+				
+				bus.emit(`${key}:${id}`, data)
+				bus.emit(`${key}`, data)
 			}
 		})
 		
