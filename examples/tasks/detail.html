@@ -1,12 +1,11 @@
 
 <div>
-	<div class="container">
-		<section class="content">
-			<header data-title class="title" style="display:none;"></header>
+	<div class="container tasks">
+		<section class="content tasks">
 			<section class="scroll">
-				<input class="task-title">
-				<button class="task-done">Complete Task</button>
-				<button class="task-close">Discard Task</button>
+				<input data-title>
+				<button>Complete Task</button>
+				<button>Discard Task</button>
 			</section>
 		</section>
 		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
@@ -19,12 +18,11 @@
 		Component.ready(({ component, data, $ }) => {
 			
 			const { item, bus } = data
-			const { header, input, button } = $()
+			const { input, button } = $()
 			
-			header.innerText = item.title
 			input.value = item.title
 			input.oninput = () => {
-				item.title = header.innerText = input.value
+				item.title = input.value
 				bus.emit(`item-changed:${item.id}`, item)
 				bus.emit('title-changed')
 			}

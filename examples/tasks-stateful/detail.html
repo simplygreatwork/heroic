@@ -1,12 +1,11 @@
 
 <div>
 	<div class="container">
-		<section class="content">
-			<header data-title style="display:none;"></header>
+		<section class="content tasks">
 			<section class="scroll">
-				<input class="task-title">
-				<button class="task-done">Complete Task</button>
-				<button class="task-close">Discard Task</button>
+				<input data-title>
+				<button>Complete Task</button>
+				<button>Discard Task</button>
 			</section>
 		</section>
 		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
@@ -19,13 +18,11 @@
 		Component.ready(({ component, data, $ }) => {
 			
 			const { id, item, bus, cloud } = data
-			const { header, input, button } = $()
+			const { input, button } = $()
 			
-			header.innerText = item.title
-			input.value = header.innerText = item.title
+			input.value = item.title
 			input.oninput = () => {
 				cloud.set(`tasks/${id}/title`, input.value)
-				header.innerText = input.value
 				bus.emit('title-changed')
 			}
 			button[0].onclick = () => cloud.set(`tasks/${id}/done`, true)

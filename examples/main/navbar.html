@@ -66,8 +66,10 @@
 				})
 				if (component_) {
 					const element = component_.element.querySelector('[data-title]')
-					if (element) return element.innerHTML
-					else console.warn(`Navbar found a component matching path "${path}" but no "data-title" attribute.`)
+					if (element) {
+						if (element instanceof HTMLInputElement) return element.value
+						else return element.innerHTML
+					} else console.warn(`Navbar found a component matching path "${path}" but no "data-title" attribute.`)
 				}
 				console.warn(`Navbar found no component with path "${path}" in the component hierachy.`)
 				return null
