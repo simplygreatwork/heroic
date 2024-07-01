@@ -1,6 +1,6 @@
 
 <div>
-	<div class="container tasks">
+	<div class="container">
 		<section class="content tasks">
 			<section class="scroll">
 				<input data-title>
@@ -21,13 +21,10 @@
 			const { input, button } = $()
 			
 			input.value = item.title
-			input.oninput = () => {
-				item.title = input.value
-				bus.emit(`item-changed:${item.id}`, item)
-				bus.emit('title-changed')
-			}
-			button[0].onclick = () => emit(`item-changed`, item.id, Object.assign(item, { done: true }))
-			button[1].onclick = () => emit(`item-changed`, item.id, Object.assign(item, { closed: true }))
+			input.addEventListener('input', () => bus.emit(`item-changed:${item.id}`, Object.assign(item, { title: input.value })))
+			input.addEventListener('input', () => bus.emit('title-changed'))
+			button[0].addEventListener('click', () => emit(`item-changed`, item.id, Object.assign(item, { done: true })))
+			button[1].addEventListener('click', () => emit(`item-changed`, item.id, Object.assign(item, { closed: true })))
 			
 			function emit(key, id, data) {
 				

@@ -73,9 +73,9 @@ export class Component {
 	load() {
 		
 		this.fetch_((html) => {
-			const div = document.createElement('div')
-			div.appendChild(document.createRange().createContextualFragment(html))
-			this.content = div.children[0]
+			const span = document.createElement('span')
+			span.appendChild(document.createRange().createContextualFragment(html))
+			this.content = span.children[0]
 			Component.recent = this
 			this.element.innerHTML = ''
 			this.content.style.visibility = 'hidden'											// prevents flicker
@@ -136,7 +136,7 @@ export class Component {
 		})
 		this.parent.children.push(component)
 		this.element.before(component.element)
-		component.element.style.display = 'block'
+		component.element.style.display = 'inline'
 		component.invoke()
 		return component
 	}

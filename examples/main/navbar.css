@@ -1,0 +1,17 @@
+
+.navbar {
+	padding-top:12px;
+	padding-bottom:10px;
+	padding-left:10px;
+	font-size:95%;
+	text-decoration:none;
+	font-weight:900;
+	border-bottom:1px solid lightgrey;
+}
+.navbar a {
+	text-decoration:none;
+}
+.navbar-dark, .navbar-dark a {
+	color:#cfcfcf;
+	background:darkblue;
+}

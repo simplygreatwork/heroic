@@ -21,12 +21,12 @@
 			const { input, button } = $()
 			
 			input.value = item.title
-			input.oninput = () => {
+			input.addEventListener('input', () => {
 				cloud.set(`tasks/${id}/title`, input.value)
 				bus.emit('title-changed')
-			}
-			button[0].onclick = () => cloud.set(`tasks/${id}/done`, true)
-			button[1].onclick = () => cloud.remove(`tasks/${id}`)
+			})
+			button[0].addEventListener('click', () => cloud.set(`tasks/${id}/done`, true))
+			button[1].addEventListener('click', () => cloud.remove(`tasks/${id}`))
 		})
 		
 	</script>

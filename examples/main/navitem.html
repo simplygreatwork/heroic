@@ -1,0 +1,18 @@
+
+<span>
+	<span><a></a>&nbsp;&nbsp;&raquo;</span>
+	
+	<script type="module">
+		
+		import { Component } from 'component'
+		
+		Component.ready(({ component, data, $ }) => {
+			
+			const { path, title } = data
+			const { a } = $()
+			Object.assign(a, { href: path, innerHTML: title })
+			return	
+		})
+		
+	</script>
+</span>

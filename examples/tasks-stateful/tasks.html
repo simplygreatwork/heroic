@@ -38,7 +38,7 @@
 			const cache = {}
 			const { button } = $()
 			
-			configure_store(store)
+			configure_store()
 			render()
 			bind()
 			watch()
@@ -97,7 +97,7 @@
 				})
 			}
 			
-			function configure_store(store) {
+			function configure_store() {
 				
 				cloud_install_store(cloud, store)
 				if (cloud.get('tasks')) return
@@ -113,6 +113,6 @@
 				return Object.assign(task, { done: false, created: new Date().getTime() })
 			}
 		})
-			
+		
 	</script>
 </div>
