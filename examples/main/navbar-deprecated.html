@@ -1,8 +1,6 @@
 
 <div>
-	<div class="navbar">
-		<span name="template" data-component="./navitem.html" data-template></span>
-	</div>
+	<div class="navbar"><a href="#">Examples</a> &raquo; </div>
 	<link rel="stylesheet" type="text/css" href="navbar.css"/>
 	
 	<script type="module">
@@ -32,18 +30,12 @@
 			
 			function render(paths) {
 				
-				let index = component.children.length - 1
-				while (index > 0) {
-					component.child(index).remove()
-					index--
-				}
-				const template = component.child('template')
-				template.clone({ title: 'Examples', path: '#' })
-				paths.forEach((path, index) => {
+				const separator = `&nbsp;&nbsp;&raquo;&nbsp;&nbsp;`
+				const content = paths.map((path) => {
 					const title = find_title(path, component) || paths.pop()
-					path = `#/${path}`
-					template.clone({ path, title })
-				})
+					return `<a href="#/${path}">${title}</a>`
+				}).join(separator)
+				navbar.innerHTML = `<a href="#">Examples</a> ${separator} ${content}`
 			}
 			
 			function find_title(path, component) {
