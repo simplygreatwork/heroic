@@ -52,6 +52,8 @@
 			function default_paths() {
 				
 				return [
+					`#/scripted`,
+					`#/bindings`,
 					`#/intro`,
 					`#/tasks`,
 					`#/tasks-stateful`,
@@ -161,6 +163,24 @@
 				router.register('test', {
 					enter: ({ path, then }) => {
 						child.rebase('../test').redirect('./test.html', { path }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('scripted', {
+					enter: ({ path, then }) => {
+						child.rebase('../scripted').redirect('./scripted.html', { path }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('bindings', {
+					enter: ({ path, then }) => {
+						child.rebase('../bindings').redirect('./bindings.html', { path }, then)
 					},
 					exit: ({ then }) => {
 						child.rebase(null).redirect('../shared/views/empty.html', {}, then)

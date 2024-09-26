@@ -148,14 +148,23 @@ function ops_set_internal(transaction, path, value, silent) {
 	const key = path.pop()
 	const item = find(transaction.data, path)
 	path.push(key)
-	const old = ops_get_internal(transaction, path)
+	let old = ops_get_internal(transaction, path)
+	if (old) old = clone(old)
 	item[key] = value
-	path = path.join('/')
 	if (value) value = clone(value)
-	transaction.changes.push({ path, value, old })
-	const bus = transaction.store.bus
-	bus.emit('change', path, value, old)
-	bus.emit(`change:${path}`, path, value, old)
+	transaction.changes.push({ path: path.join('/'), value, old })
+	ops_fire_changes(transaction.store.bus, path, value, old)
+}
+
+function ops_fire_changes(bus, path, value, old) {
+	
+	const path_ = path.join('/')
+	bus.emit('change', path_, value, old)
+	bus.emit(`change:${path_}`, path_, value, old)
+	if (typeof value != 'object') return
+	Object.keys(value).forEach((key) => {
+		ops_fire_changes(bus, [...path, key], value[key], old ? old[key] : null)
+	})
 }
 
 function ops_update(transaction, path, fn) {
@@ -164,14 +173,13 @@ function ops_update(transaction, path, fn) {
 
 function ops_remove(transaction, path) {
 	
-	const old = ops_get_internal(transaction, path)
+	const value = undefined
+	const old = clone(ops_get_internal(transaction, path))
 	const key = path.pop()
 	const item = find(transaction.data, path)
 	path.push(key)
 	delete item[key]
-	const value = undefined
 	path = path.join('/')
-	if (value) value = clone(value)
 	transaction.changes.push({ path, value, old })
 	const bus = transaction.store.bus
 	bus.emit('change', path, value, old)

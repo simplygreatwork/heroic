@@ -14,6 +14,8 @@
 	<script type="module">
 		
 		import { Component } from 'component'
+		import { bind_text_field } from 'bind'
+		import { bind_click } from 'bind'
 		
 		Component.ready(({ component, data, $ }) => {
 			
@@ -21,12 +23,12 @@
 			const { input, button } = $()
 			
 			input.value = item.title
-			input.addEventListener('input', () => {
-				cloud.set(`tasks/${id}/title`, input.value)
-				bus.emit('title-changed')
-			})
-			button[0].addEventListener('click', () => cloud.set(`tasks/${id}/done`, true))
-			button[1].addEventListener('click', () => cloud.remove(`tasks/${id}`))
+			const parse = (value) => { bus.emit('title-changed'); return value }
+			bind_text_field(input, cloud, `tasks/${id}/title`, parse)
+			
+			const { set, undo, redo, scope } = cloud
+			bind_click(button[0], () => cloud.set(`tasks/${id}/done`, true), scope)
+			bind_click(button[1], () => cloud.remove(`tasks/${id}`), scope)		
 		})
 		
 	</script>

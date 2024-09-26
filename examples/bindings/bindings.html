@@ -1,0 +1,51 @@
+
+<div>
+	<div class="container">
+		<section class="content tasks">
+			<header data-title class="title">Bindings</header>
+			<form>
+				<input>
+				<input>
+				<input>
+			</form>
+		</section>
+		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
+	</div>
+	<link rel="stylesheet" type="text/css" href="../bindings/bindings.css"/>
+	
+	<script type="module">
+		
+		import { Bus } from 'bus'
+		import { Component } from 'component'
+		import { Cloud } from 'cloud'
+		import { State } from 'state'
+		import { Selection } from 'selection'
+		import { bind_click, bind_text_field } from 'bind'
+		import { cloud_install_store } from '../bindings/bindings.js'
+		
+		let counter = 0
+		
+		Component.ready(({ component, data, $ }) => {
+			
+			const bus = data.bus || new Bus()
+			const cloud = Cloud(bus)
+			const store = data.store || State({})
+			const realm = data.realm
+			const { input } = $()
+			
+			cloud_install_store(cloud, store)
+			bind_text_field(input[0], cloud, `items/1/title`)
+			bind_text_field(input[1], cloud, `items/2/title`)
+			bind_text_field(input[2], cloud, `items/2/magic/trick`)
+			store.commit(({ set }) => {
+				set('items', {})
+				set(`items/1`, { id: 1, title: 'one' })
+				set(`items/2`, { id: 2, title: 'two', magic: { trick: 'abracadabra '} })
+			})
+			function new_item(item) {
+				return Object.assign(item, { done: false, created: new Date().getTime() })
+			}
+		})
+		
+	</script>
+</div>

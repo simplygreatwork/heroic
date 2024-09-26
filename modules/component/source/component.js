@@ -73,12 +73,18 @@ export class Component {
 	load() {
 		
 		this.fetch_((html) => {
-			const span = document.createElement('span')
-			span.appendChild(document.createRange().createContextualFragment(html))
-			this.content = span.children[0]
+			if (this.path.endsWith('.html')) {
+				const span = document.createElement('span')
+				span.appendChild(document.createRange().createContextualFragment(html))
+				this.content = span.children[0]
+			} else if (this.path.endsWith('.js')) {
+				const span = document.createElement('span')
+				span.innerHTML = `<div>hello</div>`
+				this.content = span
+			}
 			Component.recent = this
 			this.element.innerHTML = ''
-			this.content.style.visibility = 'hidden'											// prevents flicker
+			// this.content.style.visibility = 'hidden'											// prevents flicker
 			document.body.appendChild(this.content)
 		})
 	}

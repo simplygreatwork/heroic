@@ -1,0 +1,17 @@
+
+<div>
+	<div class="container">
+		<section class="content">
+			<header data-title class="title">Scripted</header>
+			<section name="child" data-component="../shared/views/empty.html"></section>
+		</section>
+	</div>
+	<script type="module">
+		
+		import { Component } from 'component'
+		Component.ready(({ component }) => {
+			component.child('child').redirect('./scripted.js', {})
+		})
+		
+	</script>
+</div>
