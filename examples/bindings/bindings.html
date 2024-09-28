@@ -7,6 +7,7 @@
 				<input>
 				<input>
 				<input>
+				<input>
 			</form>
 		</section>
 		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
@@ -21,7 +22,7 @@
 		import { State } from 'state'
 		import { Selection } from 'selection'
 		import { bind_click, bind_text_field } from 'bind'
-		import { cloud_install_store } from '../bindings/bindings.js'
+		import { cloud_install_store } from '../../modules/utility/module.js'
 		
 		let counter = 0
 		
@@ -37,14 +38,23 @@
 			bind_text_field(input[0], cloud, `items/1/title`)
 			bind_text_field(input[1], cloud, `items/2/title`)
 			bind_text_field(input[2], cloud, `items/2/magic/trick`)
+			bind_text_field(input[3], cloud, `items/1/title`)
+			
+			cloud.on_change('items/1/title', (key, value) => console.log(`changed 'items/1/title' ${value}`))
+			cloud.on_change('items/2/title', (key, value) => console.log(`changed 'items/2/title'`))
+			cloud.on_change('items/2/magic/trick', (key, value) => console.log(`changed 'items/2/magic/trick'`))
+			
 			store.commit(({ set }) => {
 				set('items', {})
 				set(`items/1`, { id: 1, title: 'one' })
 				set(`items/2`, { id: 2, title: 'two', magic: { trick: 'abracadabra '} })
 			})
-			function new_item(item) {
-				return Object.assign(item, { done: false, created: new Date().getTime() })
-			}
+			
+			store.commit(({ set }) => {
+				set(`items/1/title`, 'one!')
+				set(`items/2/title`, 'two!')
+				set(`items/2/magic/trick`, 'abracadabra!')
+			})
 		})
 		
 	</script>

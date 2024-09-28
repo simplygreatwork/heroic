@@ -10,7 +10,7 @@ export function _() {
 		
 		Object.assign(a, { href: link, innerText: item.title })
 		div[1].onmousedown = () => {
-			selection.add(component)	
+			selection.add(component)
 			location.hash = link
 		}
 		bus.on(`item-changed:${item.id}`, (item) => {

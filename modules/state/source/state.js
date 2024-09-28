@@ -137,10 +137,7 @@ function ops_set_silently(transaction, path, value) {
 	path.push(key)
 	const old = ops_get_internal(transaction, path)
 	item[key] = value
-	const bus = transaction.store.bus
-	path = path.join('/')
-	bus.emit('change', path, value, old)
-	bus.emit(`change:${path}`, path, value, old)
+	ops_fire_changes(transaction.store.bus, path, value, old)
 }
 
 function ops_set_internal(transaction, path, value, silent) {
@@ -195,9 +192,7 @@ function ops_apply(transaction, path, fn) {
 
 function find(item, path) {
 	
-	path.forEach(key => {
-		item = item[key]
-	})
+	path.forEach(key => item = item[key])
 	return item
 }
 

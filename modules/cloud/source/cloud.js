@@ -17,7 +17,7 @@ export function Cloud(bus) {
 		remove: (key) => cloud_emit(cloud, 'remove', [key]),
 		on_remove: (key) => cloud_on(cloud, 'remove', key),
 		change: (key, value, old) => cloud_emit(cloud, 'change', [key, value, old]),
-		on_change: (fn, key) => cloud_on(cloud, 'change', fn, key),
+		on_change: (key, fn) => cloud_on(cloud, 'change', fn, key),
 		undo: () => cloud_emit(cloud,	'undo'),
 		on_undo: (fn) => cloud_on(cloud, 'undo', fn),
 		redo: () => cloud_emit(cloud,	'redo'),
@@ -40,6 +40,7 @@ function cloud_emit(cloud, pattern, args) {
 
 function cloud_on(cloud, pattern, fn, key) {
 	
+	if (typeof key == 'function') { fn = key; key = null }
 	if (key) cloud.scope.plug(cloud.bus.on(`${pattern}:${key}`, fn))
 	else cloud.scope.plug(cloud.bus.on(pattern, fn))
 }

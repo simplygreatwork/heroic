@@ -22,7 +22,8 @@
 		import { State } from 'state'
 		import { Selection } from 'selection'
 		import { bind_click } from 'bind'
-		import { cloud_install_store, place_row, trace } from '../tasks-stateful/tasks.js'
+		import { cloud_install_store } from '../../modules/utility/module.js'
+		import { place_row, trace } from '../tasks-stateful/tasks.js'
 		import { on_task_added, on_task_removed } from '../tasks-stateful/tasks.js'
 		
 		let counter = 0
@@ -38,11 +39,23 @@
 			const cache = {}
 			const { button } = $()
 			
-			configure_store()
+			configure()
 			render()
 			bind()
 			watch()
 			trace(false, cloud, store)
+			
+			function configure() {
+				
+				cloud_install_store(cloud, store)
+				if (cloud.get('tasks')) return
+				store.commit(({ set }) => {
+					set('tasks', {})
+					set(`tasks/${++counter}`, new_task({ id: counter, title: `Empty Trash!` }))
+					set(`tasks/${++counter}`, new_task({ id: counter, title: `Feed Dog!` }))
+					set(`tasks/${++counter}`, new_task({ id: counter, title: `Water Plant!` }))
+				})
+			}
 			
 			function render() {
 				
@@ -89,23 +102,11 @@
 					const row = install_row(id, item)
 					place_row(component, id, (component) => component.element.before(row.element))
 					selection.add(row)
-					window.location.hash = row.data.link
+					location.hash = row.data.link
 				})
 				
 				on_task_removed(cloud, (id, item) => {
 					delete cache[id]
-				})
-			}
-			
-			function configure_store() {
-				
-				cloud_install_store(cloud, store)
-				if (cloud.get('tasks')) return
-				store.commit(({ set }) => {
-					set('tasks', {})
-					set(`tasks/${++counter}`, new_task({ id: counter, title: `Empty Trash!` }))
-					set(`tasks/${++counter}`, new_task({ id: counter, title: `Feed Dog!` }))
-					set(`tasks/${++counter}`, new_task({ id: counter, title: `Water Plant!` }))
 				})
 			}
 			
