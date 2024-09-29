@@ -14,6 +14,7 @@
 		
 		import { Component } from 'component'
 		import { Bus } from 'bus'
+		import { Scope } from 'scope'
 		import { Selection } from 'selection'
 		
 		let counter = 0
@@ -21,6 +22,7 @@
 		Component.ready(function({ component, $ }) {
 			
 			const bus = new Bus()
+			const scope = new Scope()
 			const selection = Selection({ component, kind: './item.html' })
 			const template = component.child('template')
 			const cache = {}
@@ -40,6 +42,10 @@
 				}
 			})
 			
+			router.register('stress', {
+				exit: () => scope.unplug()
+			})
+			
 			function default_items() {
 				
 				return new Array(10000).fill(0).map((each, index) => {
@@ -51,7 +57,7 @@
 			function install_row(item) {
 				
 				const link = `#/stress/${item.id}`
-				const row = template.clone({ item, link, bus })
+				const row = template.clone({ item, link, bus, scope })
 				cache[item.id] = { item, row }
 				return row
 			}

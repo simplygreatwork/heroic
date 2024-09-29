@@ -31,7 +31,6 @@
 			const bus = data.bus || new Bus()
 			const cloud = Cloud(bus)
 			const store = data.store || State({})
-			const realm = data.realm
 			const { input } = $()
 			
 			cloud_install_store(cloud, store)
