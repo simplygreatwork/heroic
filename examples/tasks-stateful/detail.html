@@ -24,8 +24,6 @@
 			input.value = item.title
 			const parse = (value) => { bus.emit('title-changed'); return value }
 			bind_text_field(input, cloud, `tasks/${id}/title`, parse)
-			
-			const { set, undo, redo, scope } = cloud
 			bind(button[0], 'click', () => cloud.set(`tasks/${id}/done`, true), scope)
 			bind(button[1], 'click', () => cloud.remove(`tasks/${id}`), scope)		
 		})
