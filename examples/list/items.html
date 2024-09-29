@@ -13,16 +13,16 @@
 	<script type="module">
 		
 		import { Component } from 'component'
-		import { Scope } from 'scope'
 		import { Bus } from 'bus'
+		import { Scope } from 'scope'
 		import { Selection } from 'selection'
 		
 		let counter = 0
 		
 		Component.ready(({ component, data, $ }) => {
 			
-			const scope = new Scope()
 			const bus = data.bus || new Bus()
+			const scope = new Scope()
 			const selection = Selection({ component, kind: './item.html' })
 			const template = component.child('template')
 			const cache = {}
