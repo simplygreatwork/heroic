@@ -14,14 +14,17 @@
 	
 	<script type="module">
 		
-		import { Bus } from 'bus'
 		import { Component } from 'component'
+		import { Scope } from 'scope'
+		import { Bus } from 'bus'
 		import { Selection } from 'selection'
+		import { bind } from 'bind'
 		
 		let counter = 0
 		
 		Component.ready(({ component, data, $ }) => {
 			
+			const scope = new Scope()
 			const bus = data.bus || new Bus()
 			const selection = Selection({ component, kind: './task.html' })
 			const template = component.child('task-template')
@@ -41,6 +44,10 @@
 				}
 			})
 			
+			router.register('tasks', {
+				exit: () => scope.unplug()
+			})
+			
 			listen()
 			
 			function default_items() {
@@ -55,20 +62,21 @@
 			function install_row(item) {
 				
 				const link = `#/tasks/${item.id}`
-				const row = template.clone({ item, link, selection, bus })
+				const row = template.clone({ item, link, selection, bus, scope })
 				cache[item.id] = { item, row }
 				return row
 			}
 			
 			function listen() {
 				
-				button.onclick = () => {
+				bind(button, 'click', () => {
 					const id = ++counter
 					const item = { id, title: `Untitled Task ${id}`, done: false }
 					const row = install_row(item)
 					selection.add(row)
 					window.location.hash = row.data.link
-				}
+				}, scope)
+				
 				bus.on(`item-changed`, (item) => {
 					if (item.closed) delete cache[item.id]
 				})

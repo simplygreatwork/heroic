@@ -1,5 +1,6 @@
 
 import { Component } from 'component'
+import { bind } from 'bind'
 
 export function _() {
 	
@@ -10,9 +11,10 @@ export function _() {
 		
 		Object.assign(a, { href: link, innerText: item.title })
 		apply_done(item.done)
-		const fn = () => { location.hash = link; selection.add(component); }
-		div[1].addEventListener('mousedown', fn)
-		cloud.scope.plug(() => { div[1].removeEventListener('mousedown', fn); })
+		bind(div[1], 'mousedown', () => {
+			location.hash = link
+			selection.add(component)
+		}, cloud.scope)
 		
 		const { on_change } = cloud
 		on_change(`tasks/${id}/title`, (key, title) => a.innerText = title)

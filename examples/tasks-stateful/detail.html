@@ -14,8 +14,7 @@
 	<script type="module">
 		
 		import { Component } from 'component'
-		import { bind_text_field } from 'bind'
-		import { bind_click } from 'bind'
+		import { bind, bind_text_field } from 'bind'
 		
 		Component.ready(({ component, data, $ }) => {
 			
@@ -27,8 +26,8 @@
 			bind_text_field(input, cloud, `tasks/${id}/title`, parse)
 			
 			const { set, undo, redo, scope } = cloud
-			bind_click(button[0], () => cloud.set(`tasks/${id}/done`, true), scope)
-			bind_click(button[1], () => cloud.remove(`tasks/${id}`), scope)		
+			bind(button[0], 'click', () => cloud.set(`tasks/${id}/done`, true), scope)
+			bind(button[1], 'click', () => cloud.remove(`tasks/${id}`), scope)		
 		})
 		
 	</script>

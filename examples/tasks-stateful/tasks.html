@@ -21,7 +21,7 @@
 		import { Cloud } from 'cloud'
 		import { State } from 'state'
 		import { Selection } from 'selection'
-		import { bind_click } from 'bind'
+		import { bind } from 'bind'
 		import { cloud_install_store } from '../../modules/utility/module.js'
 		import { place_row, trace } from '../tasks-stateful/tasks.js'
 		import { on_task_added, on_task_removed } from '../tasks-stateful/tasks.js'
@@ -41,7 +41,7 @@
 			
 			configure()
 			render()
-			bind()
+			bind_()
 			watch()
 			trace(false, cloud, store)
 			
@@ -71,14 +71,14 @@
 				return row
 			}
 			
-			function bind() {
+			function bind_() {
 				
 				const { set, undo, redo, scope } = cloud
-				bind_click(button[0], () => {
+				bind(button[0], 'click', () => {
 					set(`tasks/${++counter}`, new_task({ id: counter, title: `Untitled Task ${counter}` }))
 				}, scope)
-				bind_click(button[1], () => undo(), scope)
-				bind_click(button[2], () => redo(), scope)
+				bind(button[1], 'click', () => undo(), scope)
+				bind(button[2], 'click', () => redo(), scope)
 			}
 			
 			function watch() {

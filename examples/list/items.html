@@ -13,6 +13,7 @@
 	<script type="module">
 		
 		import { Component } from 'component'
+		import { Scope } from 'scope'
 		import { Bus } from 'bus'
 		import { Selection } from 'selection'
 		
@@ -20,6 +21,7 @@
 		
 		Component.ready(({ component, data, $ }) => {
 			
+			const scope = new Scope()
 			const bus = data.bus || new Bus()
 			const selection = Selection({ component, kind: './item.html' })
 			const template = component.child('template')
@@ -37,6 +39,10 @@
 				exit: ({ then }) => child.redirect('../shared/views/empty.html', {}, then)
 			})
 			
+			router.register('list', {
+				exit: () => scope.unplug()
+			})
+			
 			function default_items() {
 				
 				return new Array(20).fill(0).map(function(each, index) {
@@ -48,7 +54,7 @@
 			function install_row(item) {
 				
 				const link = `#/list/${item.id}`
-				const row = template.clone({ item, link, bus })
+				const row = template.clone({ item, link, bus, scope })
 				cache[item.id] = { item, row }
 				return row
 			}

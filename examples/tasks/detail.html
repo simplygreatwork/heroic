@@ -14,6 +14,7 @@
 	<script type="module">
 		
 		import { Component } from 'component'
+		import { bind } from 'bind'
 		
 		Component.ready(({ component, data, $ }) => {
 			
@@ -21,10 +22,10 @@
 			const { input, button } = $()
 			
 			input.value = item.title
-			input.addEventListener('input', () => bus.emit(`item-changed:${item.id}`, Object.assign(item, { title: input.value })))
-			input.addEventListener('input', () => bus.emit('title-changed'))
-			button[0].addEventListener('click', () => emit(`item-changed`, item.id, Object.assign(item, { done: true })))
-			button[1].addEventListener('click', () => emit(`item-changed`, item.id, Object.assign(item, { closed: true })))
+			bind(input, 'input', () => bus.emit(`item-changed:${item.id}`, Object.assign(item, { title: input.value })))
+			bind(input, 'input', () => bus.emit(`title-changed`))
+			bind(button[0], 'click', () => emit(`item-changed`, item.id, Object.assign(item, { done: true })))
+			bind(button[1], 'click', () => emit(`item-changed`, item.id, Object.assign(item, { closed: true })))
 			
 			function emit(key, id, data) {
 				

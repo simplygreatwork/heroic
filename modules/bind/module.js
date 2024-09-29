@@ -1,2 +1,5 @@
 
-export { bind_text_field, bind_click } from './source/bind.js'
+export {
+	bind,
+	bind_text_field
+} from './source/bind.js'

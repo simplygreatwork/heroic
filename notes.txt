@@ -1,0 +1,4 @@
+
+remove onclick, etc
+move scope out of cloud
+use scope with list, tasks, etc
