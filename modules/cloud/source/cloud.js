@@ -1,5 +1,5 @@
 
-import { Scope } from './scope.js'
+import { Scope } from '../../scope/module.js'
 
 export function Cloud(bus) {
 	
