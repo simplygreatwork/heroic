@@ -11,6 +11,5 @@ export function _() {
 		
 		Object.assign(a, { href: link, innerText: item.title })
 		bind(div[1], 'mousedown', () => location.hash = link, scope)
-		bus.on(`item-changed:${item.id}`, ({ item }) => a.innerText = item.title)
 	})
 }

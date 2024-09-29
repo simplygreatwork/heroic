@@ -18,14 +18,14 @@
 		
 		Component.ready(({ component, data, $ }) => {
 			
-			const { item, bus } = data
+			const { item, bus, scope } = data
 			const { input, button } = $()
 			
 			input.value = item.title
-			bind(input, 'input', () => bus.emit(`item-changed:${item.id}`, Object.assign(item, { title: input.value })))
-			bind(input, 'input', () => bus.emit(`title-changed`))
-			bind(button[0], 'click', () => emit(`item-changed`, item.id, Object.assign(item, { done: true })))
-			bind(button[1], 'click', () => emit(`item-changed`, item.id, Object.assign(item, { closed: true })))
+			bind(input, 'input', () => bus.emit(`item-changed:${item.id}`, Object.assign(item, { title: input.value })), scope)
+			bind(input, 'input', () => bus.emit(`title-changed`), scope)
+			bind(button[0], 'click', () => emit(`item-changed`, item.id, Object.assign(item, { done: true })), scope)
+			bind(button[1], 'click', () => emit(`item-changed`, item.id, Object.assign(item, { closed: true })), scope)
 			
 			function emit(key, id, data) {
 				

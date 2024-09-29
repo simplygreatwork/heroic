@@ -15,8 +15,8 @@
 	<script type="module">
 		
 		import { Component } from 'component'
-		import { Scope } from 'scope'
 		import { Bus } from 'bus'
+		import { Scope } from 'scope'
 		import { Selection } from 'selection'
 		import { bind } from 'bind'
 		
@@ -37,7 +37,7 @@
 			router.register('tasks/:id', {
 				enter: ({ path, values, then }) => {
 					const { item, row } = cache[values.id]
-					child.redirect('./detail.html', { path, item, bus }, then)
+					child.redirect('./detail.html', { path, item, bus, scope }, then)
 				},
 				exit: ({ then }) => {
 					child.redirect('../shared/views/empty.html', {}, then)
