@@ -15,8 +15,8 @@
 			const { sample } = await import_('./sample.js')
 			component.child('child').redirect(sample, { first: 'Joe', last: 'Harp' })
 			setTimeout(async () => {
-				const { listing } = await import_('./listing.js')
-				component.child('child').redirect(listing, { items: ['a', 'bb', 'ccc'] })
+				const { list } = await import_('./list.js')
+				component.child('child').redirect(list, { items: ['a', 'bb', 'ccc'] })
 			}, 1000)
 		})
 		

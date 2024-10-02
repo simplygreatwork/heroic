@@ -1,7 +1,7 @@
 
 import { html } from './html.js'
 
-export function listing(data) {
+export function list(data) {
 	
 	return html`
 	<ul>
