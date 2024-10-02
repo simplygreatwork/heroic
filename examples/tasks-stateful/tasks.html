@@ -23,13 +23,13 @@
 		import { Selection } from 'selection'
 		import { bind } from 'bind'
 		import { cloud_install_store } from '../../modules/utility/module.js'
-		import { place_row, trace } from '../tasks-stateful/tasks.js'
-		import { on_task_added, on_task_removed } from '../tasks-stateful/tasks.js'
 		
 		let counter = 0
 		
-		Component.ready(({ component, data, $ }) => {
+		Component.ready(async ({ component, data, $, import_ }) => {
 			
+			const { place_row, trace } = await import_('./tasks.js')
+			const { on_task_added, on_task_removed } = await import_('./tasks.js')
 			const bus = data.bus || new Bus()
 			const cloud = Cloud(bus)
 			const store = data.store || State({})

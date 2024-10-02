@@ -42,7 +42,8 @@ export class Component {
 		
 		if (this.is_template) return
 		const $ = (selector) => $_(this, selector)
-		this.fn.apply(this, [{ component: this, data: this.data, $ }])
+		const import_ = (base, path) => this.import_(base, path, this)
+		this.fn.apply(this, [{ component: this, data: this.data, $, import_ }])
 		this.emit('initialized', this)
 	}
 	
@@ -73,18 +74,12 @@ export class Component {
 	load() {
 		
 		this.fetch_((html) => {
-			if (this.path.endsWith('.html')) {
-				const span = document.createElement('span')
-				span.appendChild(document.createRange().createContextualFragment(html))
-				this.content = span.children[0]
-			} else if (this.path.endsWith('.js')) {
-				const span = document.createElement('span')
-				span.innerHTML = `<div>hello</div>`
-				this.content = span
-			}
+			const span = document.createElement('span')
+			span.appendChild(document.createRange().createContextualFragment(html))
+			this.content = span.children[0]
 			Component.recent = this
 			this.element.innerHTML = ''
-			// this.content.style.visibility = 'hidden'											// prevents flicker
+			this.content.style.visibility = 'hidden'											// prevents flicker
 			document.body.appendChild(this.content)
 		})
 	}
@@ -104,7 +99,12 @@ export class Component {
 		trace(`redirect: ${path}`)
 		if (then) this.once('initialized', () => then())
 		this.data = data ? data : this.data
-		this.element.setAttribute('data-component', path)
+		if (typeof path == 'string') {
+			this.element.setAttribute('data-component', path)
+		} else if (typeof path == 'function') {
+			const fn = path
+			const result = this.element.innerHTML = fn(data)
+		}
 	}
 	
 	observe() {
@@ -168,5 +168,16 @@ export class Component {
 		if (this.base) text = text.replace(`from './`, `from '${this.base}/`)
 		if (this.base) text = text.replace(`from "./`, `from "${this.base}/`)
 		return text
+	}
+	
+	async import_(path, base) {
+		
+		let path_ = this.resolve_path().split('/')
+		path_.pop()
+		path_ = path_.join('/') + '/'		
+		let url = new URL(window.location.origin + window.location.pathname)
+		url = new URL(path_, url)
+		url = new URL(path, url)
+		return await import(url)
 	}
 }

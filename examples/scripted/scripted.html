@@ -9,8 +9,15 @@
 	<script type="module">
 		
 		import { Component } from 'component'
-		Component.ready(({ component }) => {
-			component.child('child').redirect('./scripted.js', {})
+		
+		Component.ready(async ({ component, import_ }) => {
+			
+			const { sample } = await import_('./sample.js')
+			component.child('child').redirect(sample, { first: 'Joe', last: 'Harp' })
+			setTimeout(async () => {
+				const { listing } = await import_('./listing.js')
+				component.child('child').redirect(listing, { items: ['a', 'bb', 'ccc'] })
+			}, 1000)
 		})
 		
 	</script>
