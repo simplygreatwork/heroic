@@ -25,6 +25,7 @@
 		
 		import { Component } from 'component'
 		import { Bus } from 'bus'
+		import { Scope } from 'scope'
 		import { Selection } from 'selection'
 		
 		let counter = 0
@@ -33,6 +34,7 @@
 			
 			const { bus, store } = data
 			const template = component.child('template')
+			const scope = new Scope()
 			const selection = Selection({ component, kind: './item.html', selector: 'div.row_main' })
 			const cache = {}
 			
@@ -79,11 +81,11 @@
 			function install_row(item) {
 				
 				const link = item.link
-				const row = template.clone({ item, link, selection })
+				const row = template.clone({ item, link, selection, scope })
 				cache[item.id] = { item, row }
 				return row
 			}
-						
+					
 			function register() {
 				
 				const child = component.child('void')
