@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, minimum-scale=1.0">
-		<title>List</title>
+		<title>Quiz</title>
 		<link rel="stylesheet" type="text/css" href="../shared/style/main.css"/>
 		<link rel="stylesheet" type="text/css" href="../shared/style/list.css"/>
 		<script type="importmap">{"imports": {
@@ -24,23 +24,26 @@
 		<div class="modal container">
 			<div name="void" data-component="../shared/views/empty.html"></div>
 		</div>
+		
 		<script type="module">
 			
 			import { Component } from 'component'
 			import { Router } from 'router'
+			import { Bus } from 'bus'
 			
 			Component.start((component) => {
 				
 				location.hash = '#'
 				window.router = new Router()
 				const child = component.child('void')
-				router.register('list', {
-					enter: ({ path, part, then }) => child.redirect('./items.html', { path, part }, then),
+				router.register('quiz', {
+					enter: ({ path, then }) => child.redirect('./quiz.html', { path, bus }, then),
 					exit: ({ then }) => child.redirect('../shared/views/empty.html', {}, then)
 				})
-				location.hash = '#/list'
+				location.hash = '#/quiz'
 			})
 			
 		</script>
+		
 	</body>
 </html>

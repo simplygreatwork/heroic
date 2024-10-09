@@ -39,9 +39,7 @@
 				exit: ({ then }) => child.redirect('../shared/views/empty.html', {}, then)
 			})
 			
-			router.register('list', {
-				exit: () => scope.unplug()
-			})
+			router.exits('list', () => scope.unplug(), true)
 			
 			function default_items() {
 				

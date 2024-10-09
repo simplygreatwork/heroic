@@ -1,0 +1,22 @@
+
+<div>
+	<div class="container">
+		<section class="content">
+			<header data-title class="title">Router</header>
+			<section class="scroll">
+				
+			</section>
+		</section>
+		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
+	</div>
+	<script type="module">
+		
+		import { Component } from 'component'
+		import { Scope } from 'scope'
+		
+		Component.ready(({ component, data, $ }) => {			
+			router.exits('router', data => console.log('router exit'))
+		})
+		
+	</script>
+</div>

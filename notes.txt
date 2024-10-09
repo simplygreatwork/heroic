@@ -1,4 +1,43 @@
 
+add scope to bus
+
 remove onclick, etc
 move scope out of cloud
 use scope with list, tasks, etc
+find way to incorporate bus and signals
+maybe change bus channels to signals
+
+enhance: counters/ids, cache, links, realms
+
+change bus.emit to allow for major and minor key
+bus.emit(['set', 'set:tasks/1], {})
+
+const node = store.node('tasks/1')
+const node = cloud.node('tasks/1')
+const node = system.node('tasks/1')
+
+const node = store.signal('tasks/1')
+const node = cloud.signal('tasks/1')
+const node = system.signal('tasks/1')
+
+value = node.get()
+node.set(`value`)
+node.observe()
+
+bus.signal('set:tasks/1').emit('')
+bus.signal('get:tasks/1').emit('')
+
+let signal = bus.signal('set:tasks/1')
+signal.emit(emit(value))
+
+bus.on('set', (data) => {
+	return
+})
+bus.on('set:tasks', (data) => {
+	console.log('on set:tasks')
+	bus.emit('set', data)
+})
+bus.emit('set:tasks', {})
+
+bus.emit(['set', 'set:tasks/${id}'], {...})
+

@@ -4,7 +4,7 @@ import { bind } from 'bind'
 
 export function _() {
 	
-	Component.ready(function({ component, data, $ }) {
+	Component.ready(({ component, data, $ }) => {
 		
 		const { item, link, selection, bus, scope } = data
 		const { div, a } = $()
@@ -23,6 +23,6 @@ export function _() {
 			const nearest = selection.nearest()
 			nearest ? false : location.hash = `#/tasks`
 			component.remove()
-		})
+		}, scope)
 	})
 }

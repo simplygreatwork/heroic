@@ -7,14 +7,16 @@ export class Bus {
 		this.channels = {}
 	}
 	
-	on(key, fn) {
+	on(key, fn, scope) {
 		
 		this.channels[key] = this.channels[key] || []
 		this.channels[key].push(fn)
-		return function off() {
-			let index = this.channels[key].indexOf(fn)
+		const off = () => {
+			const index = this.channels[key].indexOf(fn)
 			this.channels[key].splice(index, 1)
-		}.bind(this)
+		}
+		if (scope) scope.plug(off)
+		return off
 	}
 	
 	once(key, fn) {
@@ -25,14 +27,16 @@ export class Bus {
 		})
 	}
 	
-	unshift(key, fn) {
+	unshift(key, fn, scope) {
 		
 		this.channels[key] = this.channels[key] || []
 		this.channels[key].unshift(fn)
-		return function off() {
-			let index = this.channels[key].indexOf(fn)
+		const off = () => {
+			const index = this.channels[key].indexOf(fn)
 			this.channels[key].splice(index, 1)
-		}.bind(this)
+		}
+		if (scope) scope.plug(off)
+		return off
 	}
 	
 	has(key) {

@@ -24,8 +24,8 @@
 		
 		Component.ready(({ component, data, $ }) => {
 			
-			const scope = new Scope()
 			const bus = data.bus || new Bus()
+			const scope = new Scope()
 			const selection = Selection({ component, kind: './task.html' })
 			const template = component.child('task-template')
 			const cache = {}
@@ -44,9 +44,7 @@
 				}
 			})
 			
-			router.register('tasks', {
-				exit: () => scope.unplug()
-			})
+			router.exits('tasks', () => scope.unplug(), true)
 			
 			listen()
 			
@@ -74,12 +72,12 @@
 					const item = { id, title: `Untitled Task ${id}`, done: false }
 					const row = install_row(item)
 					selection.add(row)
-					window.location.hash = row.data.link
+					location.hash = row.data.link
 				}, scope)
 				
 				bus.on(`item-changed`, (item) => {
 					if (item.closed) delete cache[item.id]
-				})
+				}, scope)
 			}
 		})
 		

@@ -24,6 +24,7 @@
 		<div class="modal container">
 			<div name="void" data-component="../shared/views/empty.html"></div>
 		</div>
+		
 		<script type="module">
 			
 			import { Component } from 'component'
@@ -34,13 +35,14 @@
 				location.hash = '#'
 				window.router = new Router()
 				const child = component.child('void')
-				router.register('list', {
-					enter: ({ path, part, then }) => child.redirect('./items.html', { path, part }, then),
+				router.register('router', {
+					enter: ({ path, part, then }) => child.redirect('./router.html', { path, part }, then),
 					exit: ({ then }) => child.redirect('../shared/views/empty.html', {}, then)
 				})
-				location.hash = '#/list'
+				location.hash = '#/router'
 			})
 			
 		</script>
+		
 	</body>
 </html>

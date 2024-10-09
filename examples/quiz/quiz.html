@@ -1,0 +1,99 @@
+
+<div>
+	<div class="container">
+		<section class="content">
+			<header data-title class="title">Quiz</header>
+			<div>0 of 0 is 0%.</div>
+			<section class="scroll">	
+				<section name="template" data-component="../shared/views/empty.html" data-template></section>
+				<br><br><br><br><br><br><br>
+			</section>
+		</section>
+		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
+	</div>
+	<style>
+		
+		input[type="submit"] {
+			width:100%;
+			padding:6px;
+			margin-top:10px;
+		}
+		
+		label {
+			display:block;	
+		}
+		
+	</style>
+	<script type="module">
+		
+		import { Component } from 'component'
+		import { Bus } from 'bus'
+		import { Cloud } from 'cloud'
+		import { Scope } from 'scope'
+		import { bind } from 'bind'
+		
+		let counter = 0
+		
+		Component.ready(({ component, data, $ }) => {
+			
+			const bus = data.bus || new Bus()
+			const cloud = Cloud(bus)
+			const scope = cloud.scope
+			const template = component.child('template')
+			const cache = {}
+			data['questions'] = {}
+			let correct_ = 0
+			let total = 0
+			
+			default_items().forEach((item) => install_row(item))
+			router.exits('quiz', data => scope.unplug(), true)
+			listen()
+			
+			function default_items() {
+				
+				return [
+					{ id: 1, path: './questions/q1.html' },
+					{ id: 2, path: './questions/q2.html' },
+					{ id: 3, path: './questions/q3.html' },					
+					{ id: 4, path: './questions/q4.html' },					
+					{ id: 5, path: './questions/q5.html' },
+				]
+			}
+			
+			function install_row(item) {
+				
+				template.clone({ item, bus, cloud }, (component) => {
+					component.on('ready', () => {
+						const { data, $ } = component
+						bus.emit('loaded', { component, data, $ })
+					})
+					component.redirect(item.path, { item, bus, cloud })
+				})
+			}
+			
+			function listen() {
+				
+				bus.on('loaded', ({ component, data, $ }) => {
+					const id = component.path
+					const correct = $('[data-answer]').dataset.answer
+					const submit = $('[type=submit]')
+					bind(submit, 'click', (event) => {
+						event.preventDefault()
+						const answer = $(':checked').value
+						bus.emit('submitted', { id, correct, answer })
+					}, scope)
+				}, scope)
+				
+				bus.on('submitted', ({ id, answer, correct }) => {
+					data.questions[id] = data.questions[id] || 0
+					data.questions[id] = data.questions[id] + 1
+					total++
+					if (answer == correct) correct_++
+					const { div } = $()
+					div[2].innerText = `${correct_} of ${total}`
+				}, scope)
+			}
+		})
+		
+	</script>
+</div>

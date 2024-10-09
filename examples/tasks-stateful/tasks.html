@@ -94,9 +94,7 @@
 					exit: ({ then }) => child.redirect('../shared/views/empty.html', {}, then)
 				})
 				
-				router.register(`${realm}`, {
-					exit: () => cloud.scope.unplug()
-				})
+				router.exits(`${realm}`, () => cloud.scope.unplug(), true)
 				
 				on_task_added(cloud, (id, item) => {
 					const row = install_row(id, item)

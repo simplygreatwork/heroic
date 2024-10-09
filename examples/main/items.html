@@ -54,12 +54,14 @@
 			function default_paths() {
 				
 				return [
-					`#/scripted`,
-					`#/bindings`,
 					`#/intro`,
+					`#/router`,
 					`#/tasks`,
 					`#/tasks-stateful`,
 					`#/list`,
+					`#/scripted`,
+					`#/bindings`,
+					`#/quiz`,
 					`#/products`,
 					`#/products/0`,
 					`#/products/1`,
@@ -93,6 +95,15 @@
 				router.register('intro', {
 					enter: ({ path, then }) => {
 						child.rebase('../intro').redirect('./intro.html', { path, bus }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('router', {
+					enter: ({ path, then }) => {
+						child.rebase('../router').redirect('./router.html', { path, bus }, then)
 					},
 					exit: ({ then }) => {
 						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
@@ -183,6 +194,15 @@
 				router.register('bindings', {
 					enter: ({ path, then }) => {
 						child.rebase('../bindings').redirect('./bindings.html', { path }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('quiz', {
+					enter: ({ path, then }) => {
+						child.rebase('../quiz').redirect('./quiz.html', { path, bus }, then)
 					},
 					exit: ({ then }) => {
 						child.rebase(null).redirect('../shared/views/empty.html', {}, then)

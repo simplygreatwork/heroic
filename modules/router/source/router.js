@@ -7,9 +7,10 @@ const trace = trace_(false)
 export function Router() {
 	
 	let then = [], now = [], queue = [], offs = []
-	let bus = new Bus(), enters = new Bus(), exits = new Bus()
+	let bus = new Bus(), enters_ = new Bus(), exits_ = new Bus()
 	return install({
 		register,
+		exits,
 		go,
 		on: bus.on.bind(bus)
 	})
@@ -29,14 +30,32 @@ export function Router() {
 		trace(`Router.register: ${path}`)
 		const length = path.split('/').length
 		const off = {}
-		if (enter) off.enter = enters.on(path, (data) => enter(data))
-		if (exit) off.exit = exits.on(path, (data) => {
+		if (enter) off.enter = enters_.on(path, (data) => enter(data))
+		if (exit) off.exit = exits_.on(path, (data) => {
 			const offs_ = offs[length]
 			if (offs_ && offs_.enter) offs_.enter()
 			if (offs_ && offs_.exit) offs_.exit()
-			exit(data)
+			exit(data, off.exit)
 		})
 		offs[length - 1] = off
+	}
+	
+	function enters(path, enter, once) {
+		
+		const off = enters_.on(path, data => {
+			enter(data)
+			if (false) console.log(`enters ${path}`)
+			if (once) off()
+		})
+	}
+	
+	function exits(path, exit, once) {
+		
+		const off = exits_.on(path, data => {
+			exit(data)
+			console.log(`exits ${path}`)
+			if (once) off()
+		})
 	}
 	
 	function go(path) {
@@ -117,7 +136,7 @@ export function Router() {
 	function fire_change(change) {
 		
 		let found = false
-		const bus = change.kind == 'enter' ? enters : exits
+		const bus = change.kind == 'enter' ? enters_ : exits_
 		Object.keys(bus.channels).forEach((pattern) => {
 			find_match(pattern, change.path, (result) => {
 				trace(`${change.kind} pattern: ${pattern}`)

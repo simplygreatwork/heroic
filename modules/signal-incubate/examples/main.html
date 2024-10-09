@@ -1,0 +1,23 @@
+
+const bus = Bus()
+
+const signal = bus.signal('get:tasks')
+signal.on((data) => {})
+signal.emit(data)
+signal.observe((data) => {})
+
+const signal = bus.signal('get:tasks')
+signal.on((data) => {})
+signal.emit(data)
+signal.observe((data) => {})
+
+// signals only observe set
+// my signal could observe get as well
+
+// what is the shared portion between signal and bus?
+
+// a signal has two emits and two ons
+
+let get = () ==> {
+	
+}

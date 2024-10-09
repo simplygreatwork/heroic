@@ -43,6 +43,7 @@ export class Component {
 		if (this.is_template) return
 		const $ = (selector) => $_(this, selector)
 		const import_ = (base, path) => this.import_(base, path, this)
+		this.$ = $
 		this.fn.apply(this, [{ component: this, data: this.data, $, import_ }])
 		this.emit('initialized', this)
 	}
@@ -127,7 +128,7 @@ export class Component {
 		else if (typeof key === 'string') return this.children.filter((child) => child.name == key)[0]
 	}
 	
-	clone(data) {
+	clone(data, then) {
 		
 		const element = this.element.cloneNode(deep)
 		const component = new Component({
@@ -138,12 +139,16 @@ export class Component {
 			parent: this.parent,
 			fn: this.fn,
 			elements: Array.from(element.querySelectorAll(`*`)),
-			is_template: false
+			is_template: false,
+			base: this.base
 		})
 		this.parent.children.push(component)
 		this.element.before(component.element)
 		component.element.style.display = 'inline'
+		component.observer = null
+		component.observe()
 		component.invoke()
+		if (then) then(component)
 		return component
 	}
 	
