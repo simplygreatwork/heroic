@@ -11,7 +11,6 @@
 		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
 	</div>
 	<link rel="stylesheet" type="text/css" href="../tasks/tasks.css"/>
-	
 	<script type="module">
 		
 		import { Component } from 'component'
@@ -25,7 +24,7 @@
 		Component.ready(({ component, data, $ }) => {
 			
 			const bus = data.bus || new Bus()
-			const scope = new Scope()
+			const scope = new Scope(bus)
 			const selection = Selection({ component, kind: './task.html' })
 			const template = component.child('task-template')
 			const cache = {}
@@ -37,7 +36,7 @@
 			router.register('tasks/:id', {
 				enter: ({ path, values, then }) => {
 					const { item, row } = cache[values.id]
-					child.redirect('./detail.html', { path, item, bus, scope }, then)
+					child.redirect('./detail.html', { path, item, scope }, then)
 				},
 				exit: ({ then }) => {
 					child.redirect('../shared/views/empty.html', {}, then)
@@ -60,7 +59,7 @@
 			function install_row(item) {
 				
 				const link = `#/tasks/${item.id}`
-				const row = template.clone({ item, link, selection, bus, scope })
+				const row = template.clone({ item, link, selection, scope })
 				cache[item.id] = { item, row }
 				return row
 			}
@@ -75,9 +74,9 @@
 					location.hash = row.data.link
 				}, scope)
 				
-				bus.on(`item-changed`, (item) => {
+				scope.on(`item-changed`, (item) => {
 					if (item.closed) delete cache[item.id]
-				}, scope)
+				})
 			}
 		})
 		

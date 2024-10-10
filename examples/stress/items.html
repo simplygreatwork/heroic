@@ -22,7 +22,7 @@
 		Component.ready(({ component, $ }) => {
 			
 			const bus = new Bus()
-			const scope = new Scope()
+			const scope = new Scope(bus)
 			const selection = Selection({ component, kind: './item.html' })
 			const template = component.child('template')
 			const cache = {}
@@ -35,7 +35,7 @@
 					const item = cache[values.id].item
 					const row = cache[values.id].row
 					selection.add(row)
-					child.redirect('./detail.html', { path, item, bus }, then)
+					child.redirect('./detail.html', { path, item, scope }, then)
 				},
 				exit: ({ then }) => {
 					child.redirect('../shared/views/empty.html', {}, then)
@@ -57,7 +57,7 @@
 			function install_row(item) {
 				
 				const link = `#/stress/${item.id}`
-				const row = template.clone({ item, link, bus, scope })
+				const row = template.clone({ item, link, scope })
 				cache[item.id] = { item, row }
 				return row
 			}

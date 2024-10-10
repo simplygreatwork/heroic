@@ -1,5 +1,22 @@
 
 add scope to bus
+	scope.emit
+	scope.on
+
+const bus = Bus()
+const scope = Scope(bus)
+scope.on()
+scope.emit()
+const cloud = Cloud(scope)
+
+const scope = {
+	on
+	once
+	unshift
+	emit
+	plug
+	unplug
+}
 
 remove onclick, etc
 move scope out of cloud

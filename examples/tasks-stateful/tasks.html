@@ -89,7 +89,7 @@
 						const { id } = values
 						const item = cloud.get(`tasks/${id}`)
 						selection.add(cache[id].row)
-						child.redirect('./detail.html', { path, id, item, bus, cloud }, then)
+						child.redirect('./detail.html', { path, id, item, cloud }, then)
 					},
 					exit: ({ then }) => child.redirect('../shared/views/empty.html', {}, then)
 				})

@@ -6,7 +6,7 @@ export function _() {
 	
 	Component.ready(({ component, data, $ }) => {
 		
-		const { item, link, bus, scope } = data
+		const { item, link, scope } = data
 		const { div, a } = $()
 		
 		Object.assign(a, { href: link, innerText: item.title })

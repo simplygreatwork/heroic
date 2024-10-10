@@ -22,7 +22,7 @@
 		Component.ready(({ component, data, $ }) => {
 			
 			const bus = data.bus || new Bus()
-			const scope = new Scope()
+			const scope = new Scope(bus)
 			const selection = Selection({ component, kind: './item.html' })
 			const template = component.child('template')
 			const cache = {}
@@ -34,7 +34,7 @@
 				enter: ({ path, values, then }) => {
 					const { item, row } = cache[values.id]
 					selection.add(row)
-					child.redirect('./detail.html', { path, item, bus }, then)
+					child.redirect('./detail.html', { path, item, scope }, then)
 				},
 				exit: ({ then }) => child.redirect('../shared/views/empty.html', {}, then)
 			})

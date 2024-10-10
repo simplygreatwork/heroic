@@ -11,19 +11,7 @@
 		</section>
 		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
 	</div>
-	<style>
-		
-		input[type="submit"] {
-			width:100%;
-			padding:6px;
-			margin-top:10px;
-		}
-		
-		label {
-			display:block;	
-		}
-		
-	</style>
+	<link rel="stylesheet" type="text/css" href="../quiz/quiz.css"/>
 	<script type="module">
 		
 		import { Component } from 'component'
@@ -62,18 +50,18 @@
 			
 			function install_row(item) {
 				
-				template.clone({ item, bus, cloud }, (component) => {
+				template.clone({ item, cloud }, (component) => {
 					component.on('ready', () => {
 						const { data, $ } = component
 						bus.emit('loaded', { component, data, $ })
 					})
-					component.redirect(item.path, { item, bus, cloud })
+					component.redirect(item.path, { item, cloud })
 				})
 			}
 			
 			function listen() {
 				
-				bus.on('loaded', ({ component, data, $ }) => {
+				scope.on('loaded', ({ component, data, $ }) => {
 					const id = component.path
 					const correct = $('[data-answer]').dataset.answer
 					const submit = $('[type=submit]')
@@ -82,16 +70,16 @@
 						const answer = $(':checked').value
 						bus.emit('submitted', { id, correct, answer })
 					}, scope)
-				}, scope)
+				})
 				
-				bus.on('submitted', ({ id, answer, correct }) => {
+				scope.on('submitted', ({ id, answer, correct }) => {
 					data.questions[id] = data.questions[id] || 0
 					data.questions[id] = data.questions[id] + 1
 					total++
 					if (answer == correct) correct_++
 					const { div } = $()
 					div[2].innerText = `${correct_} of ${total}`
-				}, scope)
+				})
 			}
 		})
 		

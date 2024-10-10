@@ -18,7 +18,7 @@
 		
 		Component.ready(({ component, data, $ }) => {
 			
-			const { item, bus, scope } = data
+			const { item, scope } = data
 			const { input, button } = $()
 			
 			input.value = item.title
@@ -29,8 +29,8 @@
 			
 			function emit(key, id, data) {
 				
-				bus.emit(`${key}:${id}`, data)
-				bus.emit(`${key}`, data)
+				scope.emit(`${key}:${id}`, data)
+				scope.emit(`${key}`, data)
 			}
 		})
 		

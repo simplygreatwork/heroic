@@ -1,9 +1,9 @@
 
 export class Scope {
 	
-	constructor(name) {
+	constructor(bus) {
 		
-		this.name = name
+		this.bus = bus
 		this.unpluggables = []
 	}
 	
@@ -13,5 +13,25 @@ export class Scope {
 	
 	unplug() {	
 		this.unpluggables.forEach(unplug => unplug())
+	}
+	
+	on(key, fn, scope) {
+		this.plug(this.bus.on(key, fn))
+	}
+	
+	once(key, fn) {
+		this.bus.on(key, fn)
+	}
+	
+	unshift(key, fn, scope) {
+		this.plug(this.bus.unshift(key, fn))
+	}
+	
+	has(key) {
+		return this.bus.has(key)
+	}
+	
+	emit(key) {
+		this.bus.emit(...arguments)
 	}
 }

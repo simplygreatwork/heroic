@@ -6,7 +6,7 @@ export function Cloud(bus) {
 	let cloud
 	return cloud = {
 		bus,
-		scope: new Scope(),
+		scope: new Scope(bus),
 		with: (fn) => fn(cloud),
 		get: (key) => cloud_emit(cloud, 'get', [key]),
 		on_get: (fn, key) => cloud_on(cloud, 'get', fn, key),
@@ -31,16 +31,16 @@ export function Cloud(bus) {
 
 function cloud_emit(cloud, pattern, args) {
 	
-	if (! args) return cloud.bus.emit(pattern)
+	if (! args) return cloud.scope.emit(pattern)
 	const result = { value: null }
-	cloud.bus.emit(pattern, ...args, result)
-	cloud.bus.emit(`${pattern}:${args[0]}`, ...args, result)
+	cloud.scope.emit(pattern, ...args, result)
+	cloud.scope.emit(`${pattern}:${args[0]}`, ...args, result)
 	return result.value
 }
 
 function cloud_on(cloud, pattern, fn, key) {
 	
 	if (typeof key == 'function') { fn = key; key = null }
-	if (key) cloud.scope.plug(cloud.bus.on(`${pattern}:${key}`, fn))
-	else cloud.scope.plug(cloud.bus.on(pattern, fn))
+	if (key) cloud.scope.on(`${pattern}:${key}`, fn)
+	else cloud.scope.on(pattern, fn)
 }
