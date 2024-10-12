@@ -150,7 +150,6 @@ export class Component {
 		component.observer = null
 		component.observe()
 		component.invoke()
-		// if (then) then(component)
 		return component
 	}
 	
