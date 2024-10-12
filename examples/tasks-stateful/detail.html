@@ -20,6 +20,7 @@
 			
 			const { id, item, cloud } = data
 			const { input, button } = $()
+			const { scope } = cloud
 			
 			input.value = item.title
 			const parse = (value) => { scope.emit('title-changed'); return value }
