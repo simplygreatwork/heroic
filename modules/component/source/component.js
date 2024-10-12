@@ -121,7 +121,7 @@ export class Component {
 				}
 			})
 		})
-		this.observer.observe(this.element, { attributes: true })
+		this.observer.observe(this.element, { attributes: true, subtree: false })
 	}
 	
 	child(key) {
@@ -130,7 +130,7 @@ export class Component {
 		else if (typeof key === 'string') return this.children.filter((child) => child.name == key)[0]
 	}
 	
-	clone(data, then, path) {
+	clone(data, then) {
 		
 		const element = this.element.cloneNode(deep)
 		const component = new Component({

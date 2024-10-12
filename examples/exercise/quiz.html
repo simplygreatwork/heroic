@@ -50,13 +50,12 @@
 			
 			function install_row(item) {
 				
-				template.clone({ item, cloud }, (component) => {
-					component.on('ready', () => {
-						const { data, $ } = component
-						loaded({ component, data, $ })
-					})
-					component.redirect(item.path, { item, cloud })
+				const component = template.clone({ item, cloud })
+				component.on('ready', () => {
+					const { data, $ } = component
+					loaded({ component, data, $ })
 				})
+				component.redirect(item.path, { item, cloud })
 			}
 			
 			function loaded({ component, data, $ }) {

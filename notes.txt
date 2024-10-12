@@ -1,4 +1,8 @@
 
+now, should be passing scope to Cloud, not bus.
+
+exploit MutationObserver for passing component id to ready
+
 component module likely needs a loading queue
 actually just load one at a time (ready)
 

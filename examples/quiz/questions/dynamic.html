@@ -2,17 +2,23 @@
 <div>
 	<div>
 		<h3>Question</h3>
-		<form data-answer="">
-			<input type="radio" id="a" name="q1" value="a"><label for="a">Answer A</label><br>
-			<input type="radio" id="b" name="q1" value="b"><label for="b">Answer B</label><br>
-			<input type="radio" id="c" name="q1" value="c"><label for="c">Answer C</label><br>
+		<form data-answer="a">
+			<label><input type="radio" name="q2" id="a" value="a"/>Answer A</label>
+			<label><input type="radio" name="q2" id="b" value="b"/>Answer B</label>
+			<label><input type="radio" name="q2" id="c" value="c"/>Answer C</label>
 			<input type="submit"><br>
 		</form>
 	</div>
 	<script type="module">
 		
 		import { Component } from 'component'
-		Component.ready(() => {})
+		Component.ready(({ component, data, $ }) => {
+			
+			const { item } = data
+			const { h3 } = $()
+			
+			Object.assign(h3, { innerText: `Question ${item.id}` })
+		})
 		
 	</script>
 </div>

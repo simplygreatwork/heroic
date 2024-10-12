@@ -37,14 +37,6 @@
 			router.exits('quiz', data => scope.unplug(), true)
 			listen()
 			
-			function default_items() {
-				
-				return new Array(100).fill(0).map(function(each, index) {
-					const id = index + 1
-					return { id, path: `./questions/q${(index % 10) + 1}.html` }
-				})
-			}
-			
 			async function install_rows(items) {
 				while (items.length > 0) await install_row(items)
 			}
@@ -54,10 +46,7 @@
 				return new Promise((resolve) => {
 					let item = items.shift()
 					let component = template.clone({ item, cloud })
-					component.on('ready', (props) => {
-						loaded(props)
-						resolve()
-					})
+					component.on('ready', (props) => resolve(loaded(props)))
 					component.redirect(item.path, { item, cloud })
 				})
 			}
@@ -83,6 +72,15 @@
 					if (answer == correct) correct_++
 					const { div } = $()
 					div[2].innerText = `${correct_} of ${total}`
+				})
+			}
+			
+			function default_items() {
+				
+				return new Array(500).fill(0).map(function(each, index) {
+					const id = index + 1
+					if (true) return { id, path: `./questions/dynamic.html` }
+					return { id, path: `./questions/q${(index % 10) + 1}.html` }
 				})
 			}
 		})
