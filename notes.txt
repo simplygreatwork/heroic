@@ -1,4 +1,9 @@
 
+component module likely needs a loading queue
+actually just load one at a time (ready)
+
+scope.bind() ???
+
 add scope to bus
 	scope.emit
 	scope.on

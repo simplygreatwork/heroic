@@ -33,13 +33,11 @@
 				
 				location.hash = '#'
 				window.router = new Router()
-				
 				const child = component.child('void')
 				router.register('intro', {
 					enter: ({ part, then }) => child.redirect('./intro.html', { part }, then),
 					exit: ({ then }) => child.redirect('../shared/views/empty.html', {}, then)
 				})
-				
 				location.hash = '#/intro'
 			})
 			

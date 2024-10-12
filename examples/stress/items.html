@@ -42,9 +42,7 @@
 				}
 			})
 			
-			router.register('stress', {
-				exit: () => scope.unplug()
-			})
+			router.exits('stress', () => scope.unplug(), true)
 			
 			function default_items() {
 				
@@ -62,6 +60,6 @@
 				return row
 			}
 		})
-			
+		
 	</script>
 </div>

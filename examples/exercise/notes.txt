@@ -1,0 +1,17 @@
+
+highlight the correct answer
+	for now, by default
+
+answer quiz questions
+then move each to bottom
+maybe dim the others which are not active
+embed answer in the static html (for now)
+have a score panel
+learn mode vs test mode
+the score is always out of all questions offered
+
+todo:
+erase correct answer from the html after loading the questions
+	and store in a data structure
+
+each question can be able to grade itself?

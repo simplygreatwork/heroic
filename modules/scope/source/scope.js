@@ -15,7 +15,7 @@ export class Scope {
 		this.unpluggables.forEach(unplug => unplug())
 	}
 	
-	on(key, fn, scope) {
+	on(key, fn) {
 		this.plug(this.bus.on(key, fn))
 	}
 	
@@ -23,7 +23,7 @@ export class Scope {
 		this.bus.on(key, fn)
 	}
 	
-	unshift(key, fn, scope) {
+	unshift(key, fn) {
 		this.plug(this.bus.unshift(key, fn))
 	}
 	

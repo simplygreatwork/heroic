@@ -13,19 +13,19 @@ export class Component {
 	static start(fn) {
 		
 		const component = new Component({ content: document.body })
-		component.once('ready', ({ component }) => fn(component))
+		component.once('ready', fn)
 		component.scan()
 	}
 	
 	static ready(fn, options) {
 		
-		let component = Component.recent
+		const component = Component.recent
 		Object.assign(component, { fn, options: options || {} })
 		component.content.style.removeProperty('visibility')									// prevents flicker
 		component.element.appendChild(component.content)
 		component.elements = Array.from(component.element.querySelectorAll(`*`))
 		component.observe()
-		component.once('ready', ({ component }) => component.invoke())
+		component.once('ready', (component) => component.invoke())
 		component.scan()
 	}
 	
@@ -35,7 +35,6 @@ export class Component {
 		this.id = Component.counter++
 		this.data = this.data || {}
 		this.children = []
-		if (this.element) this.element.dataset.id = this.id
 		install_bus(this)
 	}
 	
@@ -57,8 +56,7 @@ export class Component {
 	
 	scan_child(elements) {
 		
-		const import_ = (base, path) => this.import_(base, path, this)
-		if (elements.length === 0) return this.emit('ready', { component: this, data: this.data, $: this.$, import_ })
+		if (elements.length === 0) return this.emit('ready', this, this.path)
 		const element = elements.pop()
 		const child = new Component({
 			element,
@@ -150,7 +148,7 @@ export class Component {
 		component.observer = null
 		component.observe()
 		component.invoke()
-		// if (then) then(component)
+		if (then) then(component)
 		return component
 	}
 	

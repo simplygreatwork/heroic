@@ -1,0 +1,10 @@
+
+input[type="submit"] {
+	width:100%;
+	padding:6px;
+	margin-top:10px;
+}
+
+label {
+	display:block;	
+}

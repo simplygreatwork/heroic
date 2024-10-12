@@ -5,7 +5,7 @@
 			<header data-title class="title">Quiz</header>
 			<div>0 of 0 is 0%.</div>
 			<section class="scroll">	
-				<section name="template" data-component="../shared/views/empty.html" data-template></section>
+				<section name="template" data-component="./questions/place.html" data-template></section>
 				<br><br><br><br><br><br><br>
 			</section>
 		</section>
@@ -33,30 +33,27 @@
 			let correct_ = 0
 			let total = 0
 			
-			install_rows(default_items())
-			router.exits('quiz', data => scope.unplug(), true)
 			listen()
+			default_items().forEach((item) => install_row(item))
+			router.exits('quiz', data => scope.unplug(), true)
 			
 			function default_items() {
 				
-				return new Array(100).fill(0).map(function(each, index) {
-					const id = index + 1
-					return { id, path: `./questions/q${(index % 10) + 1}.html` }
-				})
+				return [
+					{ id: 1, path: './questions/q1.html' },
+					{ id: 2, path: './questions/q2.html' },
+					{ id: 3, path: './questions/q3.html' },					
+					{ id: 4, path: './questions/q4.html' },					
+					{ id: 5, path: './questions/q5.html' },
+				]
 			}
 			
-			async function install_rows(items) {
-				while (items.length > 0) await install_row(items)
-			}
-			
-			function install_row(items) {
+			function install_row(item) {
 				
-				return new Promise((resolve) => {
-					let item = items.shift()
-					let component = template.clone({ item, cloud })
-					component.on('ready', (props) => {
-						loaded(props)
-						resolve()
+				template.clone({ item, cloud }, (component) => {
+					component.on('ready', () => {
+						const { data, $ } = component
+						loaded({ component, data, $ })
 					})
 					component.redirect(item.path, { item, cloud })
 				})
