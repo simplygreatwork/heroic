@@ -22,8 +22,8 @@
 			const { input, button } = $()
 			
 			input.value = item.title
-			bind(input, 'input', () => bus.emit(`item-changed:${item.id}`, Object.assign(item, { title: input.value })), scope)
-			bind(input, 'input', () => bus.emit(`title-changed`), scope)
+			bind(input, 'input', () => scope.emit(`item-changed:${item.id}`, Object.assign(item, { title: input.value })), scope)
+			bind(input, 'input', () => scope.emit(`title-changed`), scope)
 			bind(button[0], 'click', () => emit(`item-changed`, item.id, Object.assign(item, { done: true })), scope)
 			bind(button[1], 'click', () => emit(`item-changed`, item.id, Object.assign(item, { closed: true })), scope)
 			
