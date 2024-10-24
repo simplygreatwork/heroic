@@ -3,13 +3,12 @@
 	<div class="container">
 		<section class="content">
 			<header data-title class="title">URLS</header>
-			<section class="scroll">
+			<section class="scroll" tabindex="10">
 				<section name="template" data-component="./item.html" data-template></section>
 			</section>
 		</section>
 		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
 	</div>
-	
 	<style>
 		div.row_main {
 			border-bottom: 0px solid #dfdfdf;
@@ -20,7 +19,6 @@
 			background-color:#DDDDFF;
 		}
 	</style>
-	
 	<script type="module">
 		
 		import { Component } from 'component'
@@ -32,10 +30,11 @@
 		
 		Component.ready(({ component, data, $ }) => {
 			
+			const { section } = $()
 			const { bus, store } = data
 			const template = component.child('template')
 			const scope = new Scope()
-			const selection = Selection({ component, kind: './item.html', selector: 'div.row_main' })
+			const selection = Selection({ component, list: section[1], kind: './item.html', selector: 'div.row_main' })
 			const cache = {}
 			
 			default_items().forEach((item) => install_row(item))
@@ -43,6 +42,8 @@
 			listen()
 			
 			location.href = `#/intro`
+			const list = section[1]
+			list.focus()
 			
 			function default_items() {
 				
@@ -56,6 +57,7 @@
 				return [
 					`#/intro`,
 					`#/exercise`,
+					`#/focus`,
 					`#/router`,
 					`#/tasks`,
 					`#/tasks-stateful`,
@@ -105,6 +107,15 @@
 				router.register('exercise', {
 					enter: ({ path, then }) => {
 						child.rebase('../exercise').redirect('./quiz.html', { path, bus }, then)
+					},
+					exit: ({ then }) => {
+						child.rebase(null).redirect('../shared/views/empty.html', {}, then)
+					}
+				})
+				
+				router.register('focus', {
+					enter: ({ path, then }) => {
+						child.rebase('../focus').redirect('./focus.html', { path, bus }, then)
 					},
 					exit: ({ then }) => {
 						child.rebase(null).redirect('../shared/views/empty.html', {}, then)

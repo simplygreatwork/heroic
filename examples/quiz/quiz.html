@@ -16,8 +16,8 @@
 		
 		import { Component } from 'component'
 		import { Bus } from 'bus'
-		import { Cloud } from 'cloud'
 		import { Scope } from 'scope'
+		import { Cloud } from 'cloud'
 		import { bind } from 'bind'
 		
 		let counter = 0
@@ -29,13 +29,15 @@
 			const scope = cloud.scope
 			const template = component.child('template')
 			const cache = {}
-			data['questions'] = {}
-			let correct_ = 0
-			let total = 0
+			const panel = $().div[2]
+			let store = {}
 			
 			install_rows(default_items())
-			router.exits('quiz', data => scope.unplug(), true)
+			bind_cloud()
 			listen()
+			system.focus = this
+			// console.log('quiz nab')
+			router.exits('quiz', data => scope.unplug(), true)
 			
 			async function install_rows(items) {
 				while (items.length > 0) await install_row(items)
@@ -45,43 +47,52 @@
 				
 				return new Promise((resolve) => {
 					let item = items.shift()
-					let component = template.clone({ item, cloud })
-					component.on('ready', (props) => resolve(loaded(props)))
-					component.redirect(item.path, { item, cloud })
+					let component = template.clone({ item, bus, scope, cloud })
+					component.on('ready', (props) => resolve())
+					component.redirect(item.path, { item, bus, scope, cloud })
 				})
-			}
-			
-			function loaded({ component, data, $ }) {
-				
-				const id = component.path
-				const correct = $('[data-answer]').dataset.answer
-				const submit = $('[type=submit]')
-				bind(submit, 'click', (event) => {
-					event.preventDefault()
-					const answer = $(':checked').value
-					scope.emit('submitted', { id, correct, answer })
-				}, scope)
 			}
 			
 			function listen() {
 				
 				scope.on('submitted', ({ id, answer, correct }) => {
-					data.questions[id] = data.questions[id] || 0
-					data.questions[id] = data.questions[id] + 1
-					total++
-					if (answer == correct) correct_++
-					const { div } = $()
-					div[2].innerText = `${correct_} of ${total}`
+					cloud.update(`score/counter`, (value) => ++value)
+					if ((answer == correct)) cloud.update(`score/correct`, (value) => ++value)
+					cloud.update(`score/total`, (value) => ++value)
+				})
+				
+				if (false) scope.on('submitted', ({ id, answer, correct }) => {
+					console.log(`store: ${JSON.stringify(store)}`)
 				})
 			}
 			
 			function default_items() {
 				
-				return new Array(500).fill(0).map(function(each, index) {
+				return new Array(10).fill(0).map(function(each, index) {
 					const id = index + 1
-					if (true) return { id, path: `./questions/dynamic.html` }
-					return { id, path: `./questions/q${(index % 10) + 1}.html` }
+					if (true) return { id, path: `./questions/multiple_choice.html` }
+					if (false) return { id, path: `./questions/q${(index % 10) + 1}.html` }
 				})
+			}
+			
+			function bind_cloud() {
+				
+				cloud.on_get((key, result) => result.value = store[key])
+				const set_ = (key, value) => { store[key] = value; cloud.change(key) }
+				cloud.on_set((key, value) => set_(key, value))
+				cloud.on_update((key, fn) => set_(key, fn(store[key])))
+				cloud.on_change('score/total', (key, value) => {
+					const total = cloud.get('score/total')
+					const correct = cloud.get('score/correct')
+					if (total == undefined) return
+					if (correct == undefined) return
+					panel.innerText = `${correct} of ${total}`
+				})
+				
+				cloud.set(`score/total`, 0)
+				cloud.set(`score/correct`, 0)
+				cloud.set(`score/counter`, 0)
+				cloud.set(`score/items`, {})
 			}
 		})
 		

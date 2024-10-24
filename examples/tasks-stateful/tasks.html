@@ -6,7 +6,7 @@
 			<button>New Task</button>
 			<button>Undo</button>
 			<button>Redo</button>
-			<section class="scroll margin-top">
+			<section class="scroll margin-top" tabindex="10">
 				<div name="task-template" data-component="./task.html" data-template></div>
 			</section>
 		</section>
@@ -30,14 +30,14 @@
 			
 			const { place_row, trace } = await import_('./tasks.js')
 			const { on_task_added, on_task_removed } = await import_('./tasks.js')
+			const { section, button } = $()
 			const bus = data.bus || new Bus()
 			const cloud = Cloud(bus)
 			const store = data.store || State({})
-			const selection = Selection({ component, kind: './task.html' })
+			const selection = Selection({ component, list: section[1], kind: './task.html' })
 			const realm = data.realm
 			const template = component.child('task-template')
 			const cache = {}
-			const { button } = $()
 			
 			configure()
 			render()

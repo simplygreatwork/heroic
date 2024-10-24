@@ -1,0 +1,21 @@
+
+<div>
+	<div>
+		<h3>Question</h3>
+		<form data-answer="a">
+			<label><input type="radio" name="qx" id="a" value="a"/>Answer A</label>
+			<label><input type="radio" name="qx" id="b" value="b"/>Answer B</label>
+			<label><input type="radio" name="qx" id="c" value="c"/>Answer C</label>
+			<input type="submit"><br>
+		</form>
+	</div>
+	<script type="module">
+		
+		import { Component } from 'component'		
+		Component.ready(async props => {
+			(await props.import_('./multiple_choice.js')).initialize(props)
+			const { component, data, $ } = props
+		})
+		
+	</script>
+</div>

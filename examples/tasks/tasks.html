@@ -4,8 +4,8 @@
 		<section class="content tasks">
 			<header data-title class="title">Tasks</header>
 			<button>New Task</button>
-			<section class="scroll margin-top">
-				<section name="task-template" data-component="./task.html" data-template></section>
+			<section class="scroll margin-top" tabindex="10">
+				<div name="task-template" data-component="./task.html" data-template></div>
 			</section>
 		</section>
 		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
@@ -23,12 +23,12 @@
 		
 		Component.ready(({ component, data, $ }) => {
 			
+			const { section, button } = $()
 			const bus = data.bus || new Bus()
 			const scope = new Scope(bus)
-			const selection = Selection({ component, kind: './task.html' })
+			const selection = Selection({ component, list: section[1], kind: './task.html' })
 			const template = component.child('task-template')
 			const cache = {}
-			const { button } = $()
 			
 			default_items().forEach((item) => install_row(item))
 			
@@ -36,6 +36,7 @@
 			router.register('tasks/:id', {
 				enter: ({ path, values, then }) => {
 					const { item, row } = cache[values.id]
+					selection.add(row)
 					child.redirect('./detail.html', { path, item, scope }, then)
 				},
 				exit: ({ then }) => {

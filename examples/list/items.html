@@ -3,7 +3,7 @@
 	<div class="container">
 		<section class="content">
 			<header data-title class="title">List Items</header>
-			<section class="scroll">
+			<section class="scroll" tabindex="10">
 				<section name="template" data-component="./item.html" data-template></section>
 			</section>
 		</section>
@@ -21,9 +21,10 @@
 		
 		Component.ready(({ component, data, $ }) => {
 			
+			const { section } = $()
 			const bus = data.bus || new Bus()
 			const scope = new Scope(bus)
-			const selection = Selection({ component, kind: './item.html' })
+			const selection = Selection({ component, list: section[1], kind: './item.html' })
 			const template = component.child('template')
 			const cache = {}
 			
@@ -40,7 +41,7 @@
 			})
 			
 			router.exits('list', () => scope.unplug(), true)
-			
+						
 			function default_items() {
 				
 				return new Array(20).fill(0).map(function(each, index) {

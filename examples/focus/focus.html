@@ -1,0 +1,45 @@
+
+<div>
+	<div class="container">
+		<section class="content">
+			<header data-title class="title">Focus</header>
+			<label><input type="radio" name="qx" id="a" value="a"/>Answer A</label>
+			<label><input type="radio" name="qx" id="b" value="b"/>Answer B</label>
+			<label><input type="radio" name="qx" id="c" value="c"/>Answer C</label>
+			<section class="scroll">
+				<section name="lorem" data-component="../shared/views/lorem.html"></section>
+			</section>
+		</section>
+		<section name="void" data-component="../shared/views/empty.html" class="void"></section>
+	</div>
+	<script type="module">
+		
+		import { Component } from 'component'
+		import { Bus } from 'bus'
+		import { Scope } from 'scope'
+		
+		Component.ready(({ component, data, $ }) => {
+			
+			const bus = new Bus()
+			const scope = new Scope(bus)
+			
+			const { div } = $()
+			// div[2].tabIndex = 0
+			// div[3].tabIndex = 0
+			// div[4].tabIndex = 0
+			// div[3].tabIndex = -1
+			
+			// div[1].tabIndex = 0
+			// div[1].addEventListener('focusin', event => {
+			// 	console.log('Focus entered the container')
+			// })
+			// div[1].addEventListener('focusout', event => {
+			// 	console.log('Focus exited the container')
+			// })
+			div[1].addEventListener('keydown', event => {
+				console.log('keydown')
+			})
+		})
+		
+	</script>
+</div>

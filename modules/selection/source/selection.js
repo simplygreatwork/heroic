@@ -1,7 +1,5 @@
 
-let active = null
-
-export function Selection({ component, kind, selector }) {
+export function Selection({ component, list, kind, selector }) {
 	
 	kind = kind || './item.html'
 	selector = selector || 'div.row'
@@ -13,6 +11,7 @@ export function Selection({ component, kind, selector }) {
 		adjacent: (bias) => adjacent(bias),
 		nearest: () => nearest()
 	}
+	install_focus()
 	install_keyboard()
 	return selection
 	
@@ -21,7 +20,7 @@ export function Selection({ component, kind, selector }) {
 		clear()
 		child.element.querySelector(selector).classList.add('selected')
 		selected = child
-		active = selection
+		system.focus = list
 	}
 	
 	function remove(child) {
@@ -44,8 +43,8 @@ export function Selection({ component, kind, selector }) {
 	
 	function adjacent(bias) {
 		
-		const child = find_adjacent(bias)
-		if (! child) return
+		let child = find_adjacent(bias)
+		if (! child) child = component.child(2)
 		location.hash = child.data.link
 	}
 	
@@ -58,28 +57,72 @@ export function Selection({ component, kind, selector }) {
 		return true
 	}
 	
+	function install_focus() {
+		
+		list.addEventListener('focus',  event => {
+			system.focus = list
+		})
+	}
+	
 	function install_keyboard() {
 		
-		document.addEventListener('keydown', (event) => {
-			if (selection != active) return
+		component.element.addEventListener('keydown', (event) => {
+			if (list != system.focus) return
 			if (event.key == 'ArrowDown') selection.adjacent(1)
 			if (event.key == 'ArrowUp') selection.adjacent(-1)
+			if (event.key == 'ArrowDown' || event.key == 'ArrowUp') event.preventDefault()
 		})
 	}
 	
 	function find_adjacent(bias) {
 		
-		let result =  null
-		component.children.forEach((each, index) => {
-			if (result) return
-			if (each != selected) return
-			if (each.path != kind) return
-			const adjacent = component.child(index + bias)
-			if (! adjacent) return
-			if (adjacent.path != kind) return
-			if (adjacent.is_template) return
-			result = adjacent
-		})
-		return result
-	}	
+		if (selected) {
+			const index = component.children.indexOf(selected)
+			const { next, previous } = iterator(component, kind, index)
+			const operation = bias > 0 ? next : previous
+			return operation()
+		} else {
+			const { next } = iterator(component, kind)
+			return next()
+		}
+	}
+	
+	function iterator(component, kind, index) {
+		
+		index = index || -1
+		let child
+		return {
+			next: next,
+			previous: previous
+		}
+		
+		function next() {
+			
+			while (true) {
+				child = component.child(++index)
+				if (child && child.is_template) continue
+				if (child && child.path != kind) continue
+				if (child) return child
+				else {
+					index = -1
+					return next()
+				}
+			}
+		}
+		
+		function previous() {
+			
+			while (true) {
+				child = component.child(--index)
+				if (child && child.is_template) continue
+				if (child && child.path != kind) continue
+				if (child) return child
+				else {
+					index = component.children.length
+					return previous()
+				}
+			}
+		}
+	}
+	
 }

@@ -12,7 +12,11 @@
 	<script type="module">
 		
 		import { Component } from 'component'
-		Component.ready(() => {})
+		Component.ready(({ component, data, $ }) => {
+			const { bus } = data
+			bus.on('hello', () => console.log('hello q1'))
+			bus.emit('hello')
+		})
 		
 	</script>
 </div>
