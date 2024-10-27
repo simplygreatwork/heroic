@@ -12,6 +12,7 @@
 			"bus": "../../modules/bus/module.js",
 			"cloud": "../../modules/cloud/module.js",
 			"component": "../../modules/component/module.js",
+			"focus": "../../modules/focus/module.js",
 			"html-console": "../../modules/html-console/module.js",
 			"router": "../../modules/router/module.js",
 			"scope": "../../modules/scope/module.js",			
@@ -43,11 +44,13 @@
 			import { Router } from 'router'
 			import { Bus } from 'bus'
 			import { State } from 'state'
+			import { Focus } from 'focus'
 			
-			Component.start((component) => {
+			Component.start(component => {
 				
 				window.location.hash = '#'
 				const system = window.system = {}
+				const focus = window.router = new Focus()
 				const router = window.router = new Router()
 				const bus = window.bus = new Bus()
 				const store = window.store = State({})

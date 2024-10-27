@@ -34,18 +34,17 @@ export function Selection({ component, list, kind, selector }) {
 		component.children.forEach((each) => remove(each))
 	}
 	
+	function adjacent(bias) {
+		
+		let child = find_adjacent(bias)
+		location.hash = child.data.link
+	}
+	
 	function nearest() {
 		
 		if (select_child(1)) return true
 		if (select_child(-1)) return true
 		clear()
-	}
-	
-	function adjacent(bias) {
-		
-		let child = find_adjacent(bias)
-		if (! child) child = component.child(2)
-		location.hash = child.data.link
 	}
 	
 	function select_child(bias) {
@@ -61,6 +60,10 @@ export function Selection({ component, list, kind, selector }) {
 		
 		list.addEventListener('focus',  event => {
 			system.focus = list
+			if (! selected) {
+				const { next } = iterator()
+				selection.add(next())
+			}
 		})
 	}
 	
@@ -78,16 +81,16 @@ export function Selection({ component, list, kind, selector }) {
 		
 		if (selected) {
 			const index = component.children.indexOf(selected)
-			const { next, previous } = iterator(component, kind, index)
+			const { next, previous } = iterator(index)
 			const operation = bias > 0 ? next : previous
 			return operation()
 		} else {
-			const { next } = iterator(component, kind)
+			const { next } = iterator()
 			return next()
 		}
 	}
 	
-	function iterator(component, kind, index) {
+	function iterator(index) {
 		
 		index = index || -1
 		let child

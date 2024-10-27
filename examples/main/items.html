@@ -3,22 +3,12 @@
 	<div class="container">
 		<section class="content">
 			<header data-title class="title">URLS</header>
-			<section class="scroll" tabindex="10">
+			<section class="scroll outset">
 				<section name="template" data-component="./item.html" data-template></section>
 			</section>
 		</section>
 		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
 	</div>
-	<style>
-		div.row_main {
-			border-bottom: 0px solid #dfdfdf;
-			padding-top:1px;
-			padding-bottom:1px;
-		}
-		div.row_main.selected {
-			background-color:#DDDDFF;
-		}
-	</style>
 	<script type="module">
 		
 		import { Component } from 'component'
@@ -34,7 +24,7 @@
 			const { bus, store } = data
 			const template = component.child('template')
 			const scope = new Scope()
-			const selection = Selection({ component, list: section[1], kind: './item.html', selector: 'div.row_main' })
+			const selection = Selection({ component, list: section[1], kind: './item.html', selector: 'div.row' })
 			const cache = {}
 			
 			default_items().forEach((item) => install_row(item))

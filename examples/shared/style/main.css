@@ -10,6 +10,7 @@
 	font-weight:bold;
 	text-transform:uppercase;
 	letter-spacing: 0.2rem;
+	margin-top:8px;
 	margin-bottom:10px;
 	font-size: 70%;
 	color:rbga(0, 0, 0, .9);
@@ -39,6 +40,10 @@
 .scroll {
 	overflow-y: scroll;
 	height:100vh;
+}
+.outset {
+	margin-left:-8px;
+	margin-right:-8px;
 }
 header.empty {
 	color:lightgray;
