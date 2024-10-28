@@ -1,7 +1,7 @@
 
 <div>
 	<div class="container">
-		<section class="content">
+		<section class="content" data-scope="/main/items.html">
 			<header data-title class="title">URLS</header>
 			<section class="scroll outset">
 				<section name="template" data-component="./item.html" data-template></section>
@@ -9,6 +9,13 @@
 		</section>
 		<section name="void" class="void" data-component="../shared/views/empty.html"></section>
 	</div>
+	<style>
+		[data-scope="/main/items.html"] {
+			div.row {
+				border-bottom:1px solid rgba(0,0,0,0);
+			}
+		}
+	</style>
 	<script type="module">
 		
 		import { Component } from 'component'

@@ -1,4 +1,7 @@
 
+let orange focus border be dashed or dotted
+apply tall css class for some list items
+
 now, should be passing scope to Cloud, not bus.
 
 exploit MutationObserver for passing component id to ready

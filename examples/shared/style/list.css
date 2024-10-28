@@ -18,7 +18,11 @@ a.row {
 	padding-left:4px
 	padding-right:4px;
 	block-size: 100%;
+	padding-left:8px;
+	margin-left:2px;
+	margin-right:2px;
+}
+a.tall {
 	padding-top:10px;
 	padding-bottom:10px;
-	padding-left:8px;
 }
